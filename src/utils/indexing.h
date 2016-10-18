@@ -1,6 +1,8 @@
 #ifndef __MARS_UTILS_INDEXING
 #define __MARS_UTILS_INDEXING
 
+	//! \file indexing.h
+
 	/** Wrap the index withing the positive range [0,N-1]
 		\param 		index   	The index that is a signed integer
 		\param 		arraySize   The size of the range (N)

@@ -6,6 +6,8 @@
 	#include <stdlib.h>
 	#include <math.h>
 
+	//! \file xcorr2tdoa.h
+
 	//! A structure that holds all the fields to extract the maximum TDOA value
 	typedef struct xcorr2tdoa_obj {
 
