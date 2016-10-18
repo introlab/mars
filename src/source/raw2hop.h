@@ -36,6 +36,7 @@
 	/** Extract the next hop from the RAW file and push samples in the hops
 		\param 		obj 		Pointer to the instantiated object.
 		\param		fp			Pointer to the RAW file.
+		\param    	hops  		Pointer to an array of hops vectors.
 		\return 				Return -1 if end of file reached, 0 otherwise.
 	*/
 	int raw2hop_process(raw2hop_obj * obj, FILE * fp, vector_float ** hops);
