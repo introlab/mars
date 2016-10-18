@@ -21,10 +21,13 @@ set(SRC
 	src/signal/vector.c
 	
 	src/source/raw2hop.c
-	
+
+	src/system/frame2freq.c
+	src/system/freq2phase.c
 	src/system/hop2frame.c
 	
 	src/utils/fft.c
+	src/utils/window.c
 
 )
 
