@@ -3,7 +3,7 @@
 
 	#include "../signal/vector.h"
 
-	//! \file frame2freq.h
+	//! \file window.h
 
 	/** Instantiate a vector that contains a Hann window.
 		\param 		frameSize 	Number of samples per frame.
