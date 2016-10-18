@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 	
 	unsigned int hopSize;
 	unsigned char nMics;
+	unsigned char nBits;
 	char * fileName;
 
 	unsigned char iMic;
@@ -21,14 +22,15 @@ int main(int argc, char* argv[])
 	float *maxValue;
 	float *minValue;
 
-	if (argc != 4) {
-		printf("Three argument expected: size of hop, number of channels, raw file name.\n");
+	if (argc != 5) {
+		printf("Three argument expected: size of hop, number of channels, number of bits, raw file name.\n");
 		exit(EXIT_FAILURE);
 	}
 
 	hopSize = (unsigned int) atoi(argv[1]);
 	nMics = (unsigned char) atoi(argv[2]);
-	fileName = argv[3];
+	nBits = (unsigned char) atoi(argv[3]);
+	fileName = argv[4];
 
 	hops = (vector_float **) malloc(sizeof(vector_float *) * nMics);
 	for (iMic = 0; iMic < nMics; iMic++) {
@@ -45,7 +47,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	myRaw2hop = raw2hop_construct(hopSize,nMics);
+	myRaw2hop = raw2hop_construct(hopSize,nMics,nBits);
 
 	fp = fopen(fileName,"rb");
 
