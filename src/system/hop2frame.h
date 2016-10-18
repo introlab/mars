@@ -30,8 +30,8 @@
 
 	/** Consume the new hop and generate the next frame
 		\param 		obj 		Pointer to the instantiated object.
-		\param		hop			Pointer to the hop.
-		\param		frame		Pointer to the frame.
+		\param		hop			Pointer to the input hop.
+		\param		frame		Pointer to the output frame.
 		\return 				Return -1 if error, 0 otherwise.
 	*/
 	int hop2frame_process(hop2frame_obj * obj, const vector_float * hop, vector_float * frame);
