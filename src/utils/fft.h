@@ -9,12 +9,12 @@
 	//! A structure that holds all the fields to perform forward and reverse Fast Fourier Transform. 
 	typedef struct fft_obj {
 
-		unsigned int frameSize; 		///< Number of samples in the real vector		 
-		unsigned int halfFrameSize; 	///< Number of samples in the complex vector
-		fftwf_plan R2C; 				///< Internal structure for FFTW
-		fftwf_plan C2R;					///< Internal structure for FFTW
-		float * realArray; 				///< Real vector
-		fftwf_complex * complexArray;   ///< Complex vector
+		unsigned int frameSize; 		///< Number of samples in the real vector.		 
+		unsigned int halfFrameSize; 	///< Number of samples in the complex vector.
+		fftwf_plan R2C; 				///< Internal structure for FFTW.
+		fftwf_plan C2R;					///< Internal structure for FFTW.
+		float * realArray; 				///< Real vector.
+		fftwf_complex * complexArray;   ///< Complex vector.
 
 	} fft_obj;
 
@@ -29,17 +29,17 @@
 	*/
 	void fft_destroy(fft_obj * obj);
 
-	/** Perform a FFT from real vector to complex vector
+	/** Perform a FFT from real vector to complex vector.
 		\param		obj    	Pointer to the instantiated object.
-		\param      in      Pointer to the array that contains input real samples (size = frameSize)
-		\param      out 	Pointer to the array that contains output complex samples (size = halfFrameSize)
+		\param      in      Pointer to the array that contains input real samples (size = frameSize).
+		\param      out 	Pointer to the array that contains output complex samples (size = halfFrameSize).
 	*/
 	void fft_r2c(fft_obj * obj, const float * in, float * out);
 
-	/** Perform a inverse FFT from complex vector to real vector
+	/** Perform a inverse FFT from complex vector to real vector.
 		\param		obj    	Pointer to the instantiated object.
-		\param      in      Pointer to the array that contains input complex samples (size = halfFrameSize)
-		\param      out 	Pointer to the array that contains output real samples (size = frameSize)
+		\param      in      Pointer to the array that contains input complex samples (size = halfFrameSize).
+		\param      out 	Pointer to the array that contains output real samples (size = frameSize).
 	*/
 	void fft_c2r(fft_obj * obj, const float * in, float * out);
 
