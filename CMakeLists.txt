@@ -17,6 +17,13 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/lib")
 
 set(SRC
 
+	src/signal/matrix.c
+	src/signal/vector.c
+	
+	src/source/raw2hop.c
+	
+	src/system/hop2frame.c
+	
 	src/utils/fft.c
 
 )
@@ -30,10 +37,16 @@ target_link_libraries(mars
 	m
 )
 
-add_executable(demo_fft
-	demo/demo_fft.c
+add_executable(demo_fftinfo
+	demo/demo_fftinfo.c
 )
-target_link_libraries(demo_fft
+target_link_libraries(demo_fftinfo
 	mars
 )
 
+add_executable(demo_rawinfo
+	demo/demo_rawinfo.c
+)
+target_link_libraries(demo_rawinfo
+	mars
+)
