@@ -23,10 +23,15 @@ set(SRC
 	src/source/raw2hop.c
 
 	src/system/frame2freq.c
+	src/system/freq2mcra.c
 	src/system/freq2phase.c
 	src/system/hop2frame.c
+	src/system/phase2phases.c
+	src/system/phases2xcorr.c
+	src/system/xcorr2tdoa.c
 	
 	src/utils/fft.c
+	src/utils/indexing.c
 	src/utils/window.c
 
 )
