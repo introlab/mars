@@ -8,127 +8,127 @@
 	//! A structure that holds all the fields of a matrix with signed char elements. 
 	typedef struct matrix_signedchar {
 
-		signed char ** array; 		///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols; 		///< Number of columns
+		signed char ** array; 		///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols; 		///< Number of columns.
 
 	} matrix_signedchar;
 
 	//! A structure that holds all the fields of a matrix with unsigned char elements. 
 	typedef struct matrix_unsignedchar {
 
-		unsigned char ** array; 	///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		unsigned char ** array; 	///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_unsignedchar;
 
 	//! A structure that holds all the fields of a matrix with signed short elements. 
 	typedef struct matrix_signedshort {
 
-		signed short ** array; 		///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		signed short ** array; 		///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_signedshort;
 
 	//! A structure that holds all the fields of a matrix with unsigned short elements. 
 	typedef struct matrix_unsignedshort {
 
-		unsigned short ** array; 	///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		unsigned short ** array; 	///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_unsignedshort;
 
 	//! A structure that holds all the fields of a matrix with signed int elements. 
 	typedef struct matrix_signedint {
 
-		signed int ** array; 		///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		signed int ** array; 		///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_signedint;
 
 	//! A structure that holds all the fields of a matrix with unsigned int elements. 
 	typedef struct matrix_unsignedint {
 
-		unsigned int ** array; 		///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		unsigned int ** array; 		///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_unsignedint;
 
 	//! A structure that holds all the fields of a matrix with float elements. 
 	typedef struct matrix_float {
 
-		float ** array;  			///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		float ** array;  			///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_float;
 
 	//! A structure that holds all the fields of a matrix with double elements. 
 	typedef struct matrix_double {
 
-		double ** array; 			///< Pointer to the array of elements		 
-		unsigned int nRows;			///< Number of rows
-		unsigned int nCols;			///< Number of columns
+		double ** array; 			///< Pointer to the array of elements.		 
+		unsigned int nRows;			///< Number of rows.
+		unsigned int nCols;			///< Number of columns.
 
 	} matrix_double;
 
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/
 	matrix_signedchar * matrix_signedchar_malloc(const unsigned int nRows, const unsigned int nCols);
 
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/
 	matrix_unsignedchar * matrix_unsignedchar_malloc(const unsigned int nRows, const unsigned int nCols);
 	
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/
 	matrix_signedshort * matrix_signedshort_malloc(const unsigned int nRows, const unsigned int nCols);
 	
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/	
 	matrix_unsignedshort * matrix_unsignedshort_malloc(const unsigned int nRows, const unsigned int nCols);
 
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/	
 	matrix_signedint * matrix_signedint_malloc(const unsigned int nRows, const unsigned int nCols);
 	
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/
 	matrix_unsignedint * matrix_unsignedint_malloc(const unsigned int nRows, const unsigned int nCols);
 
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/
 	matrix_float * matrix_float_malloc(const unsigned int nRows, const unsigned int nCols);
 
 	/** Constructor of the vector object.	
-		\param 		nRows	 	Number of rows
-		\param		nCols		Number of columns
+		\param 		nRows	 	Number of rows.
+		\param		nCols		Number of columns.
 		\return					Pointer to the instantiated object.
 	*/
 	matrix_double * matrix_double_malloc(const unsigned int nRows, const unsigned int nCols);

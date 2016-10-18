@@ -8,64 +8,64 @@
 	//! A structure that holds all the fields of a vector with signed char elements. 
 	typedef struct vector_signedchar {
 
-		signed char * array; 		///< Pointer to the array of elements		 
-		unsigned int nElements;     ///< Number of elements
+		signed char * array; 		///< Pointer to the array of elements.		 
+		unsigned int nElements;     ///< Number of elements.
 
 	} vector_signedchar;
 
 	//! A structure that holds all the fields of a vector with unsigned char elements. 
 	typedef struct vector_unsignedchar {
 
-		unsigned char * array;  	///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		unsigned char * array;  	///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_unsignedchar;
 
 	//! A structure that holds all the fields of a vector with signed short elements. 
 	typedef struct vector_signedshort {
 
-		signed short * array; 		///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		signed short * array; 		///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_signedshort;
 
 	//! A structure that holds all the fields of a vector with unsigned short elements. 
 	typedef struct vector_unsignedshort {
 
-		unsigned short * array; 	///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		unsigned short * array; 	///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_unsignedshort;
 
 	//! A structure that holds all the fields of a vector with signed int elements. 
 	typedef struct vector_signedint {
 
-		signed int * array; 		///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		signed int * array; 		///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_signedint;
 
 	//! A structure that holds all the fields of a vector with unsigned int elements. 
 	typedef struct vector_unsignedint {
 
-		unsigned int * array; 		///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		unsigned int * array; 		///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_unsignedint;
 
 	//! A structure that holds all the fields of a vector with float elements. 
 	typedef struct vector_float {
 
-		float * array; 				///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		float * array; 				///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_float;
 
 	//! A structure that holds all the fields of a vector with double elements. 
 	typedef struct vector_double {
 
-		double * array; 			///< Pointer to the array of elements		 
-		unsigned int nElements; 	///< Number of elements
+		double * array; 			///< Pointer to the array of elements.		 
+		unsigned int nElements; 	///< Number of elements.
 
 	} vector_double;
 
