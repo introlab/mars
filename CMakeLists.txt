@@ -25,6 +25,7 @@ set(SRC
 	src/system/frame2freq.c
 	src/system/freq2mcra.c
 	src/system/freq2phase.c
+	src/system/freq2softmask.c
 	src/system/hop2frame.c
 	src/system/phase2phases.c
 	src/system/phases2xcorr.c
