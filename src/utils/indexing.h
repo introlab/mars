@@ -2,10 +2,10 @@
 #define __MARS_UTILS_INDEXING
 
     /**
-    * \file 	indexing.h
-    * \author 	François Grondin <francois.grondin2@usherbrooke.ca>
+    * \file     indexing.h
+    * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
-    * \date 	2016-10-25
+    * \date     2016-10-25
     * \copyright
     *
     * This program is free software: you can redistribute it and/or modify

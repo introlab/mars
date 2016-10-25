@@ -5,10 +5,10 @@
     #include <stdlib.h>
 
     /**
-    * \file 	fft.h
-    * \author 	François Grondin <francois.grondin2@usherbrooke.ca>
+    * \file     fft.h
+    * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
-    * \date 	2016-10-25
+    * \date     2016-10-25
     * \copyright
     *
     * This program is free software: you can redistribute it and/or modify
