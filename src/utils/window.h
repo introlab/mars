@@ -26,8 +26,8 @@
     */
 
     /** Instantiate a vector that contains a Hann window.
-        \param		frameSize	Number of samples per frame.
-        \return					Pointer to the instantiated vector.
+        \param      frameSize   Number of samples per frame.
+        \return                 Pointer to the instantiated vector.
     */
     vector_float * window_hann(const unsigned short frameSize);
 
