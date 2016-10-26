@@ -1,45 +1,45 @@
-	
-	#include "freq2phase.h"
+    
+    #include "freq2phase.h"
 
-	freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon) {
+    freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon) {
 
-		freq2phase_obj * obj;
+        freq2phase_obj * obj;
 
-		obj = (freq2phase_obj *) malloc(sizeof(freq2phase_obj));
+        obj = (freq2phase_obj *) malloc(sizeof(freq2phase_obj));
 
-		obj->frameSize = frameSize;
-		obj->halfFrameSize = frameSize/2+1;
-		obj->epsilon = epsilon;
+        obj->frameSize = frameSize;
+        obj->halfFrameSize = frameSize/2+1;
+        obj->epsilon = epsilon;
 
-		return obj;
+        return obj;
 
-	}
+    }
 
-	void freq2phase_destroy(freq2phase_obj * obj) {
+    void freq2phase_destroy(freq2phase_obj * obj) {
 
-		free((void *) obj);
+        free((void *) obj);
 
-	}
+    }
 
-	int freq2phase_process(freq2phase_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phase) {
+    int freq2phase_process(freq2phase_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phase) {
 
-		unsigned int iSample;
-		float sampleReal;
-		float sampleImag;
-		float magnitude;
+        unsigned int iSample;
+        float sampleReal;
+        float sampleImag;
+        float magnitude;
 
-		for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+        for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
 
-			sampleReal = freq->array[iSample*2+0];
-			sampleImag = freq->array[iSample*2+1];
+            sampleReal = freq->array[iSample*2+0];
+            sampleImag = freq->array[iSample*2+1];
 
-			magnitude = sqrtf(sampleReal*sampleReal+sampleImag*sampleImag) + obj->epsilon;
+            magnitude = sqrtf(sampleReal*sampleReal+sampleImag*sampleImag) + obj->epsilon;
 
-			phase->array[iSample*2+0] = mask->array[iSample] * sampleReal / magnitude;
-			phase->array[iSample*2+1] = mask->array[iSample] * sampleImag / magnitude;
+            phase->array[iSample*2+0] = mask->array[iSample] * sampleReal / magnitude;
+            phase->array[iSample*2+1] = mask->array[iSample] * sampleImag / magnitude;
 
-		}
+        }
 
-		return 0;
+        return 0;
 
-	}
+    }
