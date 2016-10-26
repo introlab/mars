@@ -1,7 +1,7 @@
 	
 	#include "raw2hop.h"
 
-	raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits) {
+	raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName) {
 
 		raw2hop_obj * obj;
 
@@ -10,6 +10,9 @@
 		obj->hopSize = hopSize;
 		obj->nMics = nMics;
 		obj->nBits = nBits;
+		obj->fileName = (char *) malloc(sizeof(char) * (strlen(fileName)+1));
+		strcpy(obj->fileName, fileName);
+		obj->fp = fopen(obj->fileName,"rb");
 
 		switch(nBits) {
 			case 8:
@@ -36,11 +39,14 @@
 
 	void raw2hop_destroy(raw2hop_obj * obj) {
 
+		fclose(obj->fp);
+		free((void *) obj->fileName);
+
 		free((void *) obj);
 
 	}
 
-	int raw2hop_process(raw2hop_obj * obj, FILE * fp, vector_float ** hops) {
+	int raw2hop_process(raw2hop_obj * obj, vector_float ** hops) {
 
 		unsigned int iSample;
 		unsigned int iMic;
@@ -57,19 +63,19 @@
 			
 			for (iMic = 0; iMic < obj->nMics; iMic++) {
 			
-				if (!feof(fp)) {
+				if (!feof(obj->fp)) {
 
 					switch (obj->nBits) {
 						case 8:
-							tmp = fread(&sampleChar, obj->sizeSample, 1, fp);
+							tmp = fread(&sampleChar, obj->sizeSample, 1, obj->fp);
 							sample = (float) sampleChar;
 						break;
 						case 16:
-							tmp = fread(&sampleShort, obj->sizeSample, 1, fp);
+							tmp = fread(&sampleShort, obj->sizeSample, 1, obj->fp);
 							sample = (float) sampleShort;
 						break;
 						case 32:
-							tmp = fread(&sampleInt, obj->sizeSample, 1, fp);
+							tmp = fread(&sampleInt, obj->sizeSample, 1, obj->fp);
 							sample = (float) sampleInt;
 						break;
 					}

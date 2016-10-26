@@ -1,12 +1,6 @@
 #ifndef __MARS_SOURCE_RAW2HOP
 #define __MARS_SOURCE_RAW2HOP
 
-    #include "../signal/vector.h"
-	
-    #include <stdio.h>
-    #include <math.h>
-    #include <limits.h>
-
     /**
     * \file     raw2hop.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
@@ -29,14 +23,23 @@
     *
     */
 
+    #include "../signal/vector.h"
+
+    #include <stdio.h>
+    #include <math.h>
+    #include <limits.h>
+    #include <string.h>
+
     //! A structure that holds all the fields to extract samples from a RAW file. 
     typedef struct raw2hop_obj {
 
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
-        unsigned char nBits;        ///< Number of bytes.
+        unsigned char nBits;        ///< Number of bits per sample.
         size_t sizeSample;          ///< Size of a sample.
         float maxAmplitude;         ///< Maximum amplitude with the number of bytes.
+        char * fileName;            ///< Name of the RAW file.
+        FILE * fp;                  ///< File pointer.
 
     } raw2hop_obj;
 
@@ -44,9 +47,10 @@
         \param      hopSize     Number of samples per hop.
         \param      nMics       Number of microphones/channels.
         \param      nBits       Number of bits.
+        \param      fileName    Name of the RAW file.
         \return                 Pointer to the instantiated object.
     */
-    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits);
+    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName);
 
     /** Destructor of the raw2hop object.
         \param      obj         Pointer to the instantiated object.
@@ -55,10 +59,9 @@
 
     /** Extract the next hop from the RAW file and push samples in the hops
         \param      obj         Pointer to the instantiated object.
-        \param      fp          Pointer to the RAW file.
         \param      hops        Pointer to an array of hops vectors.
         \return                 Return -1 if end of file reached, 0 otherwise.
     */
-    int raw2hop_process(raw2hop_obj * obj, FILE * fp, vector_float ** hops);
+    int raw2hop_process(raw2hop_obj * obj, vector_float ** hops);
 
 #endif

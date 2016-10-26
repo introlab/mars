@@ -27,7 +27,7 @@
     */
 
     //! A structure that holds all the fields of a fifo buffer.
-    typedef struct fifo {
+    typedef struct fifo_obj {
 
         pthread_mutex_t mutex;          ///< Mutex to protect the structure from simultaneous pop/push.	 
         void ** buffer;                 ///< Buffer that holds all the pointers.
@@ -36,30 +36,30 @@
         unsigned int iRead;             ///< Index of the read pointer.
         unsigned int iWrite;            ///< Index of the write pointer.
 
-    } fifo;
+    } fifo_obj;
 
     /** Constructor of the fifo object.	
         \param      nMaxElements    Maximum number of elements in the buffer.
         \return                     Pointer to the instantiated object.
     */
-    fifo * fifo_construct( const unsigned int nMaxElements );
+    fifo_obj * fifo_construct( const unsigned int nMaxElements );
 
     /** Destructor of the fifo object.
         \param      obj             Pointer to the instantiated object.
     */
-    void fifo_destroy( fifo * obj );
+    void fifo_destroy( fifo_obj * obj );
 
     /** Push an element in the fifo buffer.
         \param      obj             Pointer to the object.
         \param      element         Pointer to the element to be pushed.
         \return                     Return -1 if error, 0 otherwise.
     */
-    int fifo_push( fifo * obj, const void * element );
+    int fifo_push( fifo_obj * obj, const void * element );
 
     /** Pop an element from the fifo buffer.
         \param      obj             Pointer to the object.
         \return                     Return the popped element (returns NULL if error)
     */
-    void * fifo_pop( fifo * obj );
+    void * fifo_pop( fifo_obj * obj );
 
 #endif

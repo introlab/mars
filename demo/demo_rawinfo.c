@@ -5,7 +5,6 @@
 int main(int argc, char* argv[])
 {
     
-	FILE *fp;
 	raw2hop_obj *myRaw2hop;
 	vector_float **hops;
 	
@@ -23,7 +22,7 @@ int main(int argc, char* argv[])
 	float *minValue;
 
 	if (argc != 5) {
-		printf("Three argument expected: size of hop, number of channels, number of bits, raw file name.\n");
+		printf("Four arguments expected: size of hop, number of channels, number of bits, raw file name.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -47,15 +46,13 @@ int main(int argc, char* argv[])
 	}
 
 
-	myRaw2hop = raw2hop_construct(hopSize,nMics,nBits);
-
-	fp = fopen(fileName,"rb");
+	myRaw2hop = raw2hop_construct(hopSize,nMics,nBits,fileName);
 
 	printf("Reading file... "); fflush(stdout);
 
 	nHops = 0;
 
-	while(raw2hop_process(myRaw2hop, fp, hops) == 0) {
+	while(raw2hop_process(myRaw2hop, hops) == 0) {
 
 		for (iMic = 0; iMic < nMics; iMic++) {
 
@@ -85,8 +82,6 @@ int main(int argc, char* argv[])
 	}
 
 	printf("[OK]\n");
-
-	fclose(fp);
 
 	raw2hop_destroy(myRaw2hop);
 
