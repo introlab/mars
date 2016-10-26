@@ -1,9 +1,9 @@
 
-	#include "window.h"
+    #include "window.h"
 
     #include <math.h>
 
-	vector_float * window_hann(const unsigned short frameSize) {
+    vector_float * window_hann(const unsigned short frameSize) {
 
         unsigned int iSample;
         vector_float * window;
@@ -12,7 +12,7 @@
 
         if ( frameSize == 1 ) {
 
-        	window->array[0] = 1.0f;
+            window->array[0] = 1.0f;
                         
         }
         else {
@@ -27,4 +27,4 @@
 
         return window;
 
-	}
+    }

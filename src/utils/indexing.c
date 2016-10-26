@@ -1,42 +1,42 @@
-	
-	#include "indexing.h"
+    
+    #include "indexing.h"
 
-	unsigned int indexing_wrap(const signed int index, const unsigned int arraySize) {
+    unsigned int indexing_wrap(const signed int index, const unsigned int arraySize) {
 
-		unsigned int newIndex;
+        unsigned int newIndex;
 
-		if (index < 0) {
+        if (index < 0) {
 
-			newIndex = (unsigned int) (index + arraySize);
+            newIndex = (unsigned int) (index + arraySize);
 
-		}
-		else {
+        }
+        else {
 
-			newIndex = (unsigned int) index;
+            newIndex = (unsigned int) index;
 
-		}
+        }
 
-		return newIndex;
+        return newIndex;
 
-	}
+    }
 
-	unsigned int indexing_cycle(const signed int index, const unsigned int arraySize) {
+    unsigned int indexing_cycle(const signed int index, const unsigned int arraySize) {
 
-		signed int newIndex;
+        signed int newIndex;
 
-		if (index > 0) {
-			newIndex = index;
-		}
-		else {
-			newIndex = -1 * index;
-		}
-			
-		newIndex %= 2*(arraySize-1);
+        if (index > 0) {
+            newIndex = index;
+        }
+        else {
+            newIndex = -1 * index;
+        }
+            
+        newIndex %= 2*(arraySize-1);
 
-		if ((newIndex+1) > arraySize) {
-			newIndex = 2*(arraySize-1) - newIndex;
-		}
+        if ((newIndex+1) > arraySize) {
+            newIndex = 2*(arraySize-1) - newIndex;
+        }
 
-		return ((unsigned int) newIndex);
+        return ((unsigned int) newIndex);
 
-	}
+    }
