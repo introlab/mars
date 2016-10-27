@@ -1,5 +1,5 @@
-#ifndef __MARS_SOURCE_RAW2HOP
-#define __MARS_SOURCE_RAW2HOP
+#ifndef __MARS_SINK_HOP2RAW
+#define __MARS_SINK_HOP2RAW
 
     /**
     * \file     raw2hop.h
@@ -23,44 +23,48 @@
     *
     */
 
+    #include <stdlib.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include <math.h>
+    #include <limits.h>
+
     #include "../signal/vector.h"
     #include "../utils/pcm.h"
 
-    #include <stdio.h>
-    #include <math.h>
-    #include <limits.h>
-    #include <string.h>
-
     //! A structure that holds all the fields to extract samples from a RAW file. 
-    typedef struct raw2hop_obj {
+    typedef struct hop2raw_obj {
 
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
         unsigned char nBits;        ///< Number of bits per sample.
+        size_t sizeSample;          ///< Size of a sample.
+        float maxValue;             ///< Maximum value with the number of bytes.
+        float minValue;             ///< Minimum value with the number of bytes.
         char * fileName;            ///< Name of the RAW file.
         FILE * fp;                  ///< File pointer.
 
-    } raw2hop_obj;
+    } hop2raw_obj;    
 
-    /** Constructor of the raw2hop object.	
+    /** Constructor of the hop2raw object.	
         \param      hopSize     Number of samples per hop.
         \param      nMics       Number of microphones/channels.
         \param      nBits       Number of bits.
         \param      fileName    Name of the RAW file.
         \return                 Pointer to the instantiated object.
     */
-    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName);
+    hop2raw_obj * hop2raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName);
 
-    /** Destructor of the raw2hop object.
+    /** Destructor of the hop2raw object.
         \param      obj         Pointer to the instantiated object.
     */
-    void raw2hop_destroy(raw2hop_obj * obj);
+    void hop2raw_destroy(hop2raw_obj * obj);
 
     /** Extract the next hop from the RAW file and push samples in the hops
         \param      obj         Pointer to the instantiated object.
         \param      hops        Pointer to an array of hops vectors.
         \return                 Return -1 if end of file reached, 0 otherwise.
     */
-    int raw2hop_process(raw2hop_obj * obj, vector_float ** hops);
+    int hop2raw_process(hop2raw_obj * obj, vector_float ** hops);
 
 #endif

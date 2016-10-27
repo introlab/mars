@@ -1,103 +1,85 @@
-	
-	#include "raw2hop.h"
+    
+    #include "raw2hop.h"
 
-	raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName) {
+    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName) {
 
-		raw2hop_obj * obj;
+        raw2hop_obj * obj;
 
-		obj = (raw2hop_obj *) malloc(sizeof(raw2hop_obj));
+        obj = (raw2hop_obj *) malloc(sizeof(raw2hop_obj));
 
-		obj->hopSize = hopSize;
-		obj->nMics = nMics;
-		obj->nBits = nBits;
-		obj->fileName = (char *) malloc(sizeof(char) * (strlen(fileName)+1));
-		strcpy(obj->fileName, fileName);
-		obj->fp = fopen(obj->fileName,"rb");
+        obj->hopSize = hopSize;
+        obj->nMics = nMics;
+        obj->nBits = nBits;
+        obj->fileName = (char *) malloc(sizeof(char) * (strlen(fileName)+1));
+        strcpy(obj->fileName, fileName);
+        obj->fp = fopen(obj->fileName,"rb");
 
-		switch(nBits) {
-			case 8:
-				obj->sizeSample = sizeof(signed char);
-				obj->maxAmplitude = (float) fabs(SCHAR_MIN);
-			break;
-			case 16:
-				obj->sizeSample = sizeof(signed short);
-				obj->maxAmplitude = (float) fabs(SHRT_MIN);
-			break;
-			case 32:
-				obj->sizeSample = sizeof(signed int);
-				obj->maxAmplitude = (float) fabs(INT_MIN);
-			break;
-			default:
-				printf("Invalid number of bits.\n");
-				exit(EXIT_FAILURE);
-			break;
-		}
+        if (!((nBits == 8) | (nBits == 16) | (nBits == 32))) {
+            printf("Invalid number of bits.\n");
+            exit(EXIT_FAILURE);        	
+        }
 
-		return obj;
+        return obj;
 
-	}
+    }
 
-	void raw2hop_destroy(raw2hop_obj * obj) {
+    void raw2hop_destroy(raw2hop_obj * obj) {
 
-		fclose(obj->fp);
-		free((void *) obj->fileName);
+        fclose(obj->fp);
+        free((void *) obj->fileName);
 
-		free((void *) obj);
+        free((void *) obj);
 
-	}
+    }
 
-	int raw2hop_process(raw2hop_obj * obj, vector_float ** hops) {
+    int raw2hop_process(raw2hop_obj * obj, vector_float ** hops) {
 
-		unsigned int iSample;
-		unsigned int iMic;
-		signed char sampleChar;
-		signed short sampleShort;
-		signed int sampleInt;
-		float sample;
-		int rtnValue;
-		int tmp;
+        unsigned int iSample;
+        unsigned int iMic;
+        signed char sampleChar;
+        signed short sampleShort;
+        signed int sampleInt;
+        float sample;
+        int rtnValue;
+        int tmp;
 
-		rtnValue = 0;
+        rtnValue = 0;
 
-		for (iSample = 0; iSample < obj->hopSize; iSample++) {
-			
-			for (iMic = 0; iMic < obj->nMics; iMic++) {
-			
-				if (!feof(obj->fp)) {
+        for (iSample = 0; iSample < obj->hopSize; iSample++) {
+            
+            for (iMic = 0; iMic < obj->nMics; iMic++) {
+            
+                if (!feof(obj->fp)) {
 
-					switch (obj->nBits) {
-						case 8:
-							tmp = fread(&sampleChar, obj->sizeSample, 1, obj->fp);
-							sample = (float) sampleChar;
-						break;
-						case 16:
-							tmp = fread(&sampleShort, obj->sizeSample, 1, obj->fp);
-							sample = (float) sampleShort;
-						break;
-						case 32:
-							tmp = fread(&sampleInt, obj->sizeSample, 1, obj->fp);
-							sample = (float) sampleInt;
-						break;
-					}
+                    switch (obj->nBits) {
+                        case 8:
+                            tmp = fread(&sampleChar, sizeof(signed char), 1, obj->fp);
+                            sample = pcm_signed08bits2normalized(sampleChar);
+                        break;
+                        case 16:
+                            tmp = fread(&sampleShort, sizeof(signed short), 1, obj->fp);
+                            sample = pcm_signed16bits2normalized(sampleShort);
+                        break;
+                        case 32:
+                            tmp = fread(&sampleInt, sizeof(signed int), 1, obj->fp);
+                            sample = pcm_signed32bits2normalized(sampleInt);
+                        break;
+                    }
 
-				}
-				else {
+                }
+                else {
 
-					sample = 0.0f;
-					rtnValue = -1;
+                    sample = 0.0f;
+                    rtnValue = -1;
 
-				}
+                }
 
-				if (hops != NULL) {
+                hops[iMic]->array[iSample] = sample;
 
-					hops[iMic]->array[iSample] = sample / obj->maxAmplitude;
+            }
 
-				}
+        }
 
-			}
+        return rtnValue;
 
-		}
-
-		return rtnValue;
-
-	}
+    }

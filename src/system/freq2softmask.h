@@ -1,9 +1,6 @@
 #ifndef __MARS_SYST_FREQ2SOFTMASK
 #define __MARS_SYST_FREQ2SOFTMASK
 
-    #include "../signal/vector.h"
-    #include <stdlib.h>
-
     /**
     * \file     freq2softmask.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
@@ -25,6 +22,9 @@
     * along with this program.  If not, see <http://www.gnu.org/licenses/>.
     *
     */
+
+    #include "../signal/vector.h"
+    #include <stdlib.h>
 
     //! A structure that holds all the fields to estimate a soft mask
     typedef struct freq2softmask_obj {
