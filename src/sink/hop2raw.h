@@ -2,7 +2,7 @@
 #define __MARS_SINK_HOP2RAW
 
     /**
-    * \file     raw2hop.h
+    * \file     hop2raw.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25

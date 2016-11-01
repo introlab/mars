@@ -4,6 +4,7 @@
     eightsnd2hop_obj * eightsnd2hop_construct(const unsigned int hopSize, const unsigned int sampleRate, const char * sndCardName) {
 
         eightsnd2hop_obj * obj;
+        unsigned int iElement;
         int err;
 
         snd_pcm_hw_params_t * hw_params;
@@ -25,8 +26,15 @@
         obj->bufferAvailable = (fifo_obj*) fifo_construct(obj->nMaxElements);
         obj->bufferFilled = (fifo_obj*) fifo_construct(obj->nMaxElements);
 
-        // Open sound card
+        // Fill bufferAvailable with frames
+        for (iElement = 0; iElement < obj->nMaxElements; iElement++) {
 
+            fifo_push(obj->bufferAvailable, (const void *) malloc(sizeof(char)*4*obj->nMics*obj->hopSize));
+
+        }
+
+        // Open sound card
+        
         if ((err = snd_pcm_open(&(obj->captureHandle), obj->sndCardName, SND_PCM_STREAM_CAPTURE, SND_PCM_ASYNC)) < 0) {
             printf("Cannot open audio device %s: %s\n",obj->sndCardName, snd_strerror(err));
             exit(EXIT_FAILURE);
@@ -88,9 +96,19 @@
 
     void eightsnd2hop_destroy(eightsnd2hop_obj * obj) {
 
+        void *frame;
+
         snd_pcm_close(obj->captureHandle);
 
         free((void *) obj->sndCardName);
+
+        while((frame = fifo_pop(obj->bufferAvailable)) != (void *) NULL) {
+            free(frame);
+        }
+        while((frame = fifo_pop(obj->bufferFilled)) != (void *) NULL) {
+            free(frame);
+        }  
+
         fifo_destroy(obj->bufferAvailable);
         fifo_destroy(obj->bufferFilled);
         free((void *) obj);
@@ -146,6 +164,8 @@
         }
 
         fifo_push(obj->bufferAvailable, (void *) frame);
+
+        return 0;
 
     }
 
