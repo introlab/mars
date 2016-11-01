@@ -3,7 +3,7 @@
 
     #include <math.h>
 
-    vector_float * window_hann(const unsigned short frameSize) {
+    vector_float * window_hann(const unsigned int frameSize) {
 
         unsigned int iSample;
         vector_float * window;

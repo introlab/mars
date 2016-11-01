@@ -37,7 +37,7 @@
 
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
-        unsigned char nBits;        ///< Number of bits per sample.
+        unsigned int nBits;         ///< Number of bits per sample.
         size_t sizeSample;          ///< Size of a sample.
         float maxValue;             ///< Maximum value with the number of bytes.
         float minValue;             ///< Minimum value with the number of bytes.
@@ -53,7 +53,7 @@
         \param      fileName    Name of the RAW file.
         \return                 Pointer to the instantiated object.
     */
-    hop2raw_obj * hop2raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName);
+    hop2raw_obj * hop2raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName);
 
     /** Destructor of the hop2raw object.
         \param      obj         Pointer to the instantiated object.

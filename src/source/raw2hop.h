@@ -36,7 +36,7 @@
 
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
-        unsigned char nBits;        ///< Number of bits per sample.
+        unsigned int nBits;         ///< Number of bits per sample.
         char * fileName;            ///< Name of the RAW file.
         FILE * fp;                  ///< File pointer.
 
@@ -49,7 +49,7 @@
         \param      fileName    Name of the RAW file.
         \return                 Pointer to the instantiated object.
     */
-    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName);
+    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName);
 
     /** Destructor of the raw2hop object.
         \param      obj         Pointer to the instantiated object.

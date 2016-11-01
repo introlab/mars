@@ -1,13 +1,11 @@
-#ifndef __MARS_UTILS_WINDOWS
-#define __MARS_UTILS_WINDOWS
-
-    #include "../signal/vector.h"
+#ifndef __MARS_MODULE_STFT
+#define __MARS_MODULE_STFT
 
     /**
-    * \file     window.h
+    * \file     stft.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
-    * \date     2016-10-25
+    * \date     2016-11-01
     * \copyright
     *
     * This program is free software: you can redistribute it and/or modify
@@ -25,10 +23,31 @@
     *
     */
 
-    /** Instantiate a vector that contains a Hann window.
-        \param      frameSize   Number of samples per frame.
-        \return                 Pointer to the instantiated vector.
-    */
-    vector_float * window_hann(const unsigned int frameSize);
+    #include <stdlib.h>
+
+    #include "../signal/vector.h"
+    #include "../system/hop2frame.h"
+    #include "../system/frame2freq.h"
+    #include "../utils/window.h"
+
+    typedef struct stft_obj {
+
+        unsigned int hopSize;
+        unsigned int frameSize;
+        unsigned int nMics;
+
+        vector_float ** frames;
+        vector_float * window;
+
+        hop2frame_obj ** hop2frame;
+        frame2freq_obj ** frame2freq;
+
+    } stft_obj;
+
+    stft_obj * stft_construct(const unsigned int hopSize, const unsigned int frameSize, const unsigned int nMics);
+
+    void stft_destroy(stft_obj * obj);
+
+    int stft_process(stft_obj * obj, const vector_float ** hops, vector_float ** freqs);
 
 #endif
