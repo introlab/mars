@@ -23,16 +23,17 @@
     *
     */
 
-    #include "../utils/vector.h"
-    #include "../utils/matrix.h"
+    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
 
     //! A structure that holds all the fields to generate the acoustic image.
     typedef struct xcorr2aimg_obj {
 
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int nPairs;            ///< Number of pairs.
+        unsigned int nPoints;           ///< Number of points.
 
-    } xcorr2tdoa_obj;
+    } xcorr2aimg_obj;
 
     /** Constructor of the xcorr2aimg object.	
         \param      frameSize   Number of samples per frame.

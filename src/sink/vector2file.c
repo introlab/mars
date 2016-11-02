@@ -25,34 +25,6 @@
 
     }
 
-    int vector2file_process_signedchar(vector2file_obj * obj, const vector_signedchar * vector) {
-
-        printf("Not implemented yet.\n");
-        exit(EXIT_FAILURE);
-
-    }
-
-    int vector2file_process_unsignedchar(vector2file_obj * obj, const vector_unsignedchar * vector) {
-
-        printf("Not implemented yet.\n");
-        exit(EXIT_FAILURE);
-        
-    }
-
-    int vector2file_process_signedshort(vector2file_obj * obj, const vector_signedshort * vector) {
-
-        printf("Not implemented yet.\n");
-        exit(EXIT_FAILURE);
-        
-    }
-
-    int vector2file_process_unsignedshort(vector2file_obj * obj, const vector_unsignedshort * vector) {
-
-        printf("Not implemented yet.\n");
-        exit(EXIT_FAILURE);
-        
-    }
-
     int vector2file_process_signedint(vector2file_obj * obj, const vector_signedint * vector) {
 
         printf("Not implemented yet.\n");
@@ -71,11 +43,4 @@
 
         fwrite(vector->array, sizeof(float), vector->nElements, obj->fp);
 
-    }
-
-    int vector2file_process_double(vector2file_obj * obj, const vector_double * vector) {
-
-        printf("Not implemented yet.\n");
-        exit(EXIT_FAILURE);
-        
     }

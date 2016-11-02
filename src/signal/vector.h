@@ -25,38 +25,6 @@
     *
     */
 
-    //! A structure that holds all the fields of a vector with signed char elements. 
-    typedef struct vector_signedchar {
-
-        signed char * array;        ///< Pointer to the array of elements.		 
-        unsigned int nElements;     ///< Number of elements.
-
-    } vector_signedchar;
-
-    //! A structure that holds all the fields of a vector with unsigned char elements. 
-    typedef struct vector_unsignedchar {
-
-        unsigned char * array;      ///< Pointer to the array of elements.		 
-        unsigned int nElements;     ///< Number of elements.
-
-    } vector_unsignedchar;
-
-    //! A structure that holds all the fields of a vector with signed short elements. 
-    typedef struct vector_signedshort {
-
-        signed short * array;       ///< Pointer to the array of elements.		 
-        unsigned int nElements;     ///< Number of elements.
-
-    } vector_signedshort;
-
-    //! A structure that holds all the fields of a vector with unsigned short elements. 
-    typedef struct vector_unsignedshort {
-
-        unsigned short * array;     ///< Pointer to the array of elements.		 
-        unsigned int nElements;     ///< Number of elements.
-
-    } vector_unsignedshort;
-
     //! A structure that holds all the fields of a vector with signed int elements. 
     typedef struct vector_signedint {
 
@@ -81,38 +49,6 @@
 
     } vector_float;
 
-    //! A structure that holds all the fields of a vector with double elements. 
-    typedef struct vector_double {
-
-        double * array;             ///< Pointer to the array of elements.		 
-        unsigned int nElements;     ///< Number of elements.
-
-    } vector_double;
-
-    /** Constructor of the vector object.	
-        \param      nElements   Number of elements.
-        \return                 Pointer to the instantiated object.
-    */
-    vector_signedchar * vector_signedchar_malloc(const unsigned int nElements);
-
-    /** Constructor of the vector object.	
-        \param      nElements   Number of elements.
-        \return                 Pointer to the instantiated object.
-    */
-    vector_unsignedchar * vector_unsignedchar_malloc(const unsigned int nElements);
-    
-    /** Constructor of the vector object.	
-        \param      nElements   Number of elements.
-        \return                 Pointer to the instantiated object.
-    */
-    vector_signedshort * vector_signedshort_malloc(const unsigned int nElements);
-
-    /** Constructor of the vector object.	
-        \param      nElements   Number of elements.
-        \return                 Pointer to the instantiated object.
-    */	
-    vector_unsignedshort * vector_unsignedshort_malloc(const unsigned int nElements);
-
     /** Constructor of the vector object.	
         \param      nElements   Number of elements.
         \return                 Pointer to the instantiated object.
@@ -131,32 +67,6 @@
     */	
     vector_float * vector_float_malloc(const unsigned int nElements);
 
-    /** Constructor of the vector object.	
-        \param      nElements   Number of elements.
-        \return                 Pointer to the instantiated object.
-    */	
-    vector_double * vector_double_malloc(const unsigned int nElements);
-
-    /** Destructor of the vector object.
-        \param      obj         Pointer to the instantiated object.
-    */
-    void vector_signedchar_free(vector_signedchar * obj);
-
-    /** Destructor of the vector object.
-        \param      obj         Pointer to the instantiated object.
-    */
-    void vector_unsignedchar_free(vector_unsignedchar * obj);
-
-    /** Destructor of the vector object.
-        \param      obj         Pointer to the instantiated object.
-    */
-    void vector_signedshort_free(vector_signedshort * obj);
-
-    /** Destructor of the vector object.
-        \param      obj         Pointer to the instantiated object.
-	*/	
-    void vector_unsignedshort_free(vector_unsignedshort * obj);
-
     /** Destructor of the vector object.
         \param      obj         Pointer to the instantiated object.
     */
@@ -172,9 +82,23 @@
     */
     void vector_float_free(vector_float * obj);
 
-    /** Destructor of the vector object.
-        \param      obj         Pointer to the instantiated object.
+    /** Copy the vector object and generate a new object.
+        \param      obj         Pointer to the source object.
+        \return                 Pointer to the newly instantiated object.
     */
-    void vector_double_free(vector_double * obj);
+    vector_signedint * vector_signedint_copy(const vector_signedint * obj);
+
+    /** Copy the vector object and generate a new object.
+        \param      obj         Pointer to the source object.
+        \return                 Pointer to the newly instantiated object.
+    */
+    vector_unsignedint * vector_unsignedint_copy(const vector_unsignedint * obj);
+
+    /** Copy the vector object and generate a new object.
+        \param      obj         Pointer to the source object.
+        \return                 Pointer to the newly instantiated object.
+    */
+    vector_float * vector_float_copy(const vector_float * obj);
+
 
 #endif

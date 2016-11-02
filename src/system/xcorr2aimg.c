@@ -1,6 +1,6 @@
     #include "xcorr2aimg.h"
 
-    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nPairs) {
+    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nPairs, const unsigned int nPoints) {
 
         xcorr2aimg_obj * obj;
 

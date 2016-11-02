@@ -40,20 +40,10 @@
 
     void vector2file_destroy(vector2file_obj * obj);
 
-    int vector2file_process_signedchar(vector2file_obj * obj, const vector_signedchar * vector);
-
-    int vector2file_process_unsignedchar(vector2file_obj * obj, const vector_unsignedchar * vector);
-
-    int vector2file_process_signedshort(vector2file_obj * obj, const vector_signedshort * vector);
-
-    int vector2file_process_unsignedshort(vector2file_obj * obj, const vector_unsignedshort * vector);
-
     int vector2file_process_signedint(vector2file_obj * obj, const vector_signedint * vector);
 
     int vector2file_process_unsignedint(vector2file_obj * obj, const vector_unsignedint * vector);
 
     int vector2file_process_float(vector2file_obj * obj, const vector_float * vector);
-
-    int vector2file_process_double(vector2file_obj * obj, const vector_double * vector);
 
 #endif
