@@ -1,7 +1,7 @@
     
     #include "raw2hop.h"
 
-    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned char nBits, const char * fileName) {
+    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName) {
 
         raw2hop_obj * obj;
 
