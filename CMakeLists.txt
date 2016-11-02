@@ -22,6 +22,7 @@ set(SRC
 	src/signal/vector.c
 
 	src/sink/hop2raw.c
+	src/sink/vector2file.c
 	
 	src/source/eightsnd2hop.c
 	src/source/raw2hop.c
@@ -35,11 +36,15 @@ set(SRC
 	src/system/phases2xcorr.c
 	src/system/xcorr2tdoa.c
 	
+	src/utils/circle.c
 	src/utils/fft.c
 	src/utils/fifo.c
 	src/utils/indexing.c
 	src/utils/pcm.c
+	src/utils/sphere.c
 	src/utils/window.c
+
+	src/module/stft.c
 
 )
 
