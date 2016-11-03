@@ -173,11 +173,15 @@
 
         memcpy(objDest->array, objSrc->array[iRow], sizeof(signed int) * objSrc->nCols);
 
+        return 0;
+
     }
 
     int matrix_unsignedint_export(const matrix_unsignedint * objSrc, vector_unsignedint * objDest, unsigned int iRow) {
 
         memcpy(objDest->array, objSrc->array[iRow], sizeof(unsigned int) * objSrc->nCols);
+
+        return 0;
 
     }
 
@@ -185,11 +189,15 @@
 
         memcpy(objDest->array, objSrc->array[iRow], sizeof(float) * objSrc->nCols);
 
+        return 0;
+
     }
 
     int matrix_signedint_import(matrix_signedint * objDest, const vector_signedint * objSrc, unsigned int iRow) {
 
         memcpy(objDest->array[iRow], objSrc->array, sizeof(signed int) * objSrc->nElements);
+
+        return 0;
 
     }
 
@@ -197,11 +205,15 @@
 
         memcpy(objDest->array[iRow], objSrc->array, sizeof(unsigned int) * objSrc->nElements);
 
+        return 0;
+
     }
 
     int matrix_float_import(matrix_float * objDest, const vector_float * objSrc, unsigned int iRow) {
 
         memcpy(objDest->array[iRow], objSrc->array, sizeof(float) * objSrc->nElements);
+
+        return 0;
 
     }
 
@@ -209,16 +221,22 @@
 
         memcpy(objDest->array[iRowDest], objSrc->array[iRowSrc], sizeof(signed int) * objDest->nCols);
 
+        return 0;
+
     }
 
     int matrix_unsignedint_importexport(matrix_unsignedint * objDest, const matrix_unsignedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc) {
 
         memcpy(objDest->array[iRowDest], objSrc->array[iRowSrc], sizeof(unsigned int) * objDest->nCols);
 
+        return 0;
+
     }
 
     int matrix_float_importexport(matrix_float * objDest, const matrix_float * objSrc, unsigned int iRowDest, unsigned int iRowSrc) {
 
         memcpy(objDest->array[iRowDest], objSrc->array[iRowSrc], sizeof(float) * objDest->nCols);
+
+        return 0;
 
     }

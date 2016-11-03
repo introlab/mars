@@ -132,6 +132,7 @@
     /** Extract the vector at given row.
         \param      objSrc      Pointer to the source object.
         \param      objDest     Pointer to the destination object.
+        \param      iRow        Row index.        
         \return                 Return -1 if error, 0 otherwise.
     */
     int matrix_signedint_export(const matrix_signedint * objSrc, vector_signedint * objDest, unsigned int iRow);
@@ -139,6 +140,7 @@
     /** Extract the vector at given row.
         \param      objSrc      Pointer to the source object.
         \param      objDest     Pointer to the destination object.
+        \param      iRow        Row index.        
         \return                 Return -1 if error, 0 otherwise.
     */
     int matrix_unsignedint_export(const matrix_unsignedint * objSrc, vector_unsignedint * objDest, unsigned int iRow);
@@ -146,20 +148,60 @@
     /** Extract the vector at given row.
         \param      objSrc      Pointer to the source object.
         \param      objDest     Pointer to the destination object.
+        \param      iRow        Row index.        
         \return                 Return -1 if error, 0 otherwise.
     */
     int matrix_float_export(const matrix_float * objSrc, vector_float * objDest, unsigned int iRow);
 
+    /** Import a vector at the given row.
+        \param      objDest     Pointer to the destination object.
+        \param      objSrc      Pointer to the source object.
+        \param      iRow        Row index.
+        \return                 Return -1 if error, 0 otherwise.
+    */
     int matrix_signedint_import(matrix_signedint * objDest, const vector_signedint * objSrc, unsigned int iRow);
 
+    /** Import a vector at the given row.
+        \param      objDest     Pointer to the destination object.
+        \param      objSrc      Pointer to the source object.
+        \param      iRow        Row index.
+        \return                 Return -1 if error, 0 otherwise.
+    */
     int matrix_unsignedint_import(matrix_unsignedint * objDest, const vector_unsignedint * objSrc, unsigned int iRow);
 
+    /** Import a vector at the given row.
+        \param      objDest     Pointer to the destination object.
+        \param      objSrc      Pointer to the source object.
+        \param      iRow        Row index.
+        \return                 Return -1 if error, 0 otherwise.
+    */
     int matrix_float_import(matrix_float * objDest, const vector_float * objSrc, unsigned int iRow);
 
+    /** Import a vector at the given row.
+        \param      objDest     Pointer to the destination object.
+        \param      objSrc      Pointer to the source object.
+        \param      iRowDest    Destination row index.
+        \param      iRowSrc     Source row index.
+        \return                 Return -1 if error, 0 otherwise.
+    */
     int matrix_signedint_importexport(matrix_signedint * objDest, const matrix_signedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
 
+    /** Import a vector at the given row.
+        \param      objDest     Pointer to the destination object.
+        \param      objSrc      Pointer to the source object.
+        \param      iRowDest    Destination row index.
+        \param      iRowSrc     Source row index.
+        \return                 Return -1 if error, 0 otherwise.
+    */
     int matrix_unsignedint_importexport(matrix_unsignedint * objDest, const matrix_unsignedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
 
+    /** Import a vector at the given row.
+        \param      objDest     Pointer to the destination object.
+        \param      objSrc      Pointer to the source object.
+        \param      iRowDest    Destination row index.
+        \param      iRowSrc     Source row index.
+        \return                 Return -1 if error, 0 otherwise.
+    */
     int matrix_float_importexport(matrix_float * objDest, const matrix_float * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
     
 
