@@ -29,7 +29,7 @@
     #include <math.h>
     #include <limits.h>
 
-    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
     #include "../utils/pcm.h"
 
     //! A structure that holds all the fields to extract samples from a RAW file. 

@@ -5,8 +5,8 @@
 int main(int argc, char* argv[])
 {
     
-	raw2hop_obj *myRaw2hop;
-	vector_float **hops;
+	raw2hop_obj *raw2hop;
+	matrix_float *hops;
 	
 	unsigned int hopSize;
 	unsigned char nMics;
@@ -31,10 +31,7 @@ int main(int argc, char* argv[])
 	nBits = (unsigned char) atoi(argv[3]);
 	fileName = argv[4];
 
-	hops = (vector_float **) malloc(sizeof(vector_float *) * nMics);
-	for (iMic = 0; iMic < nMics; iMic++) {
-		hops[iMic] = vector_float_malloc(hopSize);
-	}
+    hops = matrix_float_malloc(nMics, hopSize);
 
 	powerValue = (float *) malloc(sizeof(float) * nMics);
 	maxValue = (float *) malloc(sizeof(float) * nMics);
@@ -45,26 +42,25 @@ int main(int argc, char* argv[])
 		minValue[iMic] = INFINITY;
 	}
 
-
-	myRaw2hop = raw2hop_construct(hopSize,nMics,nBits,fileName);
+	raw2hop = raw2hop_construct(hopSize,nMics,nBits,fileName);
 
 	printf("Reading file... "); fflush(stdout);
 
 	nHops = 0;
 
-	while(raw2hop_process(myRaw2hop, hops) == 0) {
+	while(raw2hop_process(raw2hop, hops) == 0) {
 
 		for (iMic = 0; iMic < nMics; iMic++) {
 
 			for (iSample = 0; iSample < hopSize; iSample++) {
 
-				powerValue[iMic] += (hops[iMic]->array[iSample] * hops[iMic]->array[iSample]);
+				powerValue[iMic] += (hops->array[iMic][iSample] * hops->array[iMic][iSample]);
 
-				if (hops[iMic]->array[iSample] > maxValue[iMic]) {
-					maxValue[iMic] = hops[iMic]->array[iSample];
+				if (hops->array[iMic][iSample] > maxValue[iMic]) {
+					maxValue[iMic] = hops->array[iMic][iSample];
 				}
-				if (hops[iMic]->array[iSample] < minValue[iMic]) {
-					minValue[iMic] = hops[iMic]->array[iSample];
+				if (hops->array[iMic][iSample] < minValue[iMic]) {
+					minValue[iMic] = hops->array[iMic][iSample];
 				}
 
 			}
@@ -83,12 +79,8 @@ int main(int argc, char* argv[])
 
 	printf("[OK]\n");
 
-	raw2hop_destroy(myRaw2hop);
-
-	for (iMic = 0; iMic < nMics; iMic++) {
-		vector_float_free(hops[iMic]);
-	}
-	free((void *) hops);
+	raw2hop_destroy(raw2hop);
+	matrix_float_free(hops);
 
 	printf("Summary: \n");
 	printf(" - nChannels: %d\n",nMics);

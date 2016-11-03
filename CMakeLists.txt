@@ -24,25 +24,22 @@ set(SRC
 	src/signal/matrix.c
 	src/signal/vector.c
 
-	#src/sink/hop2raw.c
-	#src/sink/vector2file.c
-	
+	src/sink/hop2raw.c
+		
 	src/source/eightsnd2hop.c
 	src/source/raw2hop.c
 
 	src/system/frame2freq.c
-	#src/system/freq2mcra.c
 	src/system/freq2phase.c
-	#src/system/freq2softmask.c
 	src/system/hop2frame.c
 	src/system/phase2phases.c
 	src/system/phases2xcorr.c
 	src/system/xcorr2aimg.c
-	#src/system/xcorr2tdoa.c
 
 	src/utils/fft.c
 	src/utils/fifo.c
 	src/utils/indexing.c
+	src/utils/pcm.c
 
 	src/module/stft.c
 	src/module/ssl_aimg.c
@@ -59,23 +56,23 @@ target_link_libraries(mars
 	m
 )
 
-#add_executable(demo_fftinfo
-#	demo/demo_fftinfo.c
-#)
-#target_link_libraries(demo_fftinfo
-#	mars
-#)
+add_executable(demo_fftinfo
+	demo/demo_fftinfo.c
+)
+target_link_libraries(demo_fftinfo
+	mars
+)
 
-#add_executable(demo_rawinfo
-#	demo/demo_rawinfo.c
-#)
-#target_link_libraries(demo_rawinfo
-#	mars
-#)
+add_executable(demo_rawinfo
+	demo/demo_rawinfo.c
+)
+target_link_libraries(demo_rawinfo
+	mars
+)
 
-#add_executable(demo_record
-#	demo/demo_record.c
-#)
-#target_link_libraries(demo_record
-#	mars
-#)
+add_executable(demo_record
+	demo/demo_record.c
+)
+target_link_libraries(demo_record
+	mars
+)
