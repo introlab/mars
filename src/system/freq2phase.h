@@ -1,7 +1,7 @@
 #ifndef __MARS_SYST_FREQ2PHASE
 #define __MARS_SYST_FREQ2PHASE
 
-    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
 
     #include <math.h>
 
@@ -30,8 +30,9 @@
     //! A structure that holds all the fields to convert spectra to phase. 
     typedef struct freq2phase_obj {
 
-        unsigned short frameSize;       ///< Size of the frame.
-        unsigned short halfFrameSize;   ///< Size of the frame divided by 2 plus 1.
+        unsigned int frameSize;         ///< Size of the frame.
+        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
+        unsigned int nMics;             ///< Number of microphones.
         float epsilon;                  ///< Epsilon value (small value) to avoid overflow.
 
     } freq2phase_obj;
@@ -41,7 +42,7 @@
         \param      epsilon     Epsilon value (small value) to avoid overflow.
         \return                 Pointer to the instantiated object.
 	*/
-    freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon);
+    freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon, const unsigned int nMics);
 
     /** Destructor of the freq2phase object.
         \param      obj         Pointer to the instantiated object.
@@ -50,11 +51,11 @@
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      freq        Pointer to the input spectrum.
-        \param      mask        Pointer to the input mask.
-        \param      phase       Pointer to the output phase.
+        \param      freqs       Pointer to the input spectra.
+        \param      masks       Pointer to the input masks.
+        \param      phases      Pointer to the output phases.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int freq2phase_process(freq2phase_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phase);
+    int freq2phase_process(freq2phase_obj * obj, const matrix_float * freqs, const matrix_float * masks, matrix_float * phases);
 
 #endif

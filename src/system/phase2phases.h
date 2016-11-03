@@ -1,7 +1,7 @@
 #ifndef __MARS_SYST_PHASE2PHASES
 #define __MARS_SYST_PHASE2PHASES
 
-    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
 
     #include <stdlib.h>
 
@@ -32,6 +32,8 @@
 
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
+        unsigned int nMics;             ///< Number of microphones.
+        unsigned int nPairs;            ///< Number of pairs.
 
     } phase2phases_obj;
 
@@ -39,7 +41,7 @@
         \param      frameSize   Number of samples per frame.
         \return                 Pointer to the instantiated object.
     */
-    phase2phases_obj * phase2phases_construct(const unsigned int frameSize);
+    phase2phases_obj * phase2phases_construct(const unsigned int frameSize, const unsigned int nMics);
 
     /** Destructor of the phase2phases object.
         \param      obj         Pointer to the instantiated object.
@@ -48,11 +50,10 @@
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      phase1      Pointer to the first input phase.
-        \param      phase2      Pointer to the second input phase.
-        \param      phase12     Pointer to the output phase.
+        \param      phases      Pointer to the input phase.
+        \param      phasesx     Pointer to the output phase.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int phase2phases_process(phase2phases_obj * obj, const vector_float * phase1, const vector_float * phase2, vector_float * phase12);
+    int phase2phases_process(phase2phases_obj * obj, const matrix_float * phases, matrix_float * phasesx);
 
 #endif

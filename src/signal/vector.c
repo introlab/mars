@@ -61,52 +61,56 @@
 
     }
 
-    vector_signedint * vector_signedint_copy(const vector_signedint * obj) {
+    int vector_signedint_copy(const vector_signedint * objSrc, vector_signedint * objDest) {
+
+        memcpy(objDest->array,objSrc->array,sizeof(signed int) * objSrc->nElements);
+
+    }
+
+    int vector_unsignedint_copy(const vector_unsignedint * objSrc, vector_unsignedint * objDest) {
+
+        memcpy(objDest->array,objSrc->array,sizeof(unsigned int) * objSrc->nElements);
+
+    }
+
+    int vector_float_copy(const vector_float * objSrc, vector_float * objDest) {
+
+        memcpy(objDest->array,objSrc->array,sizeof(float) * objSrc->nElements);
+
+    }
+
+    vector_signedint * vector_signedint_clone(const vector_signedint * obj) {
 
         vector_signedint * objNew;
-        unsigned int iElement;
 
         objNew = vector_signedint_malloc(obj->nElements);
 
-        for (iElement = 0; iElement < obj->nElements; iElement++) {
-
-            objNew->array[iElement] = obj->array[iElement];
-
-        }
+        vector_signedint_copy(obj, objNew);
 
         return objNew;
 
     }
 
-    vector_unsignedint * vector_unsignedint_copy(const vector_unsignedint * obj) {
+    vector_unsignedint * vector_unsignedint_clone(const vector_unsignedint * obj) {
 
         vector_unsignedint * objNew;
-        unsigned int iElement;
 
         objNew = vector_unsignedint_malloc(obj->nElements);
 
-        for (iElement = 0; iElement < obj->nElements; iElement++) {
-
-            objNew->array[iElement] = obj->array[iElement];
-
-        }
+        vector_unsignedint_copy(obj, objNew);
 
         return objNew;
 
+
     }
 
-    vector_float * vector_float_copy(const vector_float * obj) {
+    vector_float * vector_float_clone(const vector_float * obj) {
 
         vector_float * objNew;
-        unsigned int iElement;
 
         objNew = vector_float_malloc(obj->nElements);
 
-        for (iElement = 0; iElement < obj->nElements; iElement++) {
-
-            objNew->array[iElement] = obj->array[iElement];
-
-        }
+        vector_float_copy(obj, objNew);
 
         return objNew;
 

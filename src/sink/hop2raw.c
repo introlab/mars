@@ -32,7 +32,7 @@
 
     }
 
-    int hop2raw_process(hop2raw_obj * obj, vector_float ** hops) {
+    int hop2raw_process(hop2raw_obj * obj, matrix_float * hops) {
 
         unsigned int iSample;
         unsigned int iMic;
@@ -49,7 +49,7 @@
             
             for (iMic = 0; iMic < obj->nMics; iMic++) {
 
-                sample = hops[iMic]->array[iSample];
+                sample = hops->array[iMic][iSample];
 
                 switch (obj->nBits) {
                     case 8:

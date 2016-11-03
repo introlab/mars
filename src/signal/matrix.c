@@ -97,68 +97,128 @@
 
     }
 
-    matrix_signedint * matrix_signedint_copy(const matrix_signedint * obj) {
+    int matrix_signedint_copy(const matrix_signedint * objSrc, matrix_signedint * objDest) {
+
+        unsigned int iRow;
+
+        for (iRow = 0; iRow < objSrc->nRows; iRow++) {
+            memcpy(objDest->array[iRow],objSrc->array[iRow],sizeof(signed int) * objSrc->nCols);
+        }
+
+        return 0;
+
+    }
+
+    int matrix_unsignedint_copy(const matrix_unsignedint * objSrc, matrix_unsignedint * objDest) {
+
+        unsigned int iRow;
+
+        for (iRow = 0; iRow < objSrc->nRows; iRow++) {
+            memcpy(objDest->array[iRow],objSrc->array[iRow],sizeof(unsigned int) * objSrc->nCols);
+        }
+
+        return 0;
+
+    }
+
+    int matrix_float_copy(const matrix_float * objSrc, matrix_float * objDest) {
+
+        unsigned int iRow;
+
+        for (iRow = 0; iRow < objSrc->nRows; iRow++) {
+            memcpy(objDest->array[iRow],objSrc->array[iRow],sizeof(float) * objSrc->nCols);
+        }
+
+        return 0;
+
+    }
+
+    matrix_signedint * matrix_signedint_clone(const matrix_signedint * obj) {
 
         matrix_signedint * objNew;
-        unsigned int iRow;
-        unsigned int iCol;
 
-        objNew = matrix_signedint_malloc(obj->nRows, obj->nCols);
+        objNew = matrix_signedint_malloc(obj->nRows,obj->nCols);
 
-        for (iRow = 0; iRow < obj->nRows; iRow++) {
+        matrix_signedint_copy(obj, objNew);
 
-            for (iCol = 0; iCol < obj->nCols; iCol++) {
+        return objNew;
 
-                objNew->array[iRow][iCol] = obj->array[iRow][iCol];
+    }   
 
-            }
-
-        }
-
-        return objNew;        
-
-    }
-
-    matrix_unsignedint * matrix_unsignedint_copy(const matrix_unsignedint * obj) {
+    matrix_unsignedint * matrix_unsignedint_clone(const matrix_unsignedint * obj) {
 
         matrix_unsignedint * objNew;
-        unsigned int iRow;
-        unsigned int iCol;
 
-        objNew = matrix_unsignedint_malloc(obj->nRows, obj->nCols);
+        objNew = matrix_unsignedint_malloc(obj->nRows,obj->nCols);
 
-        for (iRow = 0; iRow < obj->nRows; iRow++) {
+        matrix_unsignedint_copy(obj, objNew);
 
-            for (iCol = 0; iCol < obj->nCols; iCol++) {
+        return objNew;
 
-                objNew->array[iRow][iCol] = obj->array[iRow][iCol];
+    }    
 
-            }
+    matrix_float * matrix_float_clone(const matrix_float * obj) {
 
-        }
+        matrix_float * objNew;
 
-        return objNew;       
+        objNew = matrix_float_malloc(obj->nRows,obj->nCols);
+
+        matrix_float_copy(obj, objNew);
+
+        return objNew;
+
+    }       
+
+    int matrix_signedint_export(const matrix_signedint * objSrc, vector_signedint * objDest, unsigned int iRow) {
+
+        memcpy(objDest->array, objSrc->array[iRow], sizeof(signed int) * objSrc->nCols);
 
     }
 
-    matrix_float * matrix_float_copy(const matrix_float * obj) {
+    int matrix_unsignedint_export(const matrix_unsignedint * objSrc, vector_unsignedint * objDest, unsigned int iRow) {
 
-        matrix_float * objNew;
-        unsigned int iRow;
-        unsigned int iCol;
+        memcpy(objDest->array, objSrc->array[iRow], sizeof(unsigned int) * objSrc->nCols);
 
-        objNew = matrix_float_malloc(obj->nRows, obj->nCols);
+    }
 
-        for (iRow = 0; iRow < obj->nRows; iRow++) {
+    int matrix_float_export(const matrix_float * objSrc, vector_float * objDest, unsigned int iRow) {
 
-            for (iCol = 0; iCol < obj->nCols; iCol++) {
+        memcpy(objDest->array, objSrc->array[iRow], sizeof(float) * objSrc->nCols);
 
-                objNew->array[iRow][iCol] = obj->array[iRow][iCol];
+    }
 
-            }
+    int matrix_signedint_import(matrix_signedint * objDest, const vector_signedint * objSrc, unsigned int iRow) {
 
-        }
+        memcpy(objDest->array[iRow], objSrc->array, sizeof(signed int) * objSrc->nElements);
 
-        return objNew;    
+    }
+
+    int matrix_unsignedint_import(matrix_unsignedint * objDest, const vector_unsignedint * objSrc, unsigned int iRow) {
+
+        memcpy(objDest->array[iRow], objSrc->array, sizeof(unsigned int) * objSrc->nElements);
+
+    }
+
+    int matrix_float_import(matrix_float * objDest, const vector_float * objSrc, unsigned int iRow) {
+
+        memcpy(objDest->array[iRow], objSrc->array, sizeof(float) * objSrc->nElements);
+
+    }
+
+    int matrix_signedint_importexport(matrix_signedint * objDest, const matrix_signedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc) {
+
+        memcpy(objDest->array[iRowDest], objSrc->array[iRowSrc], sizeof(signed int) * objDest->nCols);
+
+    }
+
+    int matrix_unsignedint_importexport(matrix_unsignedint * objDest, const matrix_unsignedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc) {
+
+        memcpy(objDest->array[iRowDest], objSrc->array[iRowSrc], sizeof(unsigned int) * objDest->nCols);
+
+    }
+
+    int matrix_float_importexport(matrix_float * objDest, const matrix_float * objSrc, unsigned int iRowDest, unsigned int iRowSrc) {
+
+        memcpy(objDest->array[iRowDest], objSrc->array[iRowSrc], sizeof(float) * objDest->nCols);
 
     }

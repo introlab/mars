@@ -1,7 +1,7 @@
     
     #include "freq2phase.h"
 
-    freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon) {
+    freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon, const unsigned int nMics) {
 
         freq2phase_obj * obj;
 
@@ -9,6 +9,7 @@
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2+1;
+        obj->nMics = nMics;
         obj->epsilon = epsilon;
 
         return obj;
@@ -21,22 +22,27 @@
 
     }
 
-    int freq2phase_process(freq2phase_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phase) {
+    int freq2phase_process(freq2phase_obj * obj, const matrix_float * freqs, const matrix_float * masks, matrix_float * phases) {
 
+        unsigned int iMic;
         unsigned int iSample;
         float sampleReal;
         float sampleImag;
         float magnitude;
 
-        for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+        for (iMic = 0; iMic < obj->nMics; iMic++) {
 
-            sampleReal = freq->array[iSample*2+0];
-            sampleImag = freq->array[iSample*2+1];
+            for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
 
-            magnitude = sqrtf(sampleReal*sampleReal+sampleImag*sampleImag) + obj->epsilon;
+                sampleReal = freqs->array[iMic][iSample*2+0];
+                sampleImag = freqs->array[iMic][iSample*2+1];
 
-            phase->array[iSample*2+0] = mask->array[iSample] * sampleReal / magnitude;
-            phase->array[iSample*2+1] = mask->array[iSample] * sampleImag / magnitude;
+                magnitude = sqrtf(sampleReal*sampleReal+sampleImag*sampleImag) + obj->epsilon;
+
+                phases->array[iMic][iSample*2+0] = masks->array[iMic][iSample] * sampleReal / magnitude;
+                phases->array[iMic][iSample*2+1] = masks->array[iMic][iSample] * sampleImag / magnitude;
+
+            }
 
         }
 

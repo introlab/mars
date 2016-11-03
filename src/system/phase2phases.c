@@ -1,7 +1,7 @@
     
     #include "phase2phases.h"
 
-    phase2phases_obj * phase2phases_construct(const unsigned int frameSize) {
+    phase2phases_obj * phase2phases_construct(const unsigned int frameSize, const unsigned int nMics) {
 
         phase2phases_obj * obj;
 
@@ -9,6 +9,8 @@
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
+        obj->nMics = nMics;
+        obj->nPairs = (nMics - 1) * nMics / 2;
 
         return obj;
 
@@ -20,29 +22,42 @@
 
     }
 
-    int phase2phases_process(phase2phases_obj * obj, const vector_float * phase1, const vector_float * phase2, vector_float * phase12) {
+    int phase2phases_process(phase2phases_obj * obj, const matrix_float * phases, matrix_float * phasesx) {
 
-        unsigned short iSample;
+        unsigned int iMic1;
+        unsigned int iMic2;
+        unsigned int iPair;
+        unsigned int iSample;
 
-        float phase1_real;
-        float phase1_imag;
-        float phase2_real;
-        float phase2_imag;
-        float phase12_real;
-        float phase12_imag;
+        float phases1_real;
+        float phases1_imag;
+        float phases2_real;
+        float phases2_imag;
+        float phases12_real;
+        float phases12_imag;
 
-        for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+        iPair = 0;
 
-            phase1_real = phase1->array[iSample*2+0];
-            phase1_imag = phase1->array[iSample*2+1];
-            phase2_real = phase2->array[iSample*2+0];
-            phase2_imag = phase2->array[iSample*2+1];
+        for (iMic1 = 0; iMic1 < obj->nMics; iMic1++) {
 
-            phase12_real = phase1_real * phase2_real + phase1_imag * phase2_imag;
-            phase12_imag = phase1_imag * phase2_real - phase1_real * phase2_imag;
+            for (iMic2 = (iMic1+1); iMic2 < obj->nMics; iMic2++) {
 
-            phase12->array[iSample*2+0] = phase12_real;
-            phase12->array[iSample*2+1] = phase12_imag;
+                for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+
+                    phases1_real = phases->array[iMic1][iSample*2+0];
+                    phases1_imag = phases->array[iMic1][iSample*2+1];
+                    phases2_real = phases->array[iMic2][iSample*2+0];
+                    phases2_imag = phases->array[iMic2][iSample*2+1];
+
+                    phases12_real = phases1_real * phases2_real + phases1_imag * phases2_imag;
+                    phases12_imag = phases1_imag * phases2_real - phases1_real * phases2_imag;
+
+                    phasesx->array[iPair][iSample*2+0] = phases12_real;
+                    phasesx->array[iPair][iSample*2+1] = phases12_imag;
+
+                }
+
+            }
 
         }
 

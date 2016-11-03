@@ -23,7 +23,7 @@
     *
     */
 
-    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
     #include "../utils/pcm.h"
 
     #include <stdio.h>
@@ -58,9 +58,9 @@
 
     /** Extract the next hop from the RAW file and push samples in the hops
         \param      obj         Pointer to the instantiated object.
-        \param      hops        Pointer to an array of hops vectors.
+        \param      hops        Pointer to a matrix of hops.
         \return                 Return -1 if end of file reached, 0 otherwise.
     */
-    int raw2hop_process(raw2hop_obj * obj, vector_float ** hops);
+    int raw2hop_process(raw2hop_obj * obj, matrix_float * hops);
 
 #endif

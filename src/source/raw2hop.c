@@ -32,7 +32,7 @@
 
     }
 
-    int raw2hop_process(raw2hop_obj * obj, vector_float ** hops) {
+    int raw2hop_process(raw2hop_obj * obj, matrix_float * hops) {
 
         unsigned int iSample;
         unsigned int iMic;
@@ -74,7 +74,7 @@
 
                 }
 
-                hops[iMic]->array[iSample] = sample;
+                hops->array[iMic][iSample] = sample;
 
             }
 

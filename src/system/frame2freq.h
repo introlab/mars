@@ -2,7 +2,7 @@
 #define __MARS_SYST_FRAME2FREQ
 
     #include "../utils/fft.h"
-    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
 
     #include <stdlib.h>
 
@@ -31,9 +31,10 @@
     //! A structure that holds all the fields to convert frames to spectra. 
     typedef struct frame2freq_obj {
 
-        unsigned short frameSize;           ///< Size of the frame.
-        unsigned short halfFrameSize;       ///< Size of the frame divided by 2 plus 1.
+        unsigned int frameSize;             ///< Size of the frame.
+        unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
         vector_float * frameWindowed;       ///< Array that holds the samples of the window.
+        unsigned int nMics;                 ///< Number of microphones.
 
         fft_obj * fft;                      ///< Pointer to the FFT object.
 
@@ -43,7 +44,7 @@
         \param      frameSize   Number of samples per frame.
         \return                 Pointer to the instantiated object.
     */
-    frame2freq_obj * frame2freq_construct(const unsigned int frameSize);
+    frame2freq_obj * frame2freq_construct(const unsigned int frameSize, const unsigned int nMics);
 
     /** Destructor of the raw2hop object.
         \param      obj         Pointer to the instantiated object.
@@ -52,11 +53,11 @@
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      frame       Pointer to the input frame.
+        \param      frames      Pointer to the input frames.
         \param      window      Pointer to the input window.
-        \param      freq        Pointer to the output spectrum.
+        \param      freqs       Pointer to the output spectrum.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int frame2freq_process(frame2freq_obj * obj, const vector_float * frame, const vector_float * window, vector_float * freq);
+    int frame2freq_process(frame2freq_obj * obj, const matrix_float * frames, const vector_float * window, matrix_float * freqs);
 
 #endif

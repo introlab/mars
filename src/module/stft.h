@@ -28,7 +28,7 @@
     #include "../signal/vector.h"
     #include "../system/hop2frame.h"
     #include "../system/frame2freq.h"
-    #include "../utils/window.h"
+    #include "../general/window.h"
 
     typedef struct stft_obj {
 
@@ -36,11 +36,11 @@
         unsigned int frameSize;
         unsigned int nMics;
 
-        vector_float ** frames;
+        matrix_float * frames;
         vector_float * window;
 
-        hop2frame_obj ** hop2frame;
-        frame2freq_obj ** frame2freq;
+        hop2frame_obj * hop2frame;
+        frame2freq_obj * frame2freq;
 
     } stft_obj;
 
@@ -48,6 +48,6 @@
 
     void stft_destroy(stft_obj * obj);
 
-    int stft_process(stft_obj * obj, const vector_float ** hops, vector_float ** freqs);
+    int stft_process(stft_obj * obj, const matrix_float * hops, matrix_float * freqs);
 
 #endif

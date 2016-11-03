@@ -25,6 +25,8 @@
     *
     */
 
+    #include <string.h>
+
     //! A structure that holds all the fields of a vector with signed int elements. 
     typedef struct vector_signedint {
 
@@ -82,23 +84,44 @@
     */
     void vector_float_free(vector_float * obj);
 
-    /** Copy the vector object and generate a new object.
-        \param      obj         Pointer to the source object.
-        \return                 Pointer to the newly instantiated object.
+    /** Copy the matrix object.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
     */
-    vector_signedint * vector_signedint_copy(const vector_signedint * obj);
+    int vector_signedint_copy(const vector_signedint * objSrc, vector_signedint * objDest);    
+
+    /** Copy the matrix object.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int vector_unsignedint_copy(const vector_unsignedint * objSrc, vector_unsignedint * objDest);    
+
+    /** Copy the matrix object.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int vector_float_copy(const vector_float * objSrc, vector_float * objDest);  
 
     /** Copy the vector object and generate a new object.
         \param      obj         Pointer to the source object.
         \return                 Pointer to the newly instantiated object.
     */
-    vector_unsignedint * vector_unsignedint_copy(const vector_unsignedint * obj);
+    vector_signedint * vector_signedint_clone(const vector_signedint * obj);
 
     /** Copy the vector object and generate a new object.
         \param      obj         Pointer to the source object.
         \return                 Pointer to the newly instantiated object.
     */
-    vector_float * vector_float_copy(const vector_float * obj);
+    vector_unsignedint * vector_unsignedint_clone(const vector_unsignedint * obj);
+
+    /** Copy the vector object and generate a new object.
+        \param      obj         Pointer to the source object.
+        \return                 Pointer to the newly instantiated object.
+    */
+    vector_float * vector_float_clone(const vector_float * obj);
 
 
 #endif

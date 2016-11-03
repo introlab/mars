@@ -24,7 +24,9 @@
     */
 
     #include "../signal/matrix.h"
-    #include "indexing.h"
+    #include "../utils/indexing.h"
+
+    #include <math.h>
 
     /** Generate the exact TDOA values.
         \param      points      Points in a matrix Nx3.

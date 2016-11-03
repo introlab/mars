@@ -115,7 +115,7 @@
 
     }
 
-    int eightsnd2hop_process(eightsnd2hop_obj * obj, vector_float ** hops) {
+    int eightsnd2hop_process(eightsnd2hop_obj * obj, matrix_float * hops) {
 
         char * frame;
         unsigned int iSample;
@@ -157,7 +157,7 @@
                 sampleShort = (signed short) (sampleLong >> 16);
                 sampleFloat = ((float) sampleShort) / fabs(SHRT_MIN);
 
-                hops[iMic]->array[iSample] = sampleFloat;
+                hops->array[iMic][iSample] = sampleFloat;
 
             }
 

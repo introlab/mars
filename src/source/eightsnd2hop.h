@@ -23,8 +23,9 @@
     *
     */
 
-    #include "../signal/vector.h"
+    #include "../signal/matrix.h"
     #include "../utils/fifo.h"
+    
     #include <stdlib.h>
     #include <string.h>
     #include <alsa/asoundlib.h>
@@ -65,10 +66,10 @@
 
     /** Extract the next hop from the sound card and push samples in the hops
         \param      obj         Pointer to the instantiated object.
-        \param      hops        Pointer to an array of hops vectors.
+        \param      hops        Pointer to an matrix of hops.
         \return                 Return -1 if there is an error, 0 otherwise.
     */
-    int eightsnd2hop_process(eightsnd2hop_obj * obj, vector_float ** hops);
+    int eightsnd2hop_process(eightsnd2hop_obj * obj, matrix_float * hops);
 
     /** Thread that polls the sound card continuously
         \param      dataPtr     Pointer to the instantiated object (casted in a void pointer).

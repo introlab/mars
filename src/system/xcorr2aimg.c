@@ -1,13 +1,15 @@
     #include "xcorr2aimg.h"
 
-    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nPairs, const unsigned int nPoints) {
+    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints) {
 
         xcorr2aimg_obj * obj;
 
         obj = (xcorr2aimg_obj *) malloc(sizeof(xcorr2aimg_obj));
 
         obj->frameSize = frameSize;
-        obj->nPairs = nPairs;
+        obj->nMics = nMics;
+        obj->nPairs = (nMics-1) * nMics / 2;
+        obj->nPoints = nPoints;
 
         return obj;
 
@@ -19,7 +21,7 @@
 
     }
 
-    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const vector_float ** xcorrs, vector_float * aimg) {
+    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_float * xcorrs, vector_float * aimg) {
 
         unsigned int iPair;
         unsigned int iPoint;
@@ -30,7 +32,7 @@
 
             for (iPair = 0; iPair < obj->nPairs; iPair++) {
 
-                aimg->array[iPoint] += xcorrs[iPair]->array[tdoas->array[iPoint][iPair]];
+                aimg->array[iPoint] += xcorrs->array[iPair][tdoas->array[iPoint][iPair]];
 
             }
 

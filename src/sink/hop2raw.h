@@ -62,9 +62,9 @@
 
     /** Extract the next hop from the RAW file and push samples in the hops
         \param      obj         Pointer to the instantiated object.
-        \param      hops        Pointer to an array of hops vectors.
+        \param      hops        Pointer to a matrix of hops.
         \return                 Return -1 if end of file reached, 0 otherwise.
     */
-    int hop2raw_process(hop2raw_obj * obj, vector_float ** hops);
+    int hop2raw_process(hop2raw_obj * obj, matrix_float * hops);
 
 #endif

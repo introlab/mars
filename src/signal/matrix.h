@@ -25,6 +25,8 @@
     *
     */
 
+    #include "vector.h"
+
     //! A structure that holds all the fields of a matrix with signed int elements. 
     typedef struct matrix_signedint {
 
@@ -88,23 +90,77 @@
     */
     void matrix_float_free(matrix_float * obj);
 
-    /** Copy the matrix object and generate a new object.
-        \param      obj         Pointer to the source object.
-        \return                 Pointer to the newly instantiated object.
+    /** Copy the matrix object.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
     */
-    matrix_signedint * matrix_signedint_copy(const matrix_signedint * obj);    
+    int matrix_signedint_copy(const matrix_signedint * objSrc, matrix_signedint * objDest);    
+
+    /** Copy the matrix object.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int matrix_unsignedint_copy(const matrix_unsignedint * objSrc, matrix_unsignedint * objDest);    
+
+    /** Copy the matrix object.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int matrix_float_copy(const matrix_float * objSrc, matrix_float * objDest);    
 
     /** Copy the matrix object and generate a new object.
         \param      obj         Pointer to the source object.
         \return                 Pointer to the newly instantiated object.
     */
-    matrix_unsignedint * matrix_unsignedint_copy(const matrix_unsignedint * obj);    
+    matrix_signedint * matrix_signedint_clone(const matrix_signedint * obj);    
 
     /** Copy the matrix object and generate a new object.
         \param      obj         Pointer to the source object.
         \return                 Pointer to the newly instantiated object.
     */
-    matrix_float * matrix_float_copy(const matrix_float * obj);    
+    matrix_unsignedint * matrix_unsignedint_clone(const matrix_unsignedint * obj);    
 
+    /** Copy the matrix object and generate a new object.
+        \param      obj         Pointer to the source object.
+        \return                 Pointer to the newly instantiated object.
+    */
+    matrix_float * matrix_float_clone(const matrix_float * obj);    
+
+    /** Extract the vector at given row.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int matrix_signedint_export(const matrix_signedint * objSrc, vector_signedint * objDest, unsigned int iRow);
+
+    /** Extract the vector at given row.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int matrix_unsignedint_export(const matrix_unsignedint * objSrc, vector_unsignedint * objDest, unsigned int iRow);
+
+    /** Extract the vector at given row.
+        \param      objSrc      Pointer to the source object.
+        \param      objDest     Pointer to the destination object.
+        \return                 Return -1 if error, 0 otherwise.
+    */
+    int matrix_float_export(const matrix_float * objSrc, vector_float * objDest, unsigned int iRow);
+
+    int matrix_signedint_import(matrix_signedint * objDest, const vector_signedint * objSrc, unsigned int iRow);
+
+    int matrix_unsignedint_import(matrix_unsignedint * objDest, const vector_unsignedint * objSrc, unsigned int iRow);
+
+    int matrix_float_import(matrix_float * objDest, const vector_float * objSrc, unsigned int iRow);
+
+    int matrix_signedint_importexport(matrix_signedint * objDest, const matrix_signedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
+
+    int matrix_unsignedint_importexport(matrix_unsignedint * objDest, const matrix_unsignedint * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
+
+    int matrix_float_importexport(matrix_float * objDest, const matrix_float * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
+    
 
 #endif
