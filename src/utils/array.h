@@ -42,6 +42,7 @@
 
     } array_2d;    
 
+    //! A structure that holds all the fields in a 3-D array. 
     typedef struct array_3d {
 
         unsigned int X;         ///< Number of elements in the 1st dimension.
