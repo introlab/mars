@@ -25,29 +25,52 @@
 
     #include <stdlib.h>
 
+    #include "../general/window.h"
     #include "../signal/vector.h"
     #include "../system/hop2frame.h"
     #include "../system/frame2freq.h"
-    #include "../general/window.h"
+    #include "../utils/array.h"
 
+    #include "../message/msg_hops.h"
+    #include "../message/msg_spectra.h"
+
+    //! A structure that holds all the fields for STFT
     typedef struct stft_obj {
 
-        unsigned int hopSize;
-        unsigned int frameSize;
+        unsigned int hopSize;           ///< Size of the hop.
+        unsigned int frameSize;         ///< Size of the frame.
+        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
         unsigned int nMics;
 
-        matrix_float * frames;
-        vector_float * window;
+        array_1d * hops;                ///< Array of hops.
+        array_1d * hop2frame;           ///< Array of objects to convert hops to frames.
+        array_1d * frames;              ///< Array of frames.
+        array_1d * frame2freq;          ///< Array of objects to convert frames to freqs.
+        array_1d * freqs;               ///< Array of spectra.
 
-        hop2frame_obj * hop2frame;
-        frame2freq_obj * frame2freq;
+        vector_float * window;          ///< Analysis window.
+
 
     } stft_obj;
 
+    /** Constructor of the vector object.   
+        \param      hopSize     Size of a hop.
+        \param      frameSize   Size of a frame.
+        \param      nMics       Number of microphones/channels.
+        \return                 Pointer to the instantiated object.
+    */      
     stft_obj * stft_construct(const unsigned int hopSize, const unsigned int frameSize, const unsigned int nMics);
 
+    /** Destructor of the vector object.
+        \param      obj         Pointer to the instantiated object.
+    */
     void stft_destroy(stft_obj * obj);
 
-    int stft_process(stft_obj * obj, const matrix_float * hops, matrix_float * freqs);
+    /** Generate spectra from hops.
+        \param      obj         Pointer to the instantiated object.
+        \param      hops        Hops message.
+        \param      spectra     Spectra message.
+    */
+    int stft_process(stft_obj * obj, const msg_hops_obj * hops, const msg_spectra_obj * spectra);
 
 #endif
