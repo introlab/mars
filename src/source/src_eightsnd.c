@@ -1,16 +1,16 @@
     
-    #include "eightsnd2hop.h"
+    #include "src_eightsnd.h"
 
-    eightsnd2hop_obj * eightsnd2hop_construct(const unsigned int hopSize, const unsigned int sampleRate, const char * sndCardName) {
+    src_eightsnd_obj * src_eightsnd_construct(const unsigned int hopSize, const unsigned int sampleRate, const char * sndCardName) {
 
-        eightsnd2hop_obj * obj;
+        src_eightsnd_obj * obj;
         unsigned int iElement;
         int err;
 
         snd_pcm_hw_params_t * hw_params;
         snd_pcm_format_t format = SND_PCM_FORMAT_S32_LE;
 
-        obj = (eightsnd2hop_obj *) malloc(sizeof(eightsnd2hop_obj));
+        obj = (src_eightsnd_obj *) malloc(sizeof(src_eightsnd_obj));
 
         // Save parameters
 
@@ -94,7 +94,7 @@
 
     }
 
-    void eightsnd2hop_destroy(eightsnd2hop_obj * obj) {
+    void src_eightsnd_destroy(src_eightsnd_obj * obj) {
 
         void *frame;
 
@@ -115,7 +115,7 @@
 
     }
 
-    int eightsnd2hop_process(eightsnd2hop_obj * obj, matrix_float * hops) {
+    int src_eightsnd_process(src_eightsnd_obj * obj, msg_hops_obj * hops) {
 
         char * frame;
         unsigned int iSample;
@@ -129,7 +129,7 @@
 
         if (obj->state == 0) {
 
-            pthread_create(&(obj->thread), NULL, eightsnd2hop_thread, (void *) obj);
+            pthread_create(&(obj->thread), NULL, src_eightsnd_thread, (void *) obj);
 
             obj->state = 1;
 
@@ -157,7 +157,7 @@
                 sampleShort = (signed short) (sampleLong >> 16);
                 sampleFloat = ((float) sampleShort) / fabs(SHRT_MIN);
 
-                hops->array[iMic][iSample] = sampleFloat;
+                hops->samples[iMic][iSample] = sampleFloat;
 
             }
 
@@ -169,13 +169,13 @@
 
     }
 
-    void * eightsnd2hop_thread( void * dataPtr ) {
+    void * src_eightsnd_thread( void * dataPtr ) {
 
-        eightsnd2hop_obj * obj;
+        src_eightsnd_obj * obj;
         void * frame;
         int err;
 
-        obj = (eightsnd2hop_obj *) dataPtr;
+        obj = (src_eightsnd_obj *) dataPtr;
 
         while(1) {
 

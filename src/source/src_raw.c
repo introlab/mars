@@ -1,11 +1,11 @@
     
-    #include "raw2hop.h"
+    #include "src_raw.h"
 
-    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName) {
+    src_raw_obj * src_raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName) {
 
-        raw2hop_obj * obj;
+        src_raw_obj * obj;
 
-        obj = (raw2hop_obj *) malloc(sizeof(raw2hop_obj));
+        obj = (src_raw_obj *) malloc(sizeof(src_raw_obj));
 
         obj->hopSize = hopSize;
         obj->nMics = nMics;
@@ -23,7 +23,7 @@
 
     }
 
-    void raw2hop_destroy(raw2hop_obj * obj) {
+    void src_raw_destroy(src_raw_obj * obj) {
 
         fclose(obj->fp);
         free((void *) obj->fileName);
@@ -32,7 +32,7 @@
 
     }
 
-    int raw2hop_process(raw2hop_obj * obj, matrix_float * hops) {
+    int src_raw_process(src_raw_obj * obj, msg_hops_obj * hops) {
 
         unsigned int iSample;
         unsigned int iMic;
@@ -74,7 +74,7 @@
 
                 }
 
-                hops->array[iMic][iSample] = sample;
+                hops->samples[iMic][iSample] = sample;
 
             }
 

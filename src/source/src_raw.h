@@ -1,5 +1,5 @@
-#ifndef __MARS_SOURCE_RAW2HOP
-#define __MARS_SOURCE_RAW2HOP
+#ifndef __MARS_SOURCE_RAW
+#define __MARS_SOURCE_RAW
 
     /**
     * \file     raw2hop.h
@@ -23,7 +23,7 @@
     *
     */
 
-    #include "../signal/matrix.h"
+    #include "../message/msg_hops.h"
     #include "../utils/pcm.h"
 
     #include <stdio.h>
@@ -32,7 +32,7 @@
     #include <string.h>
 
     //! A structure that holds all the fields to extract samples from a RAW file. 
-    typedef struct raw2hop_obj {
+    typedef struct src_raw_obj {
 
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
@@ -40,27 +40,27 @@
         char * fileName;            ///< Name of the RAW file.
         FILE * fp;                  ///< File pointer.
 
-    } raw2hop_obj;
+    } src_raw_obj;
 
-    /** Constructor of the raw2hop object.	
+    /** Constructor of the object.	
         \param      hopSize     Number of samples per hop.
         \param      nMics       Number of microphones/channels.
         \param      nBits       Number of bits.
         \param      fileName    Name of the RAW file.
         \return                 Pointer to the instantiated object.
     */
-    raw2hop_obj * raw2hop_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName);
+    src_raw_obj * src_raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName);
 
-    /** Destructor of the raw2hop object.
+    /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void raw2hop_destroy(raw2hop_obj * obj);
+    void src_raw_destroy(src_raw_obj * obj);
 
     /** Extract the next hop from the RAW file and push samples in the hops
         \param      obj         Pointer to the instantiated object.
         \param      hops        Pointer to a matrix of hops.
         \return                 Return -1 if end of file reached, 0 otherwise.
     */
-    int raw2hop_process(raw2hop_obj * obj, matrix_float * hops);
+    int src_raw_process(src_raw_obj * obj, msg_hops_obj * hops);
 
 #endif

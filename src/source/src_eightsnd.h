@@ -23,7 +23,7 @@
     *
     */
 
-    #include "../signal/matrix.h"
+    #include "../message/msg_hops.h"
     #include "../utils/fifo.h"
     
     #include <stdlib.h>
@@ -35,7 +35,7 @@
     #include <math.h>
 
     //! A structure that holds all the fields to extract samples from a RAW file. 
-    typedef struct eightsnd2hop_obj {
+    typedef struct src_eightsnd_obj {
 
         unsigned int hopSize;               ///< Size of the hop.
         unsigned int nMics;                 ///< Number of microphones/channels.
@@ -49,32 +49,32 @@
         pthread_t thread;                   ///< Thread to poll the soundcard.
         char state;                         ///< State (0 = not started, 1 = running).
 
-    } eightsnd2hop_obj;
+    } src_eightsnd_obj;
 
-    /** Constructor of the eightsnd2hop object.	
+    /** Constructor of the object.	
         \param      hopSize     Number of samples per hop.
         \param      sampleRate  Sample rate (samples/sec).
         \param      sndCardName Name of the sound car.
         \return                 Pointer to the instantiated object.
     */
-    eightsnd2hop_obj * eightsnd2hop_construct(const unsigned int hopSize, const unsigned int sampleRate, const char * sndCardName);
+    src_eightsnd_obj * src_eightsnd_construct(const unsigned int hopSize, const unsigned int sampleRate, const char * sndCardName);
 
     /** Destructor of the eightsnd2hop object.
         \param      obj         Pointer to the instantiated object.
     */
-    void eightsnd2hop_destroy(eightsnd2hop_obj * obj);
+    void src_eightsnd_destroy(src_eightsnd_obj * obj);
 
     /** Extract the next hop from the sound card and push samples in the hops
         \param      obj         Pointer to the instantiated object.
         \param      hops        Pointer to an matrix of hops.
         \return                 Return -1 if there is an error, 0 otherwise.
     */
-    int eightsnd2hop_process(eightsnd2hop_obj * obj, matrix_float * hops);
+    int src_eightsnd_process(src_eightsnd_obj * obj, msg_hops_obj * hops);
 
     /** Thread that polls the sound card continuously
         \param      dataPtr     Pointer to the instantiated object (casted in a void pointer).
         \return                 Return NULL if thread is stopped.
     */
-    void * eightsnd2hop_thread( void * dataPtr );
+    void * src_eightsnd_thread( void * dataPtr );
 
 #endif
