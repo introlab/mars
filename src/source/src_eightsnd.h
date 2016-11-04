@@ -1,8 +1,8 @@
-#ifndef __MARS_SOURCE_EIGHTSND2HOP
-#define __MARS_SOURCE_EIGHTSND2HOP
+#ifndef __MARS_SOURCE_EIGHTSND
+#define __MARS_SOURCE_EIGHTSND
 
     /**
-    * \file     eightsnd2hop.h
+    * \file     src_eightsnd.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
