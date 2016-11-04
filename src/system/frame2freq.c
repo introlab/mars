@@ -1,7 +1,7 @@
     
     #include "frame2freq.h"
 
-    frame2freq_obj * frame2freq_construct(const unsigned int frameSize, const unsigned int nMics) {
+    frame2freq_obj * frame2freq_construct(const unsigned int frameSize) {
 
         frame2freq_obj * obj;
 
@@ -9,7 +9,6 @@
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2+1;
-        obj->nMics = nMics;
 
         obj->frameWindowed = vector_float_malloc(obj->frameSize);
 
@@ -29,24 +28,19 @@
 
     }
 
-    int frame2freq_process(frame2freq_obj * obj, const matrix_float * frames, const vector_float * window, matrix_float * freqs) {
+    int frame2freq_process(frame2freq_obj * obj, const vector_float * frame, const vector_float * window, vector_float * freq) {
 
         unsigned int iSample;
-        unsigned int iMic;
 
-        for (iMic = 0; iMic < obj->nMics; iMic++) {
+        for (iSample = 0; iSample < obj->frameSize; iSample++) {
 
-            for (iSample = 0; iSample < obj->frameSize; iSample++) {
-
-                obj->frameWindowed->array[iSample] = frames->array[iMic][iSample] * window->array[iSample];
-
-            }
-
-            fft_r2c(obj->fft,
-                    obj->frameWindowed->array,
-                    freqs->array[iMic]);
+            obj->frameWindowed->array[iSample] = frame->array[iSample] * window->array[iSample];
 
         }
+
+        fft_r2c(obj->fft,
+                obj->frameWindowed->array,
+                freq->array);
 
         return 0;
 

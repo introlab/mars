@@ -1,16 +1,14 @@
     
-    #include "phases2xcorr.h"
+    #include "phasex2xcorr.h"
 
-    phases2xcorr_obj * phases2xcorr_construct(const unsigned int frameSize, const unsigned int nMics) {
+    phasex2xcorr_obj * phasex2xcorr_construct(const unsigned int frameSize) {
 
-        phases2xcorr_obj * obj;
+        phasex2xcorr_obj * obj;
 
-        obj = (phases2xcorr_obj *) malloc(sizeof(phases2xcorr_obj));
+        obj = (phasex2xcorr_obj *) malloc(sizeof(phasex2xcorr_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = (frameSize/2)+1;
-        obj->nMics = nMics;
-        obj->nPairs = (nMics-1) * nMics / 2;
 
         obj->fft = fft_construct(obj->frameSize);
 
@@ -18,7 +16,7 @@
 
     }
 
-    void phases2xcorr_destroy(phases2xcorr_obj * obj) {
+    void phasex2xcorr_destroy(phasex2xcorr_obj * obj) {
 
         fft_destroy(obj->fft);
 
@@ -27,17 +25,13 @@
     }
 
 
-    int phases2xcorr_process(phases2xcorr_obj * obj, const matrix_float * phasesx, matrix_float * xcorrs) {
+    int phasex2xcorr_process(phasex2xcorr_obj * obj, const vector_float * phasex, vector_float * xcorr) {
 
         unsigned int iPair;
 
-        for (iPair = 0; iPair < obj->nPairs; iPair++) {
-
-            fft_c2r(obj->fft,
-                    phasesx->array[iPair],
-                    xcorrs->array[iPair]);
-
-        }
+        fft_c2r(obj->fft,
+                phasex->array,
+                xcorr->array);
 
         return 0;
 

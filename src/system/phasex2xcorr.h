@@ -1,11 +1,11 @@
-#ifndef __MARS_SYST_PHASES2XCORR
-#define __MARS_SYST_PHASES2XCORR
+#ifndef __MARS_SYST_PHASEX2XCORR
+#define __MARS_SYST_PHASEX2XCORR
 
     #include "../utils/fft.h"
-    #include "../signal/matrix.h"
+    #include "../signal/vector.h"
 
     /**
-    * \file     phases2xcorr.h
+    * \file     phasex2xcorr.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -27,35 +27,33 @@
     */
 
     //! A structure that holds all the fields to multiply phases. 
-    typedef struct phases2xcorr_obj {
+    typedef struct phasex2xcorr_obj {
 
         unsigned int frameSize;             ///< Size of the frame.
         unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
-        unsigned int nMics;                 ///< Number of microphones.
-        unsigned int nPairs;                ///< Number of pairs.
 
         fft_obj * fft;                      ///< Pointer to the FFT object.
 
-    } phases2xcorr_obj;
+    } phasex2xcorr_obj;
 
 
-    /** Constructor of the phases2xcorr object.	
+    /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
         \return                 Pointer to the instantiated object.
     */
-    phases2xcorr_obj * phases2xcorr_construct(const unsigned int frameSize, const unsigned int nMics);
+    phasex2xcorr_obj * phasex2xcorr_construct(const unsigned int frameSize);
 
-    /** Destructor of the phases2xcorr object.
+    /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void phases2xcorr_destroy(phases2xcorr_obj * obj);
+    void phasex2xcorr_destroy(phasex2xcorr_obj * obj);
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      phasesx     Pointer to the input phase.
+        \param      phasex      Pointer to the input phase.
         \param      xcorr       Pointer to the output cross-correlation.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int phases2xcorr_process(phases2xcorr_obj * obj, const matrix_float * phasesx, matrix_float * xcorrs);
+    int phasex2xcorr_process(phasex2xcorr_obj * obj, const vector_float * phasex, vector_float * xcorr);
 
 #endif

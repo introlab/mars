@@ -1,8 +1,8 @@
-#ifndef __MARS_SYST_XCORR2AIMG
-#define __MARS_SYST_XCORR2AIMG
+#ifndef __MARS_SYST_XCORR2XCORRRESET
+#define __MARS_SYST_XCORR2XCORRRESET
 
     /**
-    * \file     xcorr2aimg.h
+    * \file     xcorr2xcorrmax.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-11-02
@@ -25,37 +25,39 @@
 
     #include "../signal/vector.h"
     #include "../signal/matrix.h"
+    #include "../utils/indexing.h"
+
+    #include <stdlib.h>
+    #include <math.h>
 
     //! A structure that holds all the fields to generate the acoustic image.
-    typedef struct xcorr2aimg_obj {
+    typedef struct xcorr2xcorrreset_obj {
 
         unsigned int frameSize;         ///< Size of the frame.
-        unsigned int nMics;             ///< Number of microphones.
-        unsigned int nPairs;            ///< Number of pairs.
-        unsigned int nPoints;           ///< Number of points.
+        unsigned int winSize;           ///< Maximum window size (must be odd).
+        unsigned int halfWinSize;       ///< (Maximum window size - 1) / 2.
 
-    } xcorr2aimg_obj;
+    } xcorr2xcorrreset_obj;
 
-    /** Constructor of the xcorr2aimg object.	
+    /** Constructor of the xcorr2xcorrmax object.	
         \param      frameSize   Number of samples per frame.
         \param      nMics       Number of microphones.
-        \param      nPoints     Number of points.
+        \param      winSize     Maximum window size (must be odd).
         \return                 Pointer to the instantiated object.
     */
-    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints);
+    xcorr2xcorrreset_obj * xcorr2xcorrreset_construct(const unsigned int frameSize, const unsigned int winSize);
 
     /** Destructor of the xcorr2aimg object.
         \param      obj         Pointer to the instantiated object.
     */
-    void xcorr2aimg_destroy(xcorr2aimg_obj * obj);
+    void xcorr2xcorrreset_destroy(xcorr2xcorrreset_obj * obj);
 
-    /** Generate the acoustic image. 
+    /** Filter with a maximum window.
         \param      obj			Pointer to the instantiated object.
-        \param      tdoas       Matrix with the TDOAs.
-        \param      xcorrs      Cross-correlation vectors.
-        \param      aimg        Vector with the acoustic image.
+        \param      xcorrs      Cross-correlation matrix.
+        \param      xcorrsReset Filtered cross-correlation matrix.
         \return                 Return -1 if error, 0 otherwise.        
 	*/
-    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const vector_float ** xcorrs, vector_float * aimg);
+    int xcorr2xcorrreset_process(const xcorr2xcorrreset_obj * obj, const vector_float * xcorrs, const signed int tdoa, vector_float * xcorrsReset);
 
 #endif

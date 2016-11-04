@@ -1,12 +1,12 @@
-#ifndef __MARS_SYST_PHASE2PHASES
-#define __MARS_SYST_PHASE2PHASES
+#ifndef __MARS_SYST_PHASE2PHASEX
+#define __MARS_SYST_PHASE2PHASEX
 
-    #include "../signal/matrix.h"
+    #include "../signal/vector.h"
 
     #include <stdlib.h>
 
     /**
-    * \file     phase2phases.h
+    * \file     phase2phasex.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -28,32 +28,31 @@
     */
 
     //! A structure that holds all the fields to convert spectra to phase. 
-    typedef struct phase2phases_obj {
+    typedef struct phase2phasex_obj {
 
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
-        unsigned int nMics;             ///< Number of microphones.
-        unsigned int nPairs;            ///< Number of pairs.
 
-    } phase2phases_obj;
+    } phase2phasex_obj;
 
-    /** Constructor of the phase2phases object.	
+    /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
         \return                 Pointer to the instantiated object.
     */
-    phase2phases_obj * phase2phases_construct(const unsigned int frameSize, const unsigned int nMics);
+    phase2phasex_obj * phase2phasex_construct(const unsigned int frameSize);
 
-    /** Destructor of the phase2phases object.
+    /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void phase2phases_destroy(phase2phases_obj * obj);
+    void phase2phasex_destroy(phase2phasex_obj * obj);
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      phases      Pointer to the input phase.
-        \param      phasesx     Pointer to the output phase.
+        \param      phase1      Pointer to the input phase 1.
+        \param      phase2      Pointer to the input phase 2.
+        \param      phase12     Pointer to the output phase.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int phase2phases_process(phase2phases_obj * obj, const matrix_float * phases, matrix_float * phasesx);
+    int phase2phasex_process(phase2phasex_obj * obj, const vector_float * phase1, const vector_float * phase2, vector_float * phase12);
 
 #endif

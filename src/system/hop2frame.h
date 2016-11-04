@@ -1,7 +1,7 @@
 #ifndef __MARS_SYST_HOP2FRAME
 #define __MARS_SYST_HOP2FRAME
 
-    #include "../signal/matrix.h"
+    #include "../signal/vector.h"
 
     #include <stdlib.h>
 
@@ -27,35 +27,34 @@
     *
     */
 
-    //! A structure that holds all the fields to convert hops to frames. 
+    //! A structure that holds all the fields to convert hop to frame. 
     typedef struct hop2frame_obj {
 
         unsigned int hopSize;           ///< Size of the hop.
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int nMics;             ///< Number of microphones.
-        matrix_float * frames;          ///< Matrix that holds the samples.
+        vector_float * frame;           ///< Vector that holds the samples.
 
     } hop2frame_obj;
 
-    /** Constructor of the hop2frame object.	
+    /** Constructor of the object.	
         \param      hopSize     Number of samples per hop.
         \param      frameSize   Number of samples per frame.
-        \param      nMics       Number of microphones.
         \return                 Pointer to the instantiated object.
     */
-    hop2frame_obj * hop2frame_construct(const unsigned int hopSize, const unsigned int frameSize, const unsigned int nMics);
+    hop2frame_obj * hop2frame_construct(const unsigned int hopSize, const unsigned int frameSize);
 
-    /** Destructor of the raw2hop object.
+    /** Destructor of the object.
         \param      obj             Pointer to the instantiated object.
     */
     void hop2frame_destroy(hop2frame_obj * obj);
 
     /** Consume the new hop and generate the next frame
         \param      obj         Pointer to the instantiated object.
-        \param      hops        Pointer to the input hop.
-        \param      frames      Pointer to the output frame.
+        \param      hop         Pointer to the input hop.
+        \param      frame       Pointer to the output frame.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int hop2frame_process(hop2frame_obj * obj, const matrix_float * hops, matrix_float * frames);
+    int hop2frame_process(hop2frame_obj * obj, const vector_float * hop, vector_float * frame);
 
 #endif
