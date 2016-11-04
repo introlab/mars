@@ -40,7 +40,7 @@
         unsigned int hopSize;           ///< Size of the hop.
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
-        unsigned int nMics;
+        unsigned int nMics;             ///< Number of microphones/channels.
 
         array_1d * hops;                ///< Array of hops.
         array_1d * hop2frame;           ///< Array of objects to convert hops to frames.
