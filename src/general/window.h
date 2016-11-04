@@ -7,7 +7,7 @@
     * \file     window.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
-    * \date     2016-10-25
+    * \date     2016-11-04
     * \copyright
     *
     * This program is free software: you can redistribute it and/or modify
