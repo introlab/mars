@@ -5,8 +5,8 @@
 int main(int argc, char* argv[])
 {
     
-	raw2hop_obj *raw2hop;
-	matrix_float *hops;
+	src_raw_obj * src_raw;
+	msg_hops_obj * msg_hops;
 	
 	unsigned int hopSize;
 	unsigned char nMics;
@@ -31,8 +31,6 @@ int main(int argc, char* argv[])
 	nBits = (unsigned char) atoi(argv[3]);
 	fileName = argv[4];
 
-    hops = matrix_float_malloc(nMics, hopSize);
-
 	powerValue = (float *) malloc(sizeof(float) * nMics);
 	maxValue = (float *) malloc(sizeof(float) * nMics);
 	minValue = (float *) malloc(sizeof(float) * nMics);
@@ -42,25 +40,26 @@ int main(int argc, char* argv[])
 		minValue[iMic] = INFINITY;
 	}
 
-	raw2hop = raw2hop_construct(hopSize,nMics,nBits,fileName);
+    msg_hops = msg_hops_construct(hopSize, nMics);
+	src_raw = src_raw_construct(hopSize, nMics, nBits, fileName);
 
 	printf("Reading file... "); fflush(stdout);
 
 	nHops = 0;
 
-	while(raw2hop_process(raw2hop, hops) == 0) {
+	while(src_raw_process(src_raw, msg_hops) == 0) {
 
 		for (iMic = 0; iMic < nMics; iMic++) {
 
 			for (iSample = 0; iSample < hopSize; iSample++) {
 
-				powerValue[iMic] += (hops->array[iMic][iSample] * hops->array[iMic][iSample]);
+				powerValue[iMic] += (msg_hops->samples[iMic][iSample] * msg_hops->samples[iMic][iSample]);
 
-				if (hops->array[iMic][iSample] > maxValue[iMic]) {
-					maxValue[iMic] = hops->array[iMic][iSample];
+				if (msg_hops->samples[iMic][iSample] > maxValue[iMic]) {
+					maxValue[iMic] = msg_hops->samples[iMic][iSample];
 				}
-				if (hops->array[iMic][iSample] < minValue[iMic]) {
-					minValue[iMic] = hops->array[iMic][iSample];
+				if (msg_hops->samples[iMic][iSample] < minValue[iMic]) {
+					minValue[iMic] = msg_hops->samples[iMic][iSample];
 				}
 
 			}
@@ -79,8 +78,8 @@ int main(int argc, char* argv[])
 
 	printf("[OK]\n");
 
-	raw2hop_destroy(raw2hop);
-	matrix_float_free(hops);
+    src_raw_destroy(src_raw);
+    msg_hops_destroy(msg_hops);
 
 	printf("Summary: \n");
 	printf(" - nChannels: %d\n",nMics);

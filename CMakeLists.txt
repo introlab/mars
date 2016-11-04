@@ -21,28 +21,37 @@ set(SRC
     src/general/tdoa.c
     src/general/window.c
 
+    src/message/msg_hops.c
+    src/message/msg_pots.c
+    src/message/msg_spectra.c
+
+    src/module/stft.c
+    src/module/ssl_aimg.c
+
 	src/signal/matrix.c
 	src/signal/vector.c
 
-	src/sink/hop2raw.c
-		
-	src/source/eightsnd2hop.c
-	src/source/raw2hop.c
+	src/sink/snk_raw.c
+	
+	src/source/src_eightsnd.c
+	src/source/src_raw.c
 
-	src/system/frame2freq.c
-	src/system/freq2phase.c
-	src/system/hop2frame.c
-	src/system/phase2phases.c
-	src/system/phases2xcorr.c
-	src/system/xcorr2aimg.c
+    src/system/hop2frame.c
+    src/system/frame2freq.c
+    src/system/freq2phase.c
+    src/system/phase2phasex.c
+    src/system/phasex2xcorr.c
+    src/system/xcorr2aimg.c
+    src/system/xcorr2xcorrmax.c
+    src/system/xcorr2xcorrreset.c
 
+    src/utils/array.c
 	src/utils/fft.c
 	src/utils/fifo.c
 	src/utils/indexing.c
+	src/utils/minmax.c
+	src/utils/pair.c
 	src/utils/pcm.c
-
-	src/module/stft.c
-	src/module/ssl_aimg.c
 
 )
 

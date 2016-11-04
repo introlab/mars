@@ -8,9 +8,9 @@
 int main(int argc, char* argv[])
 {
 
-    eightsnd2hop_obj *eightsnd2hop;
-    matrix_float *hops;
-    hop2raw_obj *hop2raw;
+    src_eightsnd_obj * src_eightsnd;
+    msg_hops_obj * msg_hops;
+    snk_raw_obj * snk_raw;
 
     unsigned int hopSize;
     unsigned int nMics;
@@ -35,23 +35,21 @@ int main(int argc, char* argv[])
     sndCardName = argv[1];
     fileName = argv[2];
 
-    eightsnd2hop = eightsnd2hop_construct(hopSize, sampleRate, sndCardName);
-    hop2raw = hop2raw_construct(hopSize, nMics, nBits, fileName);
-
-	hops = matrix_float_malloc(nMics,hopSize);
+    src_eightsnd = src_eightsnd_construct(hopSize, sampleRate, sndCardName);
+    msg_hops = msg_hops_construct(hopSize, nMics);
+    snk_raw = snk_raw_construct(hopSize, nMics, nBits, fileName);
 
 	while(1) {
 
-    	eightsnd2hop_process(eightsnd2hop, hops);
-		hop2raw_process(hop2raw, hops);
+    	src_eightsnd_process(src_eightsnd, msg_hops);
+        snk_raw_process(snk_raw, msg_hops);
 
 	}
 
-
-    matrix_float_free(hops);
-
-    hop2raw_destroy(hop2raw);
-    eightsnd2hop_destroy(eightsnd2hop);
+    msg_hops_destroy(msg_hops);
+    
+    snk_raw_destroy(snk_raw);
+    src_eightsnd_destroy(src_eightsnd);
 
     return 0;
 }
