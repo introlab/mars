@@ -1,11 +1,11 @@
     
-    #include "hop2raw.h"
+    #include "snk_raw.h"
 
-    hop2raw_obj * hop2raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName) {
+    snk_raw_obj * snk_raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName) {
 
-        hop2raw_obj * obj;
+        snk_raw_obj * obj;
 
-        obj = (hop2raw_obj *) malloc(sizeof(hop2raw_obj));
+        obj = (snk_raw_obj *) malloc(sizeof(snk_raw_obj));
 
         obj->hopSize = hopSize;
         obj->nMics = nMics;
@@ -23,7 +23,7 @@
 
     }
 
-    void hop2raw_destroy(hop2raw_obj * obj) {
+    void snk_raw_destroy(snk_raw_obj * obj) {
 
         fclose(obj->fp);
         free((void *) obj->fileName);
@@ -32,7 +32,7 @@
 
     }
 
-    int hop2raw_process(hop2raw_obj * obj, matrix_float * hops) {
+    int snk_raw_process(snk_raw_obj * obj, msg_hops_obj * hops) {
 
         unsigned int iSample;
         unsigned int iMic;
@@ -49,7 +49,7 @@
             
             for (iMic = 0; iMic < obj->nMics; iMic++) {
 
-                sample = hops->array[iMic][iSample];
+                sample = hops->samples[iMic][iSample];
 
                 switch (obj->nBits) {
                     case 8:

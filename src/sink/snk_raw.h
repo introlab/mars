@@ -1,11 +1,11 @@
-#ifndef __MARS_SINK_HOP2RAW
-#define __MARS_SINK_HOP2RAW
+#ifndef __MARS_SINK_RAW
+#define __MARS_SINK_RAW
 
     /**
-    * \file     hop2raw.h
+    * \file     snk_raw.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
-    * \date     2016-10-25
+    * \date     2016-11-04
     * \copyright
     *
     * This program is free software: you can redistribute it and/or modify
@@ -29,11 +29,11 @@
     #include <math.h>
     #include <limits.h>
 
-    #include "../signal/matrix.h"
+    #include "../message/msg_hops.h"
     #include "../utils/pcm.h"
 
     //! A structure that holds all the fields to extract samples from a RAW file. 
-    typedef struct hop2raw_obj {
+    typedef struct snk_raw_obj {
 
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
@@ -44,27 +44,27 @@
         char * fileName;            ///< Name of the RAW file.
         FILE * fp;                  ///< File pointer.
 
-    } hop2raw_obj;    
+    } snk_raw_obj;    
 
-    /** Constructor of the hop2raw object.	
+    /** Constructor of the object.	
         \param      hopSize     Number of samples per hop.
         \param      nMics       Number of microphones/channels.
         \param      nBits       Number of bits.
         \param      fileName    Name of the RAW file.
         \return                 Pointer to the instantiated object.
     */
-    hop2raw_obj * hop2raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName);
+    snk_raw_obj * snk_raw_construct(const unsigned int hopSize, const unsigned int nMics, const unsigned int nBits, const char * fileName);
 
     /** Destructor of the hop2raw object.
         \param      obj         Pointer to the instantiated object.
     */
-    void hop2raw_destroy(hop2raw_obj * obj);
+    void snk_raw_destroy(snk_raw_obj * obj);
 
     /** Extract the next hop from the RAW file and push samples in the hops
         \param      obj         Pointer to the instantiated object.
-        \param      hops        Pointer to a matrix of hops.
+        \param      hops        Pointer to a message of hops.
         \return                 Return -1 if end of file reached, 0 otherwise.
     */
-    int hop2raw_process(hop2raw_obj * obj, matrix_float * hops);
+    int snk_raw_process(snk_raw_obj * obj, msg_hops_obj * hops);
 
 #endif
