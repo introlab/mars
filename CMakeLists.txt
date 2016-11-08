@@ -18,6 +18,8 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/lib")
 
 set(SRC
 
+    src/general/circle.c
+    src/general/sphere.c
     src/general/tdoa.c
     src/general/window.c
 
@@ -27,6 +29,8 @@ set(SRC
 
     src/module/stft.c
     src/module/ssl_aimg.c
+
+    src/probe/snapshot.c
 
 	src/signal/matrix.c
 	src/signal/vector.c
@@ -84,4 +88,11 @@ add_executable(demo_record
 )
 target_link_libraries(demo_record
 	mars
+)
+
+add_executable(demo_sslt
+    demo/demo_sslt.c
+)
+target_link_libraries(demo_sslt
+    mars
 )

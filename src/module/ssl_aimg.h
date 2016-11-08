@@ -65,7 +65,8 @@
         matrix_float * ref_bands;       ///< Matrix that contains the frequency bands (Bx(N/2+1)).
         matrix_float * ref_tdoas;       ///< Matrix that contains the TDOAs values (SxP).
 
-        matrix_unsignedint * tdoas;     ///< Matrix that contains the TDOAs values rounded to closest integer.
+        matrix_signedint * tdoasRound;  ///< Matrix that contains the TDOAs values rounded to closest integer.
+        matrix_unsignedint * tdoasWrap; ///< Matrix that contains the TDOAs values wrapped.
         vector_signedint * lowValues;   ///< Vector that contains the minimum TDOA value for each pair.
         vector_signedint * highValues;  ///< Vector that contains the maximum TDOA value for each pair.
 
@@ -101,7 +102,7 @@
         \param      winSizeReset    Size of the reset window (must be an odd number).
         \return                     Pointer to the instantiated object.
     */  
-    ssl_aimg_obj * ssl_aimg_construct(const matrix_float * mics, const mtrix_float * points, const matrix_float * bands, const unsigned int frameSize, const unsigned int fS, const float c, const unsigned int nScans, const float epsilon, const unsigned int winSizeMax, const unsigned int winSizeReset);
+    ssl_aimg_obj * ssl_aimg_construct(const matrix_float * mics, const matrix_float * points, const matrix_float * bands, const unsigned int frameSize, const unsigned int fS, const float c, const unsigned int nScans, const float epsilon, const unsigned int winSizeMax, const unsigned int winSizeReset);
 
     /** Destructor of the vector object.
         \param      obj             Pointer to the instantiated object.

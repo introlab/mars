@@ -50,7 +50,6 @@
 
         vector_float * window;          ///< Analysis window.
 
-
     } stft_obj;
 
     /** Constructor of the vector object.   

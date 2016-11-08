@@ -39,9 +39,10 @@
 
     /** Generate the rounded TDOA values to the closest frequency bin.
         \param      tdoas       TDOA values in a matrix NxP, where \f$P=N(N-1)/2\f$.
-        \param      frameSize   Number of samples per frame.
         \return                 Rounded TDOA values in a matrix NxP, where \f$P=N(N-1)/2\f$.
     */
-    matrix_unsignedint * tdoa_round(const matrix_float * tdoas, const unsigned int frameSize);    
+    matrix_signedint * tdoa_round(const matrix_float * tdoas);    
+
+    matrix_unsignedint * tdoa_wrap(const matrix_signedint * tdoas, const unsigned int frameSize);
 
 #endif

@@ -31,36 +31,38 @@
         obj->ref_bands = matrix_float_clone(bands);
         obj->ref_tdoas = tdoa_delay(points, mics, fS, c);
 
-        obj->tdoas = tdoa_round((const matrix_float *) obj->ref_tdoas, frameSize);    
+        obj->tdoasRound = tdoa_round((const matrix_float *) obj->ref_tdoas);    
+        obj->tdoasWrap = tdoa_wrap(obj->tdoasRound, frameSize);
         obj->lowValues = vector_signedint_malloc(obj->nPairs);
         obj->highValues = vector_signedint_malloc(obj->nPairs);
 
         for (iPair = 0; iPair < obj->nPairs; iPair++) {
 
-            obj->lowValues->array[iPair] = obj->tdoas->array[0][iPair];
-            obj->highValues->array[iPair] = obj->tdoas->array[0][iPair];
+            obj->lowValues->array[iPair] = obj->tdoasRound->array[0][iPair];
+            obj->highValues->array[iPair] = obj->tdoasRound->array[0][iPair];
 
             for (iPoint = 0; iPoint < obj->nPoints; iPoint++) {
 
-                if (obj->tdoas->array[iPoint][iPair] < obj->lowValues->array[iPair]) {
-                    obj->lowValues->array[iPair] = obj->tdoas->array[iPoint][iPair];
+                if (obj->tdoasRound->array[iPoint][iPair] < obj->lowValues->array[iPair]) {
+                    obj->lowValues->array[iPair] = obj->tdoasRound->array[iPoint][iPair];
                 }
-                if (obj->tdoas->array[iPoint][iPair] > obj->highValues->array[iPair]) {
-                    obj->highValues->array[iPair] = obj->tdoas->array[iPoint][iPair];
+                if (obj->tdoasRound->array[iPoint][iPair] > obj->highValues->array[iPair]) {
+                    obj->highValues->array[iPair] = obj->tdoasRound->array[iPoint][iPair];
                 }
 
             }
 
         }
-        
+
         obj->bands = array_1d_malloc(obj->nBands);
 
         for (iBand = 0; iBand < obj->nBands; iBand++) {
 
+            obj->bands->ptr[iBand] = vector_float_malloc(obj->halfFrameSize);
         	matrix_float_export(bands, obj->bands->ptr[iBand], iBand);
 
         }
-        
+
         obj->freqs = array_1d_malloc(obj->nMics);
 
         for (iMic = 0; iMic < obj->nMics; iMic++) {
@@ -218,7 +220,8 @@
 
         vector_signedint_free(obj->lowValues);
         vector_signedint_free(obj->highValues);
-        matrix_unsignedint_free(obj->tdoas);
+        matrix_signedint_free(obj->tdoasRound);
+        matrix_unsignedint_free(obj->tdoasWrap);
 
         matrix_float_free(obj->ref_tdoas);
         matrix_float_free(obj->ref_bands);
@@ -291,8 +294,11 @@
                 }
 
             }
+            
 
         }
+
+        //printf("Step 1\n");
 
         // Filter each xx with maximum sliding window
         // Generate acoustic image
@@ -308,12 +314,12 @@
                                            obj->xcorrs->ptr[iScan][iBand][iPair], 
                                            obj->xcorrsMax->ptr[iScan][iBand][iPair]);
 
-                    xcorr2aimg_process(obj->xcorr2aimg->ptr[iScan][iBand],
-                    	               obj->tdoas,
-                                       obj->xcorrs->ptr[iScan][iBand][iPair],
-                                       obj->aimgs->ptr[iScan][iBand]);
-
                 }
+                
+                xcorr2aimg_process(obj->xcorr2aimg->ptr[iScan][iBand],
+                                   obj->tdoasWrap,
+                                   (const vector_float **) (obj->xcorrsMax->ptr[iScan][iBand]),
+                                   obj->aimgs->ptr[iScan][iBand]);
 
                 maxIndex = minmax_max_float(obj->aimgs->ptr[iScan][iBand], obj->nPoints);
                 maxValue = ((vector_float *) obj->aimgs->ptr[iScan][iBand])->array[maxIndex];
@@ -324,7 +330,7 @@
 
                         xcorr2xcorrreset_process(obj->xcorr2xcorrreset->ptr[iScan][iBand][iPair], 
                                                  obj->xcorrs->ptr[iScan][iBand][iPair], 
-                                                 obj->tdoas->array[maxIndex][iPair],
+                                                 obj->tdoasRound->array[maxIndex][iPair],
                                                  obj->xcorrs->ptr[iScan+1][iBand][iPair]);
 
                     }

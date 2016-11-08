@@ -4,6 +4,7 @@
     #include "../signal/vector.h"
 
     #include <math.h>
+    #include <stdlib.h>
 
     /**
     * \file     freq2phase.h
@@ -52,7 +53,7 @@
         \param      obj         Pointer to the instantiated object.
         \param      freq        Pointer to the input spectrum.
         \param      mask        Pointer to the input mask.
-        \param      phase       Pointer to the output phase.
+        \param      phases      Pointer to the output phase.
         \return                 Return -1 if error, 0 otherwise.
     */
     int freq2phase_process(freq2phase_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phases);

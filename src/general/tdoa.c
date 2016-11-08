@@ -63,25 +63,48 @@
 
 	}
 
-	matrix_unsignedint * tdoa_round(const matrix_float * tdoas, const unsigned int frameSize) {
+	matrix_signedint * tdoa_round(const matrix_float * tdoas) {
 
-		matrix_unsignedint * tdoasRounded;
+		matrix_signedint * tdoasRounded;
 		
 		unsigned int iPoint;
 		unsigned int iPair;
 
-		tdoasRounded = matrix_unsignedint_malloc(tdoas->nRows,tdoas->nCols);
+		tdoasRounded = matrix_signedint_malloc(tdoas->nRows, tdoas->nCols);
 		
 		for (iPoint = 0; iPoint < tdoas->nRows; iPoint++) {
 
 			for (iPair = 0; iPair < tdoas->nCols; iPair++) {
 
-				tdoasRounded->array[iPoint][iPair] = (unsigned int) indexing_wrap(roundf(tdoas->array[iPoint][iPair]),frameSize);
+				tdoasRounded->array[iPoint][iPair] = (signed int) roundf(tdoas->array[iPoint][iPair]);
 
 			}
 
 		}
 
 		return tdoasRounded;
+
+	}
+
+	matrix_unsignedint * tdoa_wrap(const matrix_signedint * tdoas, const unsigned int frameSize) {
+
+        matrix_unsignedint * tdoasWrapped;
+
+        unsigned int iPoint;
+        unsigned int iPair;
+
+        tdoasWrapped = matrix_unsignedint_malloc(tdoas->nRows, tdoas->nCols);
+
+        for (iPoint = 0; iPoint < tdoas->nRows; iPoint++) {
+
+            for (iPair = 0; iPair < tdoas->nCols; iPair++) {
+
+                tdoasWrapped->array[iPoint][iPair] = (unsigned int) indexing_wrap(tdoas->array[iPoint][iPair], frameSize);
+
+            }
+
+        }
+
+        return tdoasWrapped;
 
 	}

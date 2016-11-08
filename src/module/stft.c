@@ -24,7 +24,7 @@
         	obj->hop2frame->ptr[iMic] = (void *) hop2frame_construct(obj->hopSize, obj->frameSize);
         	obj->frames->ptr[iMic] = (void *) vector_float_malloc(obj->frameSize);
         	obj->frame2freq->ptr[iMic] = (void *) frame2freq_construct(obj->frameSize);
-        	obj->freqs->ptr[iMic] = (void *) vector_float_malloc(obj->halfFrameSize);
+        	obj->freqs->ptr[iMic] = (void *) vector_float_malloc(obj->halfFrameSize*2);
         }
     	
     	obj->window = window_hann(obj->frameSize);
@@ -77,8 +77,10 @@
 
         for (iMic = 0; iMic < obj->nMics; iMic++) {
             for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+
             	spectra->samples[iMic][iSample*2+0] = ((vector_float *) obj->freqs->ptr[iMic])->array[iSample*2+0];
                 spectra->samples[iMic][iSample*2+1] = ((vector_float *) obj->freqs->ptr[iMic])->array[iSample*2+1];
+
             }
         }
 

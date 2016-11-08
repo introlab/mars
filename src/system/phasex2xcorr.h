@@ -4,6 +4,8 @@
     #include "../utils/fft.h"
     #include "../signal/vector.h"
 
+    #include <stdlib.h>
+
     /**
     * \file     phasex2xcorr.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>

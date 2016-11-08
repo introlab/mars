@@ -1,5 +1,7 @@
     #include "xcorr2aimg.h"
 
+    #include <stdio.h>
+
     xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints) {
 
         xcorr2aimg_obj * obj;
@@ -25,6 +27,7 @@
 
         unsigned int iPair;
         unsigned int iPoint;
+        unsigned int iSample;
 
         for (iPoint = 0; iPoint < obj->nPoints; iPoint++) {
 
@@ -37,5 +40,7 @@
             }
 
         }
+
+        return 0;
 
     }
