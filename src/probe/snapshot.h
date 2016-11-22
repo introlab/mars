@@ -29,21 +29,42 @@
 
     #include "../signal/vector.h"
 
+    //! A structure that holds all the fields to take snapshots over time.
     typedef struct snapshot_obj {
 
-        char * fileName;
-        FILE * fp;
+        char * fileName;            ///< Name of the file to save snapshots.
+        FILE * fp;                  ///< Pointer to the file stream.
 
     } snapshot_obj;
 
+    /** Constructor of the object.    
+        \param      fileName    Name of the file to save snapshots.
+        \return                 Pointer to the instantiated object.
+    */
+
     snapshot_obj * snapshot_construct(const char * fileName);
 
+    /** Destructor of the object.
+        \param      obj         Pointer to the instantiated object.
+    */
     void snapshot_destroy(snapshot_obj * obj);
 
+    /** Take a snapshot of a vector with signed integers.
+        \param      obj         Pointer to the instantiated object.
+        \param      vector      Pointer to the vector.
+    */
     int snapshot_vector_signedint(snapshot_obj * obj, const vector_signedint * vector);
 
+    /** Take a snapshot of a vector with unsigned integers.
+        \param      obj         Pointer to the instantiated object.
+        \param      vector      Pointer to the vector.
+    */
     int snapshot_vector_unsignedint(snapshot_obj * obj, const vector_unsignedint * vector);    
 
+    /** Take a snapshot of a vector with floats.
+        \param      obj         Pointer to the instantiated object.
+        \param      vector      Pointer to the vector.
+    */
     int snapshot_vector_float(snapshot_obj * obj, const vector_float * vector);
 
 #endif
