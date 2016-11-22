@@ -28,6 +28,8 @@
     //! A structure that holds all the fields in a hops. 
     typedef struct msg_hops_obj {
 
+        unsigned long long id;      ///< Time stamp
+
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
         float ** samples;           ///< Samples.

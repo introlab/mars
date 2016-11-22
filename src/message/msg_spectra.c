@@ -8,6 +8,8 @@
 
         obj = (msg_spectra_obj *) malloc(sizeof(msg_spectra_obj));
 
+        obj->id = 0;
+
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
         obj->nMics = nMics;

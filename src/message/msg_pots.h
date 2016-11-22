@@ -28,18 +28,15 @@
     //! A structure that holds all the fields for potential sources. 
     typedef struct msg_pots_obj {
 
-        unsigned int nScans;        ///< Number of scans.
-        unsigned int nBands;        ///< Number of bands.
-        float *** samples;          ///< Samples.
+        unsigned long long id;      ///< Time stamp
+        float * samples;            ///< Samples.
 
     } msg_pots_obj;
 
     /** Constructor of the vector object.   
-        \param      nScans      Number of scans.
-        \param      nBands      Number of bands.
         \return                 Pointer to the instantiated object.
     */  
-    msg_pots_obj * msg_pots_construct(const unsigned int nScans, const unsigned int nBands);
+    msg_pots_obj * msg_pots_construct(void);
 
     /** Destructor of the vector object.
         \param      obj         Pointer to the instantiated object.

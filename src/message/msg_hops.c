@@ -7,6 +7,8 @@
 
         obj = (msg_hops_obj *) malloc(sizeof(msg_hops_obj));
 
+        obj->id = 0;
+
         obj->hopSize = hopSize;
         obj->nMics = nMics;
 
