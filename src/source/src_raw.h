@@ -34,6 +34,8 @@
     //! A structure that holds all the fields to extract samples from a RAW file. 
     typedef struct src_raw_obj {
 
+        unsigned long long id;      ///< Time stamp.
+
         unsigned int hopSize;       ///< Size of the hop.
         unsigned int nMics;         ///< Number of microphones/channels.
         unsigned int nBits;         ///< Number of bits per sample.

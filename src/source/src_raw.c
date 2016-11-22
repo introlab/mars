@@ -7,6 +7,8 @@
 
         obj = (src_raw_obj *) malloc(sizeof(src_raw_obj));
 
+        obj->id = 0;
+
         obj->hopSize = hopSize;
         obj->nMics = nMics;
         obj->nBits = nBits;
@@ -79,6 +81,10 @@
             }
 
         }
+
+        obj->id++;
+
+        hops->id = obj->id;
 
         return rtnValue;
 
