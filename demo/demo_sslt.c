@@ -1,244 +1,387 @@
 #include <mars/mars.h>
 
 #include <stdio.h>
+#include <libconfig.h>
+#include <getopt.h>
 
-int main(int argc, char* argv[])
-{
-    
-	src_raw_obj * src_raw;
-	msg_hops_obj * msg_hops;
-	stft_obj * stft;
-	msg_spectra_obj * msg_spectra;
-    matrix_float * mics;
-    matrix_float * points;
-	ssl_obj * ssl;
+struct objects {
 
+    src_raw_obj * src_raw;
+    msg_hops_obj * msg_hops;
+    stft_obj * stft;
+    msg_spectra_obj * msg_spectra;
+    ssl_obj * ssl;
     msg_pots_obj * msg_pots;
     snk_pots_obj * snk_pots;
 
-	unsigned int hopSize;
-	unsigned int frameSize;
-	unsigned int halfFrameSize;
-	unsigned char nMics;
-	unsigned char nBits;
+} objects;
 
-	char * rawFileName;
-	char * potsFileName;
+struct parameters {
 
-    unsigned int fS;
-    float c;
-    vector_unsignedint * levels;
-    float sigma;
-    unsigned int nMatches;
-    float epsilon;
-    unsigned int w;
-    unsigned int L;
-    float alphaS;
-    float alphaD;
-    float delta;
-    float alphaP;
+    struct general {
+        matrix_float * mics;
+        unsigned int hopSize;
+        unsigned int frameSize;
+        unsigned int fS;
+        float c;
+    } general;
 
-	unsigned char iMic;
-	unsigned int iSample;
-	unsigned int nHops;
+    struct raw {      
+        unsigned int nBits;
+    } raw ;
 
-	time_t start,end;
-	float readingTime;
-	float processingTime, signalTime, cpuUsage;
+    struct ssl {
+        vector_unsignedint * levels;
+        double sigma;
+        unsigned int nMatches;
+        double epsilon;
+        unsigned int w;
+        unsigned int L;
+        double alphaS;
+        double alphaD;
+        double delta;
+        double alphaP;        
+    } ssl;
 
-	float mic_x, mic_y, mic_z;
+} parameters;
 
-	if (argc != 3) {
-		printf("Raw file name and pots file name expected.\n");
-		exit(EXIT_FAILURE);
-	}
+int configuration_load(const char * fileName) {
 
-	hopSize = 128;
-	frameSize = 256;
-	halfFrameSize = frameSize/2 + 1;
-	nMics = 8;
-	nBits = 16;
-	rawFileName = argv[1];
-	potsFileName = argv[2];
+    config_t cfg;
+    config_setting_t * setting;
+    int i;
+    int N;
+    int valueInt;
+    double valueDouble;
 
-    mics = matrix_float_malloc(nMics, 3);
+    config_init(&cfg);
 
-    mic_x = 0.1150f;
-    mic_y = 0.1150f;
-    mic_z = 0.1025f;
+    /* Read the file. If there is an error, report it and exit. */
+    if(!config_read_file(&cfg, fileName))
+    {
+        
+        printf("%s:%d - %s\n", config_error_file(&cfg), config_error_line(&cfg), config_error_text(&cfg));
+        config_destroy(&cfg);
+      
+        exit(EXIT_FAILURE);
 
-    mics->array[0][0] = +mic_x;
-    mics->array[0][1] = -mic_y;
-    mics->array[0][2] = +mic_z;
-    mics->array[1][0] = -mic_x;
-    mics->array[1][1] = -mic_y;
-    mics->array[1][2] = +mic_z;
-    mics->array[2][0] = -mic_x;
-    mics->array[2][1] = +mic_y;
-    mics->array[2][2] = +mic_z;
-    mics->array[3][0] = +mic_x;
-    mics->array[3][1] = +mic_y;
-    mics->array[3][2] = +mic_z;
-    mics->array[4][0] = +mic_x;
-    mics->array[4][1] = -mic_y;
-    mics->array[4][2] = -mic_z;    
-    mics->array[5][0] = -mic_x;
-    mics->array[5][1] = -mic_y;
-    mics->array[5][2] = -mic_z;        
-    mics->array[6][0] = -mic_x;
-    mics->array[6][1] = +mic_y;
-    mics->array[6][2] = -mic_z;        
-    mics->array[7][0] = +mic_x;
-    mics->array[7][1] = +mic_y;
-    mics->array[7][2] = -mic_z;        
-    // mics->array[8][0] = +mic_x;
-    // mics->array[8][1] = -mic_y;
-    // mics->array[8][2] = +mic_z;
-    // mics->array[9][0] = -mic_x;
-    // mics->array[9][1] = -mic_y;
-    // mics->array[9][2] = +mic_z;
-    // mics->array[10][0] = -mic_x;
-    // mics->array[10][1] = +mic_y;
-    // mics->array[10][2] = +mic_z;
-    // mics->array[11][0] = +mic_x;
-    // mics->array[11][1] = +mic_y;
-    // mics->array[11][2] = +mic_z;
-    // mics->array[12][0] = +mic_x;
-    // mics->array[12][1] = -mic_y;
-    // mics->array[12][2] = -mic_z;    
-    // mics->array[13][0] = -mic_x;
-    // mics->array[13][1] = -mic_y;
-    // mics->array[13][2] = -mic_z;        
-    // mics->array[14][0] = -mic_x;
-    // mics->array[14][1] = +mic_y;
-    // mics->array[14][2] = -mic_z;        
-    // mics->array[15][0] = +mic_x;
-    // mics->array[15][1] = +mic_y;
-    // mics->array[15][2] = -mic_z;   
-    // mics->array[16][0] = +mic_x;
-    // mics->array[16][1] = -mic_y;
-    // mics->array[16][2] = +mic_z;
-    // mics->array[17][0] = -mic_x;
-    // mics->array[17][1] = -mic_y;
-    // mics->array[17][2] = +mic_z;
-    // mics->array[18][0] = -mic_x;
-    // mics->array[18][1] = +mic_y;
-    // mics->array[18][2] = +mic_z;
-    // mics->array[19][0] = +mic_x;
-    // mics->array[19][1] = +mic_y;
-    // mics->array[19][2] = +mic_z;
-    // mics->array[20][0] = +mic_x;
-    // mics->array[20][1] = -mic_y;
-    // mics->array[20][2] = -mic_z;    
-    // mics->array[21][0] = -mic_x;
-    // mics->array[21][1] = -mic_y;
-    // mics->array[21][2] = -mic_z;        
-    // mics->array[22][0] = -mic_x;
-    // mics->array[22][1] = +mic_y;
-    // mics->array[22][2] = -mic_z;        
-    // mics->array[23][0] = +mic_x;
-    // mics->array[23][1] = +mic_y;
-    // mics->array[23][2] = -mic_z;        
-    // mics->array[24][0] = +mic_x;
-    // mics->array[24][1] = -mic_y;
-    // mics->array[24][2] = +mic_z;
-    // mics->array[25][0] = -mic_x;
-    // mics->array[25][1] = -mic_y;
-    // mics->array[25][2] = +mic_z;
-    // mics->array[26][0] = -mic_x;
-    // mics->array[26][1] = +mic_y;
-    // mics->array[26][2] = +mic_z;
-    // mics->array[27][0] = +mic_x;
-    // mics->array[27][1] = +mic_y;
-    // mics->array[27][2] = +mic_z;
-    // mics->array[28][0] = +mic_x;
-    // mics->array[28][1] = -mic_y;
-    // mics->array[28][2] = -mic_z;    
-    // mics->array[29][0] = -mic_x;
-    // mics->array[29][1] = -mic_y;
-    // mics->array[29][2] = -mic_z;        
-    // mics->array[30][0] = -mic_x;
-    // mics->array[30][1] = +mic_y;
-    // mics->array[30][2] = -mic_z;        
-    // mics->array[31][0] = +mic_x;
-    // mics->array[31][1] = +mic_y;
-    // mics->array[31][2] = -mic_z;       
+    }     
 
-    fS = 16000;
-    c = 343.0f;
-    levels = vector_unsignedint_malloc(1);
-    levels->array[0] = 4;
-    //levels = vector_unsignedint_malloc(2);
-    //levels->array[0] = 2;
-    //levels->array[1] = 4;
+    // General
 
-    sigma = 5.0f;
-    nMatches = 5;
-    epsilon = 1E-20;
-    w = 1;
-    L = 150;
-    alphaS = 0.8f;
-    alphaD = 0.95f;
-    delta = 5.0f;
-    alphaP = 0.1f;
-
-    msg_hops = msg_hops_construct(hopSize, nMics);
-    stft = stft_construct(hopSize, frameSize, nMics);
-    msg_spectra = msg_spectra_construct(frameSize, nMics);
-    ssl = ssl_construct(mics, frameSize, fS, c, levels, sigma, nMatches, epsilon, w, L, alphaS, alphaD, delta, alphaP);
-    msg_pots = msg_pots_construct();
-
-    src_raw = src_raw_construct(hopSize, nMics, nBits, rawFileName);
+    if (config_lookup_int(&cfg, "general.hopSize", &valueInt)) {
+        parameters.general.hopSize = valueInt;
+    }
+    else {
+        printf("Missing: general.hopSize\n");
+        exit(EXIT_FAILURE);
+    }
     
-    start = clock();
-    printf("Reading file (1/2)... "); fflush(stdout);
-    while(src_raw_process(src_raw, msg_hops) == 0);
-    printf("[OK]\n");
-    end = clock();
+    if (config_lookup_int(&cfg, "general.frameSize", &valueInt)) {
+        parameters.general.frameSize = valueInt;
+    }
+    else {
+        printf("Missing: general.frameSize\n");
+        exit(EXIT_FAILURE);        
+    }
+
+    if (config_lookup_int(&cfg, "general.fS", &valueInt)) {
+        parameters.general.fS = valueInt;
+    }
+    else {
+        printf("Missing: general.fS\n");
+        exit(EXIT_FAILURE);
+    }
     
-    src_raw_destroy(src_raw);
+    if (config_lookup_float(&cfg, "general.c", &valueDouble)) {
+        parameters.general.c = (float) valueDouble;
+    }
+    else {
+        printf("Missing: general.c\n");
+        exit(EXIT_FAILURE);        
+    }
 
-    readingTime = (float) ((end-start)/((float) CLOCKS_PER_SEC));
+    setting = config_lookup(&cfg, "general.mics");
 
-    src_raw = src_raw_construct(hopSize, nMics, nBits, rawFileName);
-    snk_pots = snk_pots_construct(potsFileName, "xml");
+    if (setting != NULL) {
 
-    start = clock();
+        N = config_setting_length(setting);
 
-	printf("Reading file (2/2)... "); fflush(stdout);
+        parameters.general.mics = matrix_float_malloc(N,3);
 
-	nHops = 0;
+        for (i = 0; i < N; i++) {
 
-	while(src_raw_process(src_raw, msg_hops) == 0) {
+            config_setting_lookup_float(config_setting_get_elem(setting, i),"x",&valueDouble);
+            parameters.general.mics->array[i][0] = (float) valueDouble;
+            config_setting_lookup_float(config_setting_get_elem(setting, i),"y",&valueDouble);
+            parameters.general.mics->array[i][1] = (float) valueDouble;
+            config_setting_lookup_float(config_setting_get_elem(setting, i),"z",&valueDouble);
+            parameters.general.mics->array[i][2] = (float) valueDouble;
 
-        stft_process(stft, msg_hops, msg_spectra);
-        ssl_process(ssl, msg_spectra, msg_pots);
-        snk_pots_process(snk_pots, msg_pots);
+        }
 
-		nHops++;
+    }
+    else {
+        
+        printf("Missing: general.mics\n"); exit(EXIT_FAILURE);
 
-	}
+    }
 
-	printf("[OK]\n");
+    // Raw
 
-	end = clock();
+    if (config_lookup_int(&cfg, "raw.nBits", &valueInt)) {
+        parameters.raw.nBits = valueInt;
+    }
+    else {
+        printf("Missing: raw.nBits\n");
+        exit(EXIT_FAILURE);
+    }
 
-    processingTime = ((float) ((end-start)/((float) CLOCKS_PER_SEC))) - readingTime;
-    signalTime = ((float) nHops*hopSize)/fS;
-    cpuUsage = 100.0f * processingTime / signalTime;
+    // SSL
 
-    printf("Time ellapsed: %1.2f secs.\n",processingTime);
-    printf("Signal duration: %1.2f secs.\n",signalTime);
-    printf("CPU usage: %1.2f%%.\n",cpuUsage);
+    if (config_lookup_float(&cfg, "ssl.sigma", &valueDouble)) {
+        parameters.ssl.sigma = (float) valueDouble;
+    }
+    else {
+        printf("Missing: ssl.sigma\n");
+        exit(EXIT_FAILURE);        
+    }    
 
-    snk_pots_destroy(snk_pots);
-    src_raw_destroy(src_raw);
+    if (config_lookup_int(&cfg, "ssl.nMatches", &valueInt)) {
+        parameters.ssl.nMatches = (float) valueInt;
+    }
+    else {
+        printf("Missing: ssl.nMatches\n");
+        exit(EXIT_FAILURE);        
+    }    
 
-    msg_pots_destroy(msg_pots);
-    ssl_destroy(ssl);
-    msg_spectra_destroy(msg_spectra);
-    stft_destroy(stft);
-    msg_hops_destroy(msg_hops);
+    if (config_lookup_float(&cfg, "ssl.epsilon", &valueDouble)) {
+        parameters.ssl.epsilon = (float) valueDouble;
+    }
+    else {
+        printf("Missing: ssl.epsilon\n");
+        exit(EXIT_FAILURE);        
+    }    
 
+    if (config_lookup_int(&cfg, "ssl.w", &valueInt)) {
+        parameters.ssl.w = (float) valueInt;
+    }
+    else {
+        printf("Missing: ssl.w\n");
+        exit(EXIT_FAILURE);        
+    }    
+
+    if (config_lookup_int(&cfg, "ssl.L", &valueInt)) {
+        parameters.ssl.L = (float) valueInt;
+    }
+    else {
+        printf("Missing: ssl.L\n");
+        exit(EXIT_FAILURE);        
+    }    
+
+    if (config_lookup_float(&cfg, "ssl.alphaS", &valueDouble)) {
+        parameters.ssl.alphaS = (float) valueDouble;
+    }
+    else {
+        printf("Missing: ssl.alphaS\n");
+        exit(EXIT_FAILURE);        
+    }  
+
+    if (config_lookup_float(&cfg, "ssl.alphaD", &valueDouble)) {
+        parameters.ssl.alphaD = (float) valueDouble;
+    }
+    else {
+        printf("Missing: ssl.alphaD\n");
+        exit(EXIT_FAILURE);        
+    }  
+
+    if (config_lookup_float(&cfg, "ssl.delta", &valueDouble)) {
+        parameters.ssl.delta = (float) valueDouble;
+    }
+    else {
+        printf("Missing: ssl.delta\n");
+        exit(EXIT_FAILURE);        
+    }  
+
+    if (config_lookup_float(&cfg, "ssl.alphaP", &valueDouble)) {
+        parameters.ssl.alphaP = (float) valueDouble;
+    }
+    else {
+        printf("Missing: ssl.alphaP\n");
+        exit(EXIT_FAILURE);        
+    }  
+
+    setting = config_lookup(&cfg, "ssl.levels");
+
+    if (setting != NULL) {
+
+        N = config_setting_length(setting);
+
+        parameters.ssl.levels = vector_unsignedint_malloc(N);
+
+        for (i = 0; i < N; i++) {
+
+            valueInt = config_setting_get_int_elem(setting, i);
+            parameters.ssl.levels->array[i] = valueInt;
+
+        }
+
+    }
+    else {
+        
+        printf("Missing: ssl.levels\n"); exit(EXIT_FAILURE);
+
+    }
+
+    config_destroy(&cfg);
+
+}
+
+int configuration_free(void) {
+
+    matrix_float_free(parameters.general.mics);
+    vector_unsignedint_free(parameters.ssl.levels);
+
+}
+
+int main(int argc, char* argv[])
+{
+
+    time_t start, end;
+    float totalTime;
+    unsigned int nHops;
+
+    float signalDuration, processingDuration;    
+
+    // Parsing arguments
+    int c;
+    char * cValue = NULL;
+    char * rValue = NULL;
+    char * pValue = NULL;
+
+    while ((c = getopt(argc,argv, "c:r:p:")) != -1) {
+
+        switch(c) {
+
+            case 'c':
+                cValue = optarg;
+            break;
+            case 'r':
+                rValue = optarg;
+            break;
+            case 'p':
+                pValue = optarg;
+            break;
+            default:
+                exit(EXIT_FAILURE);
+
+        }
+
+    }
+
+    if (cValue == NULL) { printf("Missing configuration file.\n"); exit(EXIT_FAILURE); }
+    if (rValue == NULL) { printf("Missing input.\n"); exit(EXIT_FAILURE); }
+
+    // Configuration
+
+    configuration_load(cValue);
+
+    // Initialize objects
+
+    objects.src_raw = src_raw_construct(parameters.general.hopSize,
+                                        parameters.general.mics->nRows,
+                                        parameters.raw.nBits,
+                                        rValue);
+
+    objects.msg_hops = msg_hops_construct(parameters.general.hopSize,
+                                          parameters.general.frameSize);
+
+    objects.stft = stft_construct(parameters.general.hopSize,
+                                  parameters.general.frameSize,
+                                  parameters.general.mics->nRows);
+
+    objects.msg_spectra = msg_spectra_construct(parameters.general.frameSize,
+                                                parameters.general.mics->nRows);
+
+    objects.ssl = ssl_construct(parameters.general.mics,
+                                parameters.general.frameSize,
+                                parameters.general.fS,
+                                parameters.general.c,
+                                parameters.ssl.levels,
+                                parameters.ssl.sigma,
+                                parameters.ssl.nMatches,
+                                parameters.ssl.epsilon,
+                                parameters.ssl.w,
+                                parameters.ssl.L,
+                                parameters.ssl.alphaS,
+                                parameters.ssl.alphaD,
+                                parameters.ssl.delta,
+                                parameters.ssl.alphaP);
+
+    objects.msg_pots = msg_pots_construct();
+
+    if (pValue != NULL) {
+        objects.snk_pots = snk_pots_construct(pValue, "xml");
+    }
+
+    // Process
+
+    totalTime = 0.0f;
+    nHops = 0;
+
+    printf("Processing... "); fflush(stdout);
+
+    while(src_raw_process(objects.src_raw, objects.msg_hops) == 0) {
+
+        start = clock();
+
+        stft_process(objects.stft, objects.msg_hops, objects.msg_spectra);
+        ssl_process(objects.ssl, objects.msg_spectra, objects.msg_pots);
+
+        end = clock();
+
+        totalTime += (float) (end-start);
+
+        if (pValue != NULL) {
+            snk_pots_process(objects.snk_pots, objects.msg_pots);
+        }
+
+        nHops++;
+
+    }
+
+    printf("[Done]\n");
+
+    // Configuration
+
+    configuration_free();
+
+    // Free memory
+
+    src_raw_destroy(objects.src_raw);
+
+    msg_hops_destroy(objects.msg_hops);
+
+    stft_destroy(objects.stft);
+
+    msg_spectra_destroy(objects.msg_spectra);
+
+    ssl_destroy(objects.ssl);
+
+    msg_pots_destroy(objects.msg_pots);
+
+    if (pValue != NULL) {
+        snk_pots_destroy(objects.snk_pots);
+    }
+
+    // Statistics
+
+    signalDuration = ((float) (nHops*parameters.general.hopSize)) / (parameters.general.fS);
+    processingDuration = (totalTime/((float) CLOCKS_PER_SEC));
+
+    printf("Signal duration: %2.3f sec\n", signalDuration);
+    printf("Processing time: %2.3f sec\n", processingDuration);
+    printf("CPU usage: %2.3f%%\n", 100.0f*processingDuration/signalDuration);
+   
     return 0;
 }
