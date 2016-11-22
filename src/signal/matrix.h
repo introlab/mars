@@ -1,8 +1,6 @@
 #ifndef __MARS_SIGNAL_MATRIX
 #define __MARS_SIGNAL_MATRIX
 
-    #include <stdlib.h>
-
     /**
     * \file     matrix.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
@@ -24,6 +22,9 @@
     * along with this program.  If not, see <http://www.gnu.org/licenses/>.
     *
     */
+
+    #include <stdlib.h>
+    #include <stdio.h>
 
     #include "vector.h"
 
@@ -204,5 +205,22 @@
     */
     int matrix_float_importexport(matrix_float * objDest, const matrix_float * objSrc, unsigned int iRowDest, unsigned int iRowSrc);
     
+    /** Prints the content of the matrix in the console.
+        \param      obj         Pointer to the object.
+        \return                 Return -1 if error, 0 otherwise.
+    */    
+    void matrix_signedint_printf(const matrix_signedint * obj);
+
+    /** Prints the content of the matrix in the console.
+        \param      obj         Pointer to the object.
+        \return                 Return -1 if error, 0 otherwise.
+    */    
+    void matrix_unsignedint_printf(const matrix_unsignedint * obj);    
+
+    /** Prints the content of the matrix in the console.
+        \param      obj         Pointer to the object.
+        \return                 Return -1 if error, 0 otherwise.
+    */    
+    void matrix_float_printf(const matrix_float * obj);    
 
 #endif

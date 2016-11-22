@@ -240,3 +240,66 @@
         return 0;
 
     }
+
+    void matrix_signedint_printf(const matrix_signedint * obj) {
+
+        unsigned int iRow;
+        unsigned int iCol;
+
+        for (iRow = 0; iRow < obj->nRows; iRow++) {
+
+            printf("(%03u): ",iRow);
+
+            for (iCol = 0; iCol < obj->nCols; iCol++) {
+
+                printf("%+04d ",obj->array[iRow][iCol]);
+
+            }
+
+            printf("\n");
+
+        }
+
+    }
+
+    void matrix_unsignedint_printf(const matrix_unsignedint * obj) {
+
+        unsigned int iRow;
+        unsigned int iCol;
+
+        for (iRow = 0; iRow < obj->nRows; iRow++) {
+
+            printf("(%03u): ",iRow);
+
+            for (iCol = 0; iCol < obj->nCols; iCol++) {
+
+                printf("%04u ",obj->array[iRow][iCol]);
+
+            }
+
+            printf("\n");
+
+        }
+
+    }
+
+    void matrix_float_printf(const matrix_float * obj) {
+
+        unsigned int iRow;
+        unsigned int iCol;
+
+        for (iRow = 0; iRow < obj->nRows; iRow++) {
+
+            printf("(%03u): ",iRow);
+
+            for (iCol = 0; iCol < obj->nCols; iCol++) {
+
+                printf("%+02.2f ",obj->array[iRow][iCol]);
+
+            }
+
+            printf("\n");
+
+        }
+
+    }

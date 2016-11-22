@@ -26,6 +26,7 @@
     */
 
     #include <string.h>
+    #include <stdio.h>
 
     //! A structure that holds all the fields of a vector with signed int elements. 
     typedef struct vector_signedint {
@@ -122,6 +123,24 @@
         \return                 Pointer to the newly instantiated object.
     */
     vector_float * vector_float_clone(const vector_float * obj);
+
+    /** Prints the content of the vector in the console.
+        \param      obj         Pointer to the object.
+        \return                 Return -1 if error, 0 otherwise.
+    */    
+    void vector_signedint_printf(const vector_signedint * obj);
+
+    /** Prints the content of the vector in the console.
+        \param      obj         Pointer to the object.
+        \return                 Return -1 if error, 0 otherwise.
+    */    
+    void vector_unsignedint_printf(const vector_unsignedint * obj);    
+
+    /** Prints the content of the vector in the console.
+        \param      obj         Pointer to the object.
+        \return                 Return -1 if error, 0 otherwise.
+    */    
+    void vector_float_printf(const vector_float * obj);    
 
 
 #endif

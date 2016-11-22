@@ -115,3 +115,39 @@
         return objNew;
 
     }
+
+    void vector_signedint_printf(const vector_signedint * obj) {
+
+        unsigned int iElement;
+
+        for (iElement = 0; iElement < obj->nElements; iElement++) {
+
+            printf("(%03u): %+04d\n",iElement,obj->array[iElement]);
+
+        }
+
+    }
+
+    void vector_unsignedint_printf(const vector_unsignedint * obj) {
+
+        unsigned int iElement;
+
+        for (iElement = 0; iElement < obj->nElements; iElement++) {
+
+            printf("(%03u): %04u\n",iElement,obj->array[iElement]);
+
+        }
+
+    }
+
+    void vector_float_printf(const vector_float * obj) {
+
+        unsigned int iElement;
+
+        for (iElement = 0; iElement < obj->nElements; iElement++) {
+
+            printf("(%03u): %+02.2f\n",iElement,obj->array[iElement]);
+
+        }
+
+    }
