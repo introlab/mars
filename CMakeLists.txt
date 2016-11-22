@@ -99,10 +99,3 @@ add_executable(demo_sslt
 target_link_libraries(demo_sslt
     mars
 )
-
-#add_executable(demo_hssl
-#    demo/demo_hssl.c
-#)
-#target_link_libraries(demo_hssl
-#    mars
-#)
