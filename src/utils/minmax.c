@@ -31,6 +31,7 @@
         unsigned int iElement;
 
         maxValue = elements[0];
+        maxIndex = 0;
 
         for (iElement = 0; iElement < nElements; iElement++) {
 
