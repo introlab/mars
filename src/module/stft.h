@@ -70,6 +70,6 @@
         \param      hops        Hops message.
         \param      spectra     Spectra message.
     */
-    int stft_process(stft_obj * obj, const msg_hops_obj * hops, const msg_spectra_obj * spectra);
+    int stft_process(stft_obj * obj, const msg_hops_obj * hops, msg_spectra_obj * spectra);
 
 #endif
