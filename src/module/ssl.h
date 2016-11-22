@@ -58,24 +58,24 @@
         unsigned int fS;                ///< Sample rate (samples/sec).
         float c;                        ///< Speed of sound (m/sec).
         float epsilon;                  ///< Small value to avoid overflow.
-        unsigned int w;
-        unsigned int L;
-        float alphaS;
-        float alphaD;
-        float delta;
-        float alphaP;
+        unsigned int w;                 ///< MCRA: Parameter w.
+        unsigned int L;                 ///< MCRA: Parameter L.
+        float alphaS;                   ///< MCRA: Parameter \f$\alpha_S\f$.
+        float alphaD;                   ///< MCRA: Parameter \f$\alpha_D\f$.
+        float delta;                    ///< MCRA: Parameter \f$\delta\f$.
+        float alphaP;                   ///< Soft mask: Parameter \f$\alpha_P\f$.
 
         matrix_float * mics;            ///< Matrix that contains the microphone positions (Mx3).
 
-        array_1d * points;
-        array_1d * tdoas;
-        array_1d * invmap;
+        array_1d * points;              ///< Array of matrices (Nx3) that contains the points to scan for each level.
+        array_1d * tdoas;               ///< Array of matrices (NxP) that contains the TDOAs for each level.
+        array_1d * invmap;              ///< Array of matrices (NxB) that contains the maps for each level.
 
         array_1d * freqs;               ///< Array of spectra.
-        array_1d * freq2mcra;
-        array_1d * mcras;
-        array_1d * mcra2mask;
-        array_1d * masks;
+        array_1d * freq2mcra;           ///< Array of objects to convert from spectra to MCRA.
+        array_1d * mcras;               ///< Array of MCRAs.
+        array_1d * mcra2mask;           ///< Array of objects to convert from MCRA to soft mask.
+        array_1d * masks;               ///< Array of soft masks.
         array_1d * freq2phase;          ///< Array of objects to convert from spectra to phase
         array_1d * phases;              ///< Array of phases.
         array_1d * phase2phasex;        ///< Array of objects to convert from phases to paired phases.
