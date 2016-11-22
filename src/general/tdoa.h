@@ -33,16 +33,20 @@
         \param      mics        Microphones positions in a matrix Mx3.
         \param      fS          Sample rate (samples/sec).
         \param      c           Speed of sound (m/sec).
-        \return                 TDOA values in a matrix NxP, where \f$P=N(N-1)/2\f$.
+        \return                 TDOA values in a matrix NxP, where \f$P=M(M-1)/2\f$.
     */
     matrix_float * tdoa_delay(const matrix_float * points, const matrix_float * mics, const unsigned int fS, const float c);
 
     /** Generate the rounded TDOA values to the closest frequency bin.
-        \param      tdoas       TDOA values in a matrix NxP, where \f$P=N(N-1)/2\f$.
-        \return                 Rounded TDOA values in a matrix NxP, where \f$P=N(N-1)/2\f$.
+        \param      tdoas       TDOA values in a matrix NxP, where \f$P=M(M-1)/2\f$.
+        \return                 Rounded TDOA values in a matrix NxP, where \f$P=M(M-1)/2\f$.
     */
     matrix_signedint * tdoa_round(const matrix_float * tdoas);    
 
+    /** Generate the wrapped TDOA values that fit within the range [0,frameSize-1]
+        \param      tdoas       Rounded TDOA values in a matrix NxP, where \f$P=M(M-1)/2\f$.
+        \param      frameSize   Number of samples in a xcorr frame.
+    */
     matrix_unsignedint * tdoa_wrap(const matrix_signedint * tdoas, const unsigned int frameSize);
 
 #endif

@@ -108,3 +108,74 @@
         return tdoasWrapped;
 
 	}
+/*
+	matrix_float * tdoa_limits(const matrix_float * tdoas, const unsigned int nIntervals, const float scale) {
+
+        matrix_float * tdoasLimits;
+
+        unsigned int iPair;
+        unsigned int iPoint;
+
+        float minValue;
+        float maxValue;
+        float interval;   
+        float range;     
+
+        tdoasLimits = matrix_float_malloc(3, tdoas->nCols);
+
+        for (iPair = 0; iPair < tdoas->nCols; iPair++) {
+
+            minValue = +INFINITY;
+            maxValue = -INFINITY;
+
+            for (iPoint = 0; iPoint < tdoas->nRows; iPoint++) {
+
+                if (tdoas->array[iPoint][iPair] > maxValue) {
+                	maxValue = tdoas->array[iPoint][iPair];
+                }
+                if (tdoas->array[iPoint][iPair] < minValue) {
+                	minValue = tdoas->array[iPoint][iPair];
+                }
+
+            }
+
+            range = maxValue - minValue;
+            minValue -= ((scale-1.0f)/2.0f) * range;
+            maxValue += ((scale-1.0f)/2.0f) * range;
+
+            interval = (maxValue - minValue) / ((float) (nIntervals - 1));
+
+            tdoasLimits->array[0][iPair] = minValue;
+            tdoasLimits->array[1][iPair] = maxValue;
+            tdoasLimits->array[2][iPair] = interval;
+
+        }
+
+        return tdoasLimits;
+
+	}
+
+
+	matrix_unsignedint * tdoa_discretize(const matrix_float * tdoas, const matrix_float * limits) {
+
+        matrix_unsignedint * tdoasDiscretized;
+
+        unsigned int iPoint;
+        unsigned int iPair;
+        
+        tdoasDiscretized = matrix_unsignedint_malloc(tdoas->nRows, tdoas->nCols);
+
+        for (iPoint = 0; iPoint < tdoas->nRows; iPoint++) {
+
+	        for (iPair = 0; iPair < tdoas->nCols; iPair++) {
+
+	            tdoasDiscretized->array[iPoint][iPair] = (unsigned int) roundf((tdoas->array[iPoint][iPair]-limits->array[0][iPair])/limits->array[2][iPair]);
+
+	        }
+
+        }
+
+        return tdoasDiscretized;
+
+	}	
+	*/
