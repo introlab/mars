@@ -2,7 +2,7 @@
 #define __MARS_MESSAGE_SPECTRA
 
     /**
-    * \file     msg_hops.h
+    * \file     msg_spectra.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
