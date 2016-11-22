@@ -42,6 +42,7 @@
 
     /** Constructor of the object.	
         \param      fileName    Name of the RAW file.
+        \param      format      Output format ("xml" or "bin").
         \return                 Pointer to the instantiated object.
     */
     snk_pots_obj * snk_pots_construct(const char * fileName, const char * format);

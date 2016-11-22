@@ -92,7 +92,16 @@
         \param      frameSize       Number of samples in a frame.
         \param      fS              Sample rate (samples/sec).
         \param      c               Speed of sound (m/sec).
+        \param      levels          List of resolution levels.
+        \param      sigma           Standard deviation.
+        \param      nMatches        Number of matches to generate the map.
         \param      epsilon         Small value to avoid overflow.
+        \param      w               MCRA: Parameter w.
+        \param      L               MCRA: Parameter L.
+        \param      alphaS          MCRA: Parameter \f$\alpha_S\f$.
+        \param      alphaD          MCRA: Parameter \f$\alpha_D\f$.
+        \param      delta           MCRA: Parameter \f$\delta\f$.
+        \param      alphaP          Soft mask: Parameter \f$\alpha_P\f$.
         \return                     Pointer to the instantiated object.
     */  
     ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const float sigma, const unsigned int nMatches, const float epsilon, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta, const float alphaP);

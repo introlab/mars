@@ -23,7 +23,7 @@
 
     }
 
-    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * indexes, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg) {
+    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * invmap, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg) {
 
         unsigned int iIndex;
         unsigned int iPair;
@@ -34,13 +34,13 @@
             aimg->array[iPoint] = 0.0f;
         }
 
-        for (iIndex = 0; iIndex < indexes->nCols; iIndex++) {
+        for (iIndex = 0; iIndex < invmap->nCols; iIndex++) {
 
-            if (indexes->array[iPointCoarse][iIndex] == 0) {
+            if (invmap->array[iPointCoarse][iIndex] == 0) {
                 break;
             }
 
-            iPoint = indexes->array[iPointCoarse][iIndex] - 1;
+            iPoint = invmap->array[iPointCoarse][iIndex] - 1;
 
             for (iPair = 0; iPair < obj->nPairs; iPair++) {
 

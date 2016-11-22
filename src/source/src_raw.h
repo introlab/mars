@@ -2,7 +2,7 @@
 #define __MARS_SOURCE_RAW
 
     /**
-    * \file     raw2hop.h
+    * \file     src_raw.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25

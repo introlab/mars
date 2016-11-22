@@ -35,11 +35,11 @@
         unsigned int frameSize;             ///< Size of the frame.
         unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
         float alphaP;                       ///< Parameter \f$\alpha_P\f$.
-        float epsilon;
+        float epsilon;                      ///< Parameter epsilon.
 
         vector_float * X2;                  ///< Power of the spectrum \f$|X|^2\f$.
-        vector_float * zeta;                
-        vector_float * xi;
+        vector_float * zeta;                ///< Zeta vector.
+        vector_float * xi;                  ///< Xi vector.
 
     } mcra2mask_obj;
 

@@ -13,13 +13,3 @@
         return y;
 
     }
-
-    float distribution_fractional(const float x, const float mu, const float sigma) {
-
-        float diff;
-        float y;
-
-        diff = x - mu;
-        y = sigma / (sigma + diff * diff);
-
-    }

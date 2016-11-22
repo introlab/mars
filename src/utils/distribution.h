@@ -25,8 +25,12 @@
 
     #include <math.h>
 
+    /** Generate the a normal distribution.
+        \param      x               Value of x.
+        \param      mu              Mean of the normal distribution.
+        \param      sigma           Standard deviation of the normal distribution.
+        \return                     Return the y value.
+    */
     float distribution_normal(const float x, const float mu, const float sigma);
-
-    float distribution_fractional(const float x, const float mu, const float sigma);
 
 #endif
