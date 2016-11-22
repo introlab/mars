@@ -19,6 +19,7 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/lib")
 set(SRC
 
     src/general/circle.c
+    src/general/map.c
     src/general/sphere.c
     src/general/tdoa.c
     src/general/window.c
@@ -28,13 +29,14 @@ set(SRC
     src/message/msg_spectra.c
 
     src/module/stft.c
-    src/module/ssl_aimg.c
+    src/module/ssl.c
 
     src/probe/snapshot.c
 
 	src/signal/matrix.c
 	src/signal/vector.c
 
+	src/sink/snk_pots.c
 	src/sink/snk_raw.c
 	
 	src/source/src_eightsnd.c
@@ -42,14 +44,15 @@ set(SRC
 
     src/system/hop2frame.c
     src/system/frame2freq.c
+    src/system/freq2mcra.c
     src/system/freq2phase.c
+    src/system/mcra2mask.c
     src/system/phase2phasex.c
     src/system/phasex2xcorr.c
     src/system/xcorr2aimg.c
-    src/system/xcorr2xcorrmax.c
-    src/system/xcorr2xcorrreset.c
 
     src/utils/array.c
+    src/utils/distribution.c
 	src/utils/fft.c
 	src/utils/fifo.c
 	src/utils/indexing.c
@@ -96,3 +99,10 @@ add_executable(demo_sslt
 target_link_libraries(demo_sslt
     mars
 )
+
+#add_executable(demo_hssl
+#    demo/demo_hssl.c
+#)
+#target_link_libraries(demo_hssl
+#    mars
+#)
