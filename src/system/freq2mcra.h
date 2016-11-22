@@ -1,8 +1,8 @@
 #ifndef __MARS_SYST_FREQ2MCRA
 #define __MARS_SYST_FREQ2MCRA
 
+    #include "../general/window.h"
     #include "../signal/vector.h"
-    #include "../utils/window.h"
     #include "../utils/indexing.h"
 
     #include <stdlib.h>
@@ -52,7 +52,7 @@
 
     } freq2mcra_obj;
 
-    /** Constructor of the freq2mcra object.	
+    /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
         \param      w           Parameter w.
         \param      L           Parameter L.
@@ -63,7 +63,7 @@
     */
     freq2mcra_obj * freq2mcra_construct(const unsigned int frameSize, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta);
 
-    /** Destructor of the freq2mcra object.
+    /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
     void freq2mcra_destroy(freq2mcra_obj * obj);

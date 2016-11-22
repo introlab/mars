@@ -56,6 +56,6 @@
         \param      aimg        Vector with the acoustic image.
         \return                 Return -1 if error, 0 otherwise.        
 	*/
-    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const vector_float ** xcorrs, vector_float * aimg);
+    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * indexes, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg);
 
 #endif

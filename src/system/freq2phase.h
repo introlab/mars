@@ -37,14 +37,14 @@
 
     } freq2phase_obj;
 
-    /** Constructor of the freq2phase object.	
+    /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
         \param      epsilon     Epsilon value (small value) to avoid overflow.
         \return                 Pointer to the instantiated object.
 	*/
     freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon);
 
-    /** Destructor of the freq2phase object.
+    /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
     void freq2phase_destroy(freq2phase_obj * obj);

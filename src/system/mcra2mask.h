@@ -1,16 +1,17 @@
-#ifndef __MARS_SYST_FRAME2FREQ
-#define __MARS_SYST_FRAME2FREQ
+#ifndef __MARS_SYST_MCRA2MASK
+#define __MARS_SYST_MCRA2MASK
 
-    #include "../utils/fft.h"
+    #include "../general/window.h"
     #include "../signal/vector.h"
+    #include "../utils/indexing.h"
 
     #include <stdlib.h>
 
     /**
-    * \file     frame2freq.h
+    * \file     mcra2mask.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
-    * \date     2016-10-25
+    * \date     2016-11-22
     * \copyright
     *
     * This program is free software: you can redistribute it and/or modify
@@ -28,35 +29,40 @@
     *
     */
 
-    //! A structure that holds all the fields to convert frames to spectra. 
-    typedef struct frame2freq_obj {
+    //! A structure that holds all the fields to estimate stationnary noise via MCRA
+    typedef struct mcra2mask_obj {
 
         unsigned int frameSize;             ///< Size of the frame.
         unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
-        vector_float * frameWindowed;       ///< Array that holds the samples of the window.
+        float alphaP;                       ///< Parameter \f$\alpha_P\f$.
+        float epsilon;
 
-        fft_obj * fft;                      ///< Pointer to the FFT object.
+        vector_float * X2;                  ///< Power of the spectrum \f$|X|^2\f$.
+        vector_float * zeta;                
+        vector_float * xi;
 
-    } frame2freq_obj;
+    } mcra2mask_obj;
 
-    /** Constructor of the object.	
+    /** Constructor of the object.  
         \param      frameSize   Number of samples per frame.
+        \param      alphaP      Parameter \f$\alpha_P\f$. 
+        \param      epsilon     Parameter \f$\epsilon\f$. 
         \return                 Pointer to the instantiated object.
     */
-    frame2freq_obj * frame2freq_construct(const unsigned int frameSize);
+    mcra2mask_obj * mcra2mask_construct(unsigned int frameSize, const float alphaP, const float epsilon);
 
     /** Destructor of the object.
-        \param      obj         Pointer to the instantiated object.
+        \param      obj             Pointer to the instantiated object.
     */
-    void frame2freq_destroy(frame2freq_obj * obj);
+    void mcra2mask_destroy(mcra2mask_obj * obj);
 
-    /** Convert frame to spectrum
+    /** Generate a soft mask from the current spectrum and the estimated noise via MCRA.
         \param      obj         Pointer to the instantiated object.
-        \param      frame       Pointer to the input frame.
-        \param      window      Pointer to the input window.
-        \param      freq        Pointer to the output spectrum.
+        \param      freq        Pointer to spectrum.
+        \param      mcra        Pointer to the MCRA noise.
+        \param      mask        Pointer to the generated mask.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int frame2freq_process(frame2freq_obj * obj, const vector_float * frame, const vector_float * window, vector_float * freq);
+    int mcra2mask_process(mcra2mask_obj * obj, const vector_float * freq, const vector_float * mcra, vector_float * mask);
 
 #endif
