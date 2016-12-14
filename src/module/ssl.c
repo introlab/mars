@@ -1,7 +1,7 @@
 
     #include "ssl.h"
 
-    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const float sigma, const unsigned int nMatches, const float epsilon, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta, const float alphaP) {
+    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const vector_unsignedint * deltas, const float sigma, const unsigned int nMatches, const float epsilon ) {
 
         ssl_obj * obj;
 
@@ -13,8 +13,18 @@
         matrix_signedint * tdoaSignedInt;
 
         matrix_float ** tdoasFloat;
+        matrix_signedint ** tdoasMinMax;
+
+        signed int tdoaValue;
+        signed int tdoaMin;
+        signed int tdoaMax;
+        
+        unsigned int indexSorted;
+        unsigned int deltaPrev;
 
         obj = (ssl_obj *) malloc(sizeof(ssl_obj));
+
+        // Copy parameters
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
@@ -25,20 +35,16 @@
         obj->c = c;
         obj->epsilon = epsilon;
 
-        obj->w = w;
-        obj->L = L;
-        obj->alphaS = alphaS;
-        obj->alphaD = alphaD;
-        obj->delta = delta;
-        obj->alphaP = alphaP;
-
         obj->mics = matrix_float_clone(mics);
         obj->points = array_1d_malloc(obj->nLevels);
         obj->tdoas = array_1d_malloc(obj->nLevels);
         obj->invmap = array_1d_malloc(obj->nLevels);
 
-        tdoasFloat = (matrix_float **) malloc(sizeof(matrix_float *) * obj->nLevels);
+        // Generate TDOAs and mapping between various levels
 
+        tdoasFloat = (matrix_float **) malloc(sizeof(matrix_float *) * obj->nLevels);
+        tdoasMinMax = (matrix_signedint **) malloc(sizeof(matrix_signedint *) * obj->nLevels);
+        
         for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
 
             obj->points->ptr[iLevel] = sphere_generate(levels->array[iLevel], 1.0f);
@@ -46,9 +52,34 @@
             tdoasFloat[iLevel] = tdoa_delay(obj->points->ptr[iLevel], obj->mics, fS, c);
             tdoaSignedInt = tdoa_round(tdoasFloat[iLevel]);    
             obj->tdoas->ptr[iLevel] = tdoa_wrap(tdoaSignedInt, frameSize);
-            matrix_signedint_free(tdoaSignedInt);
+        
+            tdoasMinMax[iLevel] = matrix_signedint_malloc(obj->nPairs, 2);
+
+            for (iPair = 0; iPair < obj->nPairs; iPair++) {
+
+                 tdoaMin = tdoaSignedInt->array[0][iPair];
+                 tdoaMax = tdoaSignedInt->array[0][iPair];
+
+                 for (iSample = 1; iSample < tdoaSignedInt->nRows; iSample++) {
+                     
+                     tdoaValue = tdoaSignedInt->array[iSample][iPair];
+
+                     if (tdoaValue > tdoaMax) {
+                         tdoaMax = tdoaValue;
+                     }
+
+                     if (tdoaValue < tdoaMin) {
+                         tdoaMin = tdoaValue;
+                     }
+
+                 }
+
+                 tdoasMinMax[iLevel]->array[iPair][0] = tdoaMin;
+                 tdoasMinMax[iLevel]->array[iPair][1] = tdoaMax;
+
+            }
             
-        }
+        }       
 
         obj->invmap->ptr[0] = map_generate_reverse_init(obj->points->ptr[0]);
 
@@ -63,10 +94,28 @@
         }
         free((void *) tdoasFloat);
 
+        // Compute the deltas to filter xcorr and retrieve max, and sort them to perform optimal operations later
+
+        obj->deltaSortValue = vector_unsignedint_malloc(obj->nLevels);
+        obj->deltaSortIndex = vector_unsignedint_malloc(obj->nLevels);
+ 
+        sort_ascend_unsignedint(obj->deltaSortValue->array, obj->deltaSortIndex->array, deltas->array, obj->nLevels);
+
+        obj->deltaDiff = vector_unsignedint_malloc(obj->nLevels);
+
+        deltaPrev = 0;
+
+        for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
+            
+            indexSorted = obj->deltaSortIndex->array[iLevel];
+            obj->deltaDiff->array[indexSorted] = deltas->array[indexSorted] - deltaPrev;
+            deltaPrev = deltas->array[indexSorted];
+
+        }
+
+        // Generate all signals and systems
+
         obj->freqs = array_1d_malloc(obj->nMics);
-        obj->freq2mcra = array_1d_malloc(obj->nMics);
-        obj->mcras = array_1d_malloc(obj->nMics);
-        obj->mcra2mask = array_1d_malloc(obj->nMics);
         obj->masks = array_1d_malloc(obj->nMics);
         obj->freq2phase = array_1d_malloc(obj->nMics);
         obj->phases = array_1d_malloc(obj->nMics);
@@ -74,10 +123,12 @@
         for (iMic = 0; iMic < obj->nMics; iMic++) {
 
             obj->freqs->ptr[iMic] = vector_float_malloc(obj->halfFrameSize*2);
-            obj->freq2mcra->ptr[iMic] = freq2mcra_construct(obj->frameSize, obj->w, obj->L, obj->alphaS, obj->alphaD, obj->delta);
-            obj->mcras->ptr[iMic] = vector_float_malloc(obj->halfFrameSize);
-            obj->mcra2mask->ptr[iMic] = mcra2mask_construct(obj->frameSize, obj->alphaP, obj->epsilon);
             obj->masks->ptr[iMic] = vector_float_malloc(obj->halfFrameSize);
+
+            for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+                ((vector_float *) obj->masks->ptr[iMic])->array[iSample] = 1.0f;
+            }
+
             obj->freq2phase->ptr[iMic] = freq2phase_construct(frameSize, epsilon);
             obj->phases->ptr[iMic] = vector_float_malloc(obj->halfFrameSize*2);
 
@@ -96,6 +147,28 @@
             obj->xcorrs->ptr[iPair] = vector_float_malloc(frameSize);
 
         }
+
+        obj->xcorr2xcorr = array_2d_malloc(obj->nLevels, obj->nPairs);
+        obj->xcorrsmax = array_2d_malloc(obj->nLevels, obj->nPairs);
+
+        for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
+
+            for (iPair = 0; iPair < obj->nPairs; iPair++) {
+
+                obj->xcorr2xcorr->ptr[iLevel][iPair] = xcorr2xcorr_construct(frameSize, obj->deltaDiff->array[iLevel], tdoasMinMax[iLevel]->array[iPair][0], tdoasMinMax[iLevel]->array[iPair][1]);
+                obj->xcorrsmax->ptr[iLevel][iPair] = vector_float_malloc(frameSize);
+
+                for (iSample = 0; iSample < frameSize; iSample++) {
+                    ((vector_float *) obj->xcorrsmax->ptr[iLevel][iPair])->array[iSample] = 0.0f;
+                }
+
+            }
+
+            matrix_signedint_free(tdoasMinMax[iLevel]);
+
+        }
+
+        free((void *) tdoasMinMax);
 
         obj->xcorr2aimg = array_1d_malloc(obj->nLevels);
         obj->aimgs = array_1d_malloc(obj->nLevels);
@@ -125,6 +198,9 @@
         unsigned int iLevel;
         unsigned int iScan;
 
+        unsigned int indexSorted;
+        unsigned int indexSortedPrev;
+
         unsigned int iPoint;
         float vPoint;
 
@@ -137,8 +213,6 @@
 
             }
 
-            freq2mcra_process(obj->freq2mcra->ptr[iMic], obj->freqs->ptr[iMic], obj->mcras->ptr[iMic]);
-            mcra2mask_process(obj->mcra2mask->ptr[iMic], obj->freqs->ptr[iMic], obj->mcras->ptr[iMic], obj->masks->ptr[iMic]);
             freq2phase_process(obj->freq2phase->ptr[iMic], obj->freqs->ptr[iMic], obj->masks->ptr[iMic], obj->phases->ptr[iMic]);
 
         }
@@ -156,11 +230,40 @@
 
         }
 
+        for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
+
+            indexSorted = obj->deltaSortIndex->array[iLevel];
+
+            for (iMic1 = 0; iMic1 < obj->nMics; iMic1++) {
+
+                for (iMic2 = (iMic1+1); iMic2 < obj->nMics; iMic2++) {
+
+                    iPair = pair_iPair(obj->nMics, iMic1, iMic2);
+
+                    if (iLevel == 0) {
+
+                        xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrs->ptr[iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
+
+                    }
+                    else {
+
+                        xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrsmax->ptr[indexSortedPrev][iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
+
+                    }
+
+                }
+
+            }
+
+            indexSortedPrev = indexSorted;
+
+        }
+
         iPoint = 0;
 
         for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
 
-            xcorr2aimg_process(obj->xcorr2aimg->ptr[iLevel], obj->tdoas->ptr[iLevel], obj->invmap->ptr[iLevel], iPoint, (const vector_float **) obj->xcorrs->ptr, obj->aimgs->ptr[iLevel]);
+            xcorr2aimg_process(obj->xcorr2aimg->ptr[iLevel], obj->tdoas->ptr[iLevel], obj->invmap->ptr[iLevel], iPoint, (const vector_float **) (obj->xcorrsmax->ptr[iLevel]), obj->aimgs->ptr[iLevel]);
             iPoint = minmax_max_float(((vector_float *) obj->aimgs->ptr[iLevel])->array, ((vector_float *) obj->aimgs->ptr[iLevel])->nElements);   
 
         }

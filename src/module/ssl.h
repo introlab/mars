@@ -36,6 +36,7 @@
     #include "../system/phase2phasex.h"
     #include "../system/phasex2xcorr.h"
     #include "../system/xcorr2aimg.h"
+    #include "../system/xcorr2xcorr.h"
 
     #include "../general/map.h"
     #include "../general/tdoa.h"
@@ -46,6 +47,7 @@
     #include "../utils/array.h"
     #include "../utils/minmax.h"
     #include "../utils/pair.h"
+    #include "../utils/sort.h"
 
     //! A structure that holds all the fields for SSL with acoustic images
     typedef struct ssl_obj {
@@ -58,12 +60,6 @@
         unsigned int fS;                ///< Sample rate (samples/sec).
         float c;                        ///< Speed of sound (m/sec).
         float epsilon;                  ///< Small value to avoid overflow.
-        unsigned int w;                 ///< MCRA: Parameter w.
-        unsigned int L;                 ///< MCRA: Parameter L.
-        float alphaS;                   ///< MCRA: Parameter \f$\alpha_S\f$.
-        float alphaD;                   ///< MCRA: Parameter \f$\alpha_D\f$.
-        float delta;                    ///< MCRA: Parameter \f$\delta\f$.
-        float alphaP;                   ///< Soft mask: Parameter \f$\alpha_P\f$.
 
         matrix_float * mics;            ///< Matrix that contains the microphone positions (Mx3).
 
@@ -71,10 +67,11 @@
         array_1d * tdoas;               ///< Array of matrices (NxP) that contains the TDOAs for each level.
         array_1d * invmap;              ///< Array of matrices (NxB) that contains the maps for each level.
 
+        vector_unsignedint * deltaSortValue;
+        vector_unsignedint * deltaSortIndex;
+        vector_unsignedint * deltaDiff;
+
         array_1d * freqs;               ///< Array of spectra.
-        array_1d * freq2mcra;           ///< Array of objects to convert from spectra to MCRA.
-        array_1d * mcras;               ///< Array of MCRAs.
-        array_1d * mcra2mask;           ///< Array of objects to convert from MCRA to soft mask.
         array_1d * masks;               ///< Array of soft masks.
         array_1d * freq2phase;          ///< Array of objects to convert from spectra to phase
         array_1d * phases;              ///< Array of phases.
@@ -82,6 +79,8 @@
         array_1d * phasexs;             ///< Array of paired phases.
         array_1d * phasex2xcorr;        ///< Array of objects to convert from paired phases to cross-correlations.
         array_1d * xcorrs;              ///< Array of cross-correlations.
+        array_2d * xcorr2xcorr;         ///< Array of objects to compute max values in cross-correlations.
+        array_2d * xcorrsmax;           ///< Array of cross-correlations with max values.
         array_1d * xcorr2aimg;          ///< Array of objects to convert cross-correlations to acoustic images.
         array_1d * aimgs;               ///< Array of acoustic images.
 
@@ -93,18 +92,13 @@
         \param      fS              Sample rate (samples/sec).
         \param      c               Speed of sound (m/sec).
         \param      levels          List of resolution levels.
+        \param      deltas          List of deltas to filter xcorr vectors.
         \param      sigma           Standard deviation.
         \param      nMatches        Number of matches to generate the map.
         \param      epsilon         Small value to avoid overflow.
-        \param      w               MCRA: Parameter w.
-        \param      L               MCRA: Parameter L.
-        \param      alphaS          MCRA: Parameter \f$\alpha_S\f$.
-        \param      alphaD          MCRA: Parameter \f$\alpha_D\f$.
-        \param      delta           MCRA: Parameter \f$\delta\f$.
-        \param      alphaP          Soft mask: Parameter \f$\alpha_P\f$.
         \return                     Pointer to the instantiated object.
     */  
-    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const float sigma, const unsigned int nMatches, const float epsilon, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta, const float alphaP);
+    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const vector_unsignedint * deltas, const float sigma, const unsigned int nMatches, const float epsilon );
 
     /** Destructor of the vector object.
         \param      obj             Pointer to the instantiated object.

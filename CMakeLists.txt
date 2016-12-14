@@ -51,6 +51,7 @@ set(SRC
     src/system/phase2phasex.c
     src/system/phasex2xcorr.c
     src/system/xcorr2aimg.c
+    src/system/xcorr2xcorr.c
 
     src/utils/array.c
     src/utils/distribution.c
@@ -60,6 +61,7 @@ set(SRC
 	src/utils/minmax.c
 	src/utils/pair.c
 	src/utils/pcm.c
+    src/utils/sort.c
 
 )
 
@@ -71,6 +73,13 @@ target_link_libraries(mars
 	${PC_FFTW3_LIBRARIES}
 	${PC_ALSA_LIBRARIES}
 	m
+)
+
+add_executable(demo_test
+    demo/demo_test.c
+)
+target_link_libraries(demo_test
+    mars
 )
 
 add_executable(demo_fftinfo

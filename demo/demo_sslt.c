@@ -32,15 +32,10 @@ struct parameters {
 
     struct ssl {
         vector_unsignedint * levels;
+        vector_unsignedint * deltas;
         double sigma;
         unsigned int nMatches;
         double epsilon;
-        unsigned int w;
-        unsigned int L;
-        double alphaS;
-        double alphaD;
-        double delta;
-        double alphaP;        
     } ssl;
 
 } parameters;
@@ -163,54 +158,6 @@ int configuration_load(const char * fileName) {
         exit(EXIT_FAILURE);        
     }    
 
-    if (config_lookup_int(&cfg, "ssl.w", &valueInt)) {
-        parameters.ssl.w = (float) valueInt;
-    }
-    else {
-        printf("Missing: ssl.w\n");
-        exit(EXIT_FAILURE);        
-    }    
-
-    if (config_lookup_int(&cfg, "ssl.L", &valueInt)) {
-        parameters.ssl.L = (float) valueInt;
-    }
-    else {
-        printf("Missing: ssl.L\n");
-        exit(EXIT_FAILURE);        
-    }    
-
-    if (config_lookup_float(&cfg, "ssl.alphaS", &valueDouble)) {
-        parameters.ssl.alphaS = (float) valueDouble;
-    }
-    else {
-        printf("Missing: ssl.alphaS\n");
-        exit(EXIT_FAILURE);        
-    }  
-
-    if (config_lookup_float(&cfg, "ssl.alphaD", &valueDouble)) {
-        parameters.ssl.alphaD = (float) valueDouble;
-    }
-    else {
-        printf("Missing: ssl.alphaD\n");
-        exit(EXIT_FAILURE);        
-    }  
-
-    if (config_lookup_float(&cfg, "ssl.delta", &valueDouble)) {
-        parameters.ssl.delta = (float) valueDouble;
-    }
-    else {
-        printf("Missing: ssl.delta\n");
-        exit(EXIT_FAILURE);        
-    }  
-
-    if (config_lookup_float(&cfg, "ssl.alphaP", &valueDouble)) {
-        parameters.ssl.alphaP = (float) valueDouble;
-    }
-    else {
-        printf("Missing: ssl.alphaP\n");
-        exit(EXIT_FAILURE);        
-    }  
-
     setting = config_lookup(&cfg, "ssl.levels");
 
     if (setting != NULL) {
@@ -233,6 +180,29 @@ int configuration_load(const char * fileName) {
 
     }
 
+
+    setting = config_lookup(&cfg, "ssl.deltas");
+
+    if (setting != NULL) {
+
+        N = config_setting_length(setting);
+
+        parameters.ssl.deltas = vector_unsignedint_malloc(N);
+
+        for (i = 0; i < N; i++) {
+
+            valueInt = config_setting_get_int_elem(setting, i);
+            parameters.ssl.deltas->array[i] = valueInt;
+
+        }
+
+    }
+    else {
+        
+        printf("Missing: ssl.deltas\n"); exit(EXIT_FAILURE);
+
+    }    
+
     config_destroy(&cfg);
 
 }
@@ -241,6 +211,7 @@ int configuration_free(void) {
 
     matrix_float_free(parameters.general.mics);
     vector_unsignedint_free(parameters.ssl.levels);
+    vector_unsignedint_free(parameters.ssl.deltas);
 
 }
 
@@ -308,20 +279,15 @@ int main(int argc, char* argv[])
                                 parameters.general.fS,
                                 parameters.general.c,
                                 parameters.ssl.levels,
+                                parameters.ssl.deltas,
                                 parameters.ssl.sigma,
                                 parameters.ssl.nMatches,
-                                parameters.ssl.epsilon,
-                                parameters.ssl.w,
-                                parameters.ssl.L,
-                                parameters.ssl.alphaS,
-                                parameters.ssl.alphaD,
-                                parameters.ssl.delta,
-                                parameters.ssl.alphaP);
+                                parameters.ssl.epsilon);
 
     objects.msg_pots = msg_pots_construct();
 
     if (pValue != NULL) {
-        objects.snk_pots = snk_pots_construct(pValue, "xml");
+        objects.snk_pots = snk_pots_construct(pValue, "bin");
     }
 
     // Process
