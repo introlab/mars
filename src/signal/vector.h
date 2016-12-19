@@ -124,6 +124,12 @@
     */
     vector_float * vector_float_clone(const vector_float * obj);
 
+    int vector_signedint_zero(vector_signedint * obj);
+
+    int vector_unsignedint_zero(vector_unsignedint * obj);    
+
+    int vector_float_zero(vector_float * obj);
+
     /** Prints the content of the vector in the console.
         \param      obj         Pointer to the object.
         \return                 Return -1 if error, 0 otherwise.

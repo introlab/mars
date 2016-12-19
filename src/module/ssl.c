@@ -1,7 +1,7 @@
 
     #include "ssl.h"
 
-    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const vector_unsignedint * deltas, const float sigma, const unsigned int nMatches, const float epsilon ) {
+    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const unsigned int bufferSize, const unsigned int bufferDelta, const vector_unsignedint * levels, const vector_unsignedint * deltas, const float sigma, const unsigned int nMatches, const float epsilon ) {
 
         ssl_obj * obj;
 
@@ -28,12 +28,17 @@
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
+        obj->bufferSize = bufferSize;
+        obj->bufferDelta = bufferDelta;
         obj->nMics = mics->nRows;
         obj->nPairs = pair_nPairs(obj->nMics);
         obj->nLevels = levels->nElements;
         obj->fS = fS;
         obj->c = c;
         obj->epsilon = epsilon;
+        obj->bValue = 0;
+        obj->vPointPrev = 0.0f;
+        obj->iPointPrev = 0;
 
         obj->mics = matrix_float_clone(mics);
         obj->points = array_1d_malloc(obj->nLevels);
@@ -136,6 +141,8 @@
         
         obj->phase2phasex = array_1d_malloc(obj->nPairs);
         obj->phasexs = array_1d_malloc(obj->nPairs);
+        obj->phasex2phasex = array_1d_malloc(obj->nPairs);
+        obj->phasexsmooths = array_1d_malloc(obj->nPairs);
         obj->phasex2xcorr = array_1d_malloc(obj->nPairs);
         obj->xcorrs = array_1d_malloc(obj->nPairs);
 
@@ -143,6 +150,8 @@
 
             obj->phase2phasex->ptr[iPair] = phase2phasex_construct(frameSize);
             obj->phasexs->ptr[iPair] = vector_float_malloc(obj->halfFrameSize*2);
+            obj->phasex2phasex->ptr[iPair] = phasex2phasex_construct(frameSize, obj->bufferSize);
+            obj->phasexsmooths->ptr[iPair] = vector_float_malloc(obj->halfFrameSize*2);
             obj->phasex2xcorr->ptr[iPair] = phasex2xcorr_construct(frameSize);
             obj->xcorrs->ptr[iPair] = vector_float_malloc(frameSize);
 
@@ -224,15 +233,17 @@
                 iPair = pair_iPair(obj->nMics, iMic1, iMic2);
 
                 phase2phasex_process(obj->phase2phasex->ptr[iPair], obj->phases->ptr[iMic1], obj->phases->ptr[iMic2], obj->phasexs->ptr[iPair]);
-                phasex2xcorr_process(obj->phasex2xcorr->ptr[iPair], obj->phasexs->ptr[iPair], obj->xcorrs->ptr[iPair]);
+                phasex2phasex_process(obj->phasex2phasex->ptr[iPair], obj->phasexs->ptr[iPair], obj->phasexsmooths->ptr[iPair]);
 
             }
 
         }
 
-        for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
+        obj->bValue++;
 
-            indexSorted = obj->deltaSortIndex->array[iLevel];
+        if (obj->bValue == obj->bufferDelta) {          
+
+            obj->bValue = 0;
 
             for (iMic1 = 0; iMic1 < obj->nMics; iMic1++) {
 
@@ -240,41 +251,73 @@
 
                     iPair = pair_iPair(obj->nMics, iMic1, iMic2);
 
-                    if (iLevel == 0) {
-
-                        xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrs->ptr[iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
-
-                    }
-                    else {
-
-                        xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrsmax->ptr[indexSortedPrev][iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
-
-                    }
+                    phasex2xcorr_process(obj->phasex2xcorr->ptr[iPair], obj->phasexsmooths->ptr[iPair], obj->xcorrs->ptr[iPair]);
 
                 }
 
             }
 
-            indexSortedPrev = indexSorted;
+            for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
+
+                indexSorted = obj->deltaSortIndex->array[iLevel];
+
+                for (iMic1 = 0; iMic1 < obj->nMics; iMic1++) {
+
+                    for (iMic2 = (iMic1+1); iMic2 < obj->nMics; iMic2++) {
+
+                        iPair = pair_iPair(obj->nMics, iMic1, iMic2);
+
+                        if (iLevel == 0) {
+
+                            xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrs->ptr[iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
+
+                        }
+                        else {
+
+                            xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrsmax->ptr[indexSortedPrev][iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
+
+                        }
+
+                    }
+
+                }
+
+                indexSortedPrev = indexSorted;
+
+            }
+
+            iPoint = 0;
+
+            for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
+
+                xcorr2aimg_process(obj->xcorr2aimg->ptr[iLevel], obj->tdoas->ptr[iLevel], obj->invmap->ptr[iLevel], iPoint, (const vector_float **) (obj->xcorrsmax->ptr[iLevel]), obj->aimgs->ptr[iLevel]);
+                iPoint = minmax_max_float(((vector_float *) obj->aimgs->ptr[iLevel])->array, ((vector_float *) obj->aimgs->ptr[iLevel])->nElements);   
+
+            }
+
+            vPoint = ((vector_float *) obj->aimgs->ptr[obj->nLevels-1])->array[iPoint];
+            vPoint /= ((float) obj->bufferSize);
+
+            pots->samples[0] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][0];
+            pots->samples[1] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][1];
+            pots->samples[2] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][2];
+            pots->samples[3] = vPoint;
+
+            pots->id = spectra->id;
+
+            obj->vPointPrev = vPoint;
+            obj->iPointPrev = iPoint;
 
         }
+        else {
 
-        iPoint = 0;
+            pots->samples[0] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[obj->iPointPrev][0];
+            pots->samples[1] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[obj->iPointPrev][1];
+            pots->samples[2] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[obj->iPointPrev][2];
+            pots->samples[3] = obj->vPointPrev;
 
-        for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
-
-            xcorr2aimg_process(obj->xcorr2aimg->ptr[iLevel], obj->tdoas->ptr[iLevel], obj->invmap->ptr[iLevel], iPoint, (const vector_float **) (obj->xcorrsmax->ptr[iLevel]), obj->aimgs->ptr[iLevel]);
-            iPoint = minmax_max_float(((vector_float *) obj->aimgs->ptr[iLevel])->array, ((vector_float *) obj->aimgs->ptr[iLevel])->nElements);   
+            pots->id = spectra->id;
 
         }
-
-        vPoint = ((vector_float *) obj->aimgs->ptr[obj->nLevels-1])->array[iPoint];
-
-        pots->samples[0] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][0];
-        pots->samples[1] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][1];
-        pots->samples[2] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][2];
-        pots->samples[3] = vPoint;
-
-        pots->id = spectra->id;
 
     }

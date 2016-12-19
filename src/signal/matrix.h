@@ -130,6 +130,12 @@
     */
     matrix_float * matrix_float_clone(const matrix_float * obj);    
 
+    int matrix_signedint_zero(matrix_signedint * obj);
+
+    int matrix_unsignedint_zero(matrix_unsignedint * obj);    
+
+    int matrix_float_zero(matrix_float * obj);
+
     /** Extract the vector at given row.
         \param      objSrc      Pointer to the source object.
         \param      objDest     Pointer to the destination object.

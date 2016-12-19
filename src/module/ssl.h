@@ -34,6 +34,7 @@
     #include "../system/freq2phase.h"
     #include "../system/mcra2mask.h"
     #include "../system/phase2phasex.h"
+    #include "../system/phasex2phasex.h"
     #include "../system/phasex2xcorr.h"
     #include "../system/xcorr2aimg.h"
     #include "../system/xcorr2xcorr.h"
@@ -52,37 +53,45 @@
     //! A structure that holds all the fields for SSL with acoustic images
     typedef struct ssl_obj {
 
-        unsigned int frameSize;         ///< Size of the frame.
-        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
-        unsigned int nMics;             ///< Number of microphones/channels.
-        unsigned int nPairs;            ///< Number of pairs of microphones.
-        unsigned int nLevels;           ///< Number of levels.
-        unsigned int fS;                ///< Sample rate (samples/sec).
-        float c;                        ///< Speed of sound (m/sec).
-        float epsilon;                  ///< Small value to avoid overflow.
+        unsigned int frameSize;                 ///< Size of the frame.
+        unsigned int halfFrameSize;             ///< Size of the frame divided by 2 plus 1.
+        unsigned int nMics;                     ///< Number of microphones/channels.
+        unsigned int nPairs;                    ///< Number of pairs of microphones.
+        unsigned int nLevels;                   ///< Number of levels.
+        unsigned int bufferSize;                ///< Buffer size for cross-correlation.
+        unsigned int bufferDelta;               ///< Refresh rate for cross-correlation.
+        unsigned int fS;                        ///< Sample rate (samples/sec).
+        float c;                                ///< Speed of sound (m/sec).
+        float epsilon;                          ///< Small value to avoid overflow.
 
-        matrix_float * mics;            ///< Matrix that contains the microphone positions (Mx3).
+        unsigned int bValue;                    ///< Frame count for the refresh rate.
+        float vPointPrev;                       ///< Energy level since last refresh.
+        unsigned int iPointPrev;                ///< Point index since last refresh.
 
-        array_1d * points;              ///< Array of matrices (Nx3) that contains the points to scan for each level.
-        array_1d * tdoas;               ///< Array of matrices (NxP) that contains the TDOAs for each level.
-        array_1d * invmap;              ///< Array of matrices (NxB) that contains the maps for each level.
+        matrix_float * mics;                    ///< Matrix that contains the microphone positions (Mx3).
 
-        vector_unsignedint * deltaSortValue;
-        vector_unsignedint * deltaSortIndex;
-        vector_unsignedint * deltaDiff;
+        array_1d * points;                      ///< Array of matrices (Nx3) that contains the points to scan for each level.
+        array_1d * tdoas;                       ///< Array of matrices (NxP) that contains the TDOAs for each level.
+        array_1d * invmap;                      ///< Array of matrices (NxB) that contains the maps for each level.
 
-        array_1d * freqs;               ///< Array of spectra.
-        array_1d * masks;               ///< Array of soft masks.
-        array_1d * freq2phase;          ///< Array of objects to convert from spectra to phase
-        array_1d * phases;              ///< Array of phases.
-        array_1d * phase2phasex;        ///< Array of objects to convert from phases to paired phases.
-        array_1d * phasexs;             ///< Array of paired phases.
-        array_1d * phasex2xcorr;        ///< Array of objects to convert from paired phases to cross-correlations.
-        array_1d * xcorrs;              ///< Array of cross-correlations.
-        array_2d * xcorr2xcorr;         ///< Array of objects to compute max values in cross-correlations.
-        array_2d * xcorrsmax;           ///< Array of cross-correlations with max values.
-        array_1d * xcorr2aimg;          ///< Array of objects to convert cross-correlations to acoustic images.
-        array_1d * aimgs;               ///< Array of acoustic images.
+        vector_unsignedint * deltaSortValue;    ///< List of delta values for xcorr filtering, sorted in ascending order.
+        vector_unsignedint * deltaSortIndex;    ///< List of indexes that correspond to sorted delta values.
+        vector_unsignedint * deltaDiff;         ///< Difference in delta values between each delta value.
+
+        array_1d * freqs;                       ///< Array of spectra.
+        array_1d * masks;                       ///< Array of soft masks.
+        array_1d * freq2phase;                  ///< Array of objects to convert from spectra to phase
+        array_1d * phases;                      ///< Array of phases.
+        array_1d * phase2phasex;                ///< Array of objects to convert from phases to paired phases.
+        array_1d * phasexs;                     ///< Array of paired phases.
+        array_1d * phasex2phasex;               ///< Array of objects to buffer paired phases.
+        array_1d * phasexsmooths;               
+        array_1d * phasex2xcorr;                ///< Array of objects to convert from paired phases to cross-correlations.
+        array_1d * xcorrs;                      ///< Array of cross-correlations.
+        array_2d * xcorr2xcorr;                 ///< Array of objects to compute max values in cross-correlations.
+        array_2d * xcorrsmax;                   ///< Array of cross-correlations with max values.
+        array_1d * xcorr2aimg;                  ///< Array of objects to convert cross-correlations to acoustic images.
+        array_1d * aimgs;                       ///< Array of acoustic images.
 
     } ssl_obj;
 
@@ -91,6 +100,8 @@
         \param      frameSize       Number of samples in a frame.
         \param      fS              Sample rate (samples/sec).
         \param      c               Speed of sound (m/sec).
+        \param      bufferSize      Buffer size for cross-correlation.
+        \param      bufferDelta     Refresh rate for cross-correlation.
         \param      levels          List of resolution levels.
         \param      deltas          List of deltas to filter xcorr vectors.
         \param      sigma           Standard deviation.
@@ -98,7 +109,7 @@
         \param      epsilon         Small value to avoid overflow.
         \return                     Pointer to the instantiated object.
     */  
-    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const vector_unsignedint * levels, const vector_unsignedint * deltas, const float sigma, const unsigned int nMatches, const float epsilon );
+    ssl_obj * ssl_construct(const matrix_float * mics, const unsigned int frameSize, const unsigned int fS, const float c, const unsigned int bufferSize, const unsigned int bufferDelta, const vector_unsignedint * levels, const vector_unsignedint * deltas, const float sigma, const unsigned int nMatches, const float epsilon );
 
     /** Destructor of the vector object.
         \param      obj             Pointer to the instantiated object.

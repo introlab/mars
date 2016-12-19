@@ -116,6 +116,42 @@
 
     }
 
+    int vector_signedint_zero(vector_signedint * obj) {
+
+        unsigned int iElement;
+
+        for (iElement = 0; iElement < obj->nElements; iElement++) {
+
+            obj->array[iElement] = 0;
+
+        }
+
+    }
+
+    int vector_unsignedint_zero(vector_unsignedint * obj) {
+
+        unsigned int iElement;
+
+        for (iElement = 0; iElement < obj->nElements; iElement++) {
+
+            obj->array[iElement] = 0;
+
+        }
+
+    }
+
+    int vector_float_zero(vector_float * obj) {
+
+        unsigned int iElement;
+
+        for (iElement = 0; iElement < obj->nElements; iElement++) {
+
+            obj->array[iElement] = 0.0f;
+
+        }
+
+    }
+
     void vector_signedint_printf(const vector_signedint * obj) {
 
         unsigned int iElement;
