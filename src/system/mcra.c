@@ -1,13 +1,13 @@
 
-    #include "freq2mcra.h"
+    #include "mcra.h"
 
-    freq2mcra_obj * freq2mcra_construct(const unsigned int frameSize, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta) {
+    mcra_obj * mcra_construct(const unsigned int frameSize, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta) {
 
-        freq2mcra_obj * obj;
+        mcra_obj * obj;
         vector_float * window;
         unsigned short iSample;
 
-        obj = (freq2mcra_obj *) malloc(sizeof(freq2mcra_obj));
+        obj = (mcra_obj *) malloc(sizeof(mcra_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
@@ -51,7 +51,7 @@
 
     }
 
-    void freq2mcra_destroy(freq2mcra_obj * obj) {
+    void mcra_destroy(mcra_obj * obj) {
 
         vector_float_free(obj->b);
         vector_float_free(obj->X2);
@@ -65,7 +65,7 @@
 
     }
 
-    int freq2mcra_process(freq2mcra_obj * obj, const vector_float * freq, vector_float * mcra) {
+    int mcra_process(mcra_obj * obj, const vector_float * freq, vector_float * mcra) {
 
         unsigned int iSample;
         signed int iSubSample;

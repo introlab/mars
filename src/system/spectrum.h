@@ -1,13 +1,13 @@
-#ifndef __MARS_SYST_FREQ2PHASE
-#define __MARS_SYST_FREQ2PHASE
+#ifndef __MARS_SYST_FRAME2FREQ
+#define __MARS_SYST_FRAME2FREQ
 
+    #include "../utils/fft.h"
     #include "../signal/vector.h"
 
-    #include <math.h>
     #include <stdlib.h>
 
     /**
-    * \file     freq2phase.h
+    * \file     spectrum.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -28,34 +28,35 @@
     *
     */
 
-    //! A structure that holds all the fields to convert spectra to phase. 
-    typedef struct freq2phase_obj {
+    //! A structure that holds all the fields to convert frames to spectra. 
+    typedef struct spectrum_obj {
 
-        unsigned int frameSize;         ///< Size of the frame.
-        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
-        float epsilon;                  ///< Epsilon value (small value) to avoid overflow.
+        unsigned int frameSize;             ///< Size of the frame.
+        unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
+        vector_float * frameWindowed;       ///< Array that holds the samples of the window.
 
-    } freq2phase_obj;
+        fft_obj * fft;                      ///< Pointer to the FFT object.
+
+    } spectrum_obj;
 
     /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
-        \param      epsilon     Epsilon value (small value) to avoid overflow.
         \return                 Pointer to the instantiated object.
-	*/
-    freq2phase_obj * freq2phase_construct(const unsigned int frameSize, const float epsilon);
+    */
+    spectrum_obj * spectrum_construct(const unsigned int frameSize);
 
     /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void freq2phase_destroy(freq2phase_obj * obj);
+    void spectrum_destroy(spectrum_obj * obj);
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      freq        Pointer to the input spectrum.
-        \param      mask        Pointer to the input mask.
-        \param      phases      Pointer to the output phase.
+        \param      frame       Pointer to the input frame.
+        \param      window      Pointer to the input window.
+        \param      freq        Pointer to the output spectrum.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int freq2phase_process(freq2phase_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phases);
+    int spectrum_process(spectrum_obj * obj, const vector_float * frame, const vector_float * window, vector_float * freq);
 
 #endif

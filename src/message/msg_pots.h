@@ -28,8 +28,9 @@
     //! A structure that holds all the fields for potential sources. 
     typedef struct msg_pots_obj {
 
-        unsigned long long id;      ///< Time stamp
-        float * samples;            ///< Samples.
+        unsigned long long timeStamp;   ///< Time stamp
+        
+        float * samples;                ///< Samples.
 
     } msg_pots_obj;
 

@@ -7,7 +7,7 @@
 
         obj = (msg_pots_obj *) malloc(sizeof(msg_pots_obj));
 
-        obj->id = 0;
+        obj->timeStamp = 0;
         obj->samples = (float *) malloc(sizeof(float) * 4);
 
         return obj;

@@ -1,8 +1,8 @@
-#ifndef __MARS_SYST_XCORR2XCORR
-#define __MARS_SYST_XCORR2XCORR
+#ifndef __MARS_SYST_MAXXCORR
+#define __MARS_SYST_MAXXCORR
 
     /**
-    * \file     xcorr2xcorr.h
+    * \file     maxxcorr.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-12-10
@@ -28,7 +28,7 @@
     #include "../utils/indexing.h"
 
     //! A structure that holds all the fields to multiply phases. 
-    typedef struct xcorr2xcorr_obj {
+    typedef struct maxxcorr_obj {
 
         unsigned int frameSize;             ///< Size of the frame.
         unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
@@ -36,12 +36,12 @@
         signed int tdoaMin;
         signed int tdoaMax;
 
-    } xcorr2xcorr_obj;
+    } maxxcorr_obj;
 
-    xcorr2xcorr_obj * xcorr2xcorr_construct(const unsigned int frameSize, const unsigned int delta, const signed int tdoaMin, const signed int tdoaMax);
+    maxxcorr_obj * maxxcorr_construct(const unsigned int frameSize, const unsigned int delta, const signed int tdoaMin, const signed int tdoaMax);
 
-    void xcorr2xcorr_destroy(xcorr2xcorr_obj * obj);
+    void maxxcorr_destroy(maxxcorr_obj * obj);
 
-    int xcorr2xcorr_process(const xcorr2xcorr_obj * obj, const vector_float * xcorrSrc, vector_float * xcorrDest);
+    int maxxcorr_process(const maxxcorr_obj * obj, const vector_float * xcorrSrc, vector_float * xcorrDest);
 
 #endif

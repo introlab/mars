@@ -1,12 +1,12 @@
     
-    #include "hop2frame.h"
+    #include "analysis.h"
 
-    hop2frame_obj * hop2frame_construct(const unsigned int hopSize, const unsigned int frameSize) {
+    analysis_obj * analysis_construct(const unsigned int hopSize, const unsigned int frameSize) {
 
-        hop2frame_obj * obj;
+        analysis_obj * obj;
         unsigned int iSample;
 
-        obj = (hop2frame_obj *) malloc(sizeof(hop2frame_obj));
+        obj = (analysis_obj *) malloc(sizeof(analysis_obj));
 
         obj->hopSize = hopSize;
         obj->frameSize = frameSize;
@@ -23,14 +23,14 @@
 
     }
 
-    void hop2frame_destroy(hop2frame_obj * obj) {
+    void analysis_destroy(analysis_obj * obj) {
 
         vector_float_free(obj->frame);
         free((void *) obj);
 
     }
 
-    int hop2frame_process(hop2frame_obj * obj, const vector_float * hop, vector_float * frame) {
+    int analysis_process(analysis_obj * obj, const vector_float * hop, vector_float * frame) {
 
         unsigned int iSample;
 

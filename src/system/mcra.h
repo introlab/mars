@@ -1,5 +1,5 @@
-#ifndef __MARS_SYST_FREQ2MCRA
-#define __MARS_SYST_FREQ2MCRA
+#ifndef __MARS_SYST_MCRA
+#define __MARS_SYST_MCRA
 
     #include "../general/window.h"
     #include "../signal/vector.h"
@@ -8,7 +8,7 @@
     #include <stdlib.h>
 
     /**
-    * \file     freq2mcra.h
+    * \file     mcra.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -30,7 +30,7 @@
     */
 
     //! A structure that holds all the fields to estimate stationnary noise via MCRA
-    typedef struct freq2mcra_obj {
+    typedef struct mcra_obj {
 
         unsigned int frameSize;             ///< Size of the frame.
         unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
@@ -50,7 +50,7 @@
 
         unsigned short l;                   ///< Frame index.
 
-    } freq2mcra_obj;
+    } mcra_obj;
 
     /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
@@ -61,12 +61,12 @@
         \param      delta       Parameter \f$\delta\f$.
         \return                 Pointer to the instantiated object.
     */
-    freq2mcra_obj * freq2mcra_construct(const unsigned int frameSize, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta);
+    mcra_obj * mcra_construct(const unsigned int frameSize, const unsigned int w, const unsigned int L, const float alphaS, const float alphaD, const float delta);
 
     /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void freq2mcra_destroy(freq2mcra_obj * obj);
+    void mcra_destroy(mcra_obj * obj);
 
     /** Estimate stationnary noise
         \param      obj         Pointer to the instantiated object.
@@ -74,7 +74,7 @@
         \param      mcra        Pointer to the output noise.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int freq2mcra_process(freq2mcra_obj * obj, const vector_float * freq, vector_float * mcra);
+    int mcra_process(mcra_obj * obj, const vector_float * freq, vector_float * mcra);
 
 
 #endif

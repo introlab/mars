@@ -14,16 +14,16 @@
     	obj->nMics = nMics;
 
         obj->hops = array_1d_malloc(obj->nMics);
-        obj->hop2frame = array_1d_malloc(obj->nMics);
+        obj->analysis = array_1d_malloc(obj->nMics);
         obj->frames = array_1d_malloc(obj->nMics);
-        obj->frame2freq = array_1d_malloc(obj->nMics);
+        obj->spectrum = array_1d_malloc(obj->nMics);
         obj->freqs = array_1d_malloc(obj->nMics);
 
         for (iMic = 0; iMic < nMics; iMic++) {
         	obj->hops->ptr[iMic] = (void *) vector_float_malloc(obj->hopSize);
-        	obj->hop2frame->ptr[iMic] = (void *) hop2frame_construct(obj->hopSize, obj->frameSize);
+        	obj->analysis->ptr[iMic] = (void *) analysis_construct(obj->hopSize, obj->frameSize);
         	obj->frames->ptr[iMic] = (void *) vector_float_malloc(obj->frameSize);
-        	obj->frame2freq->ptr[iMic] = (void *) frame2freq_construct(obj->frameSize);
+        	obj->spectrum->ptr[iMic] = (void *) spectrum_construct(obj->frameSize);
         	obj->freqs->ptr[iMic] = (void *) vector_float_malloc(obj->halfFrameSize*2);
         }
     	
@@ -39,16 +39,16 @@
 
         for (iMic = 0; iMic < obj->nMics; iMic++) {
         	vector_float_free(obj->hops->ptr[iMic]);
-        	hop2frame_destroy(obj->hop2frame->ptr[iMic]);
+        	analysis_destroy(obj->analysis->ptr[iMic]);
         	vector_float_free(obj->frames->ptr[iMic]);
-        	frame2freq_destroy(obj->frame2freq->ptr[iMic]);
+        	spectrum_destroy(obj->spectrum->ptr[iMic]);
         	vector_float_free(obj->freqs->ptr[iMic]);
         }
 
         array_1d_free(obj->hops);
-        array_1d_free(obj->hop2frame);
+        array_1d_free(obj->analysis);
         array_1d_free(obj->frames);
-        array_1d_free(obj->frame2freq);
+        array_1d_free(obj->spectrum);
         array_1d_free(obj->freqs);
 
         vector_float_free(obj->window);
@@ -70,8 +70,8 @@
 
         for (iMic = 0; iMic < obj->nMics; iMic++) {
 
-            hop2frame_process(obj->hop2frame->ptr[iMic], obj->hops->ptr[iMic], obj->frames->ptr[iMic]);
-            frame2freq_process(obj->frame2freq->ptr[iMic], obj->frames->ptr[iMic], obj->window, obj->freqs->ptr[iMic]);
+            analysis_process(obj->analysis->ptr[iMic], obj->hops->ptr[iMic], obj->frames->ptr[iMic]);
+            spectrum_process(obj->spectrum->ptr[iMic], obj->frames->ptr[iMic], obj->window, obj->freqs->ptr[iMic]);
 
         }
 
@@ -84,6 +84,6 @@
             }
         }
 
-        spectra->id = hops->id;
+        spectra->timeStamp = hops->timeStamp;
 
     }

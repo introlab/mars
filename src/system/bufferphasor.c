@@ -1,13 +1,13 @@
 
-    #include "phasex2phasex.h"
+    #include "bufferphasor.h"
 
-    phasex2phasex_obj * phasex2phasex_construct(const unsigned int frameSize, const unsigned int bufferSize) {
+    bufferphasor_obj * bufferphasor_construct(const unsigned int frameSize, const unsigned int bufferSize) {
 
-        phasex2phasex_obj * obj;
+        bufferphasor_obj * obj;
         unsigned int iFrame;
         vector_float * phasex;
 
-        obj = (phasex2phasex_obj *) malloc(sizeof(phasex2phasex_obj));
+        obj = (bufferphasor_obj *) malloc(sizeof(bufferphasor_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2+1;
@@ -31,7 +31,7 @@
 
     }
 
-    void phasex2phasex_destroy(phasex2phasex_obj * obj) {
+    void bufferphasor_destroy(bufferphasor_obj * obj) {
 
         unsigned int iFrame;
         vector_float * phasex;
@@ -51,7 +51,7 @@
 
     }
 
-    int phasex2phasex_process(phasex2phasex_obj * obj, const vector_float * phase12, vector_float * phase12smooth) {
+    int bufferphasor_process(bufferphasor_obj * obj, const vector_float * phase12, vector_float * phase12smooth) {
 
         vector_float * phasex;
         unsigned int iElement;

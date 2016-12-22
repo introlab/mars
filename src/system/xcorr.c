@@ -1,11 +1,11 @@
     
-    #include "phasex2xcorr.h"
+    #include "xcorr.h"
 
-    phasex2xcorr_obj * phasex2xcorr_construct(const unsigned int frameSize) {
+    xcorr_obj * xcorr_construct(const unsigned int frameSize) {
 
-        phasex2xcorr_obj * obj;
+        xcorr_obj * obj;
 
-        obj = (phasex2xcorr_obj *) malloc(sizeof(phasex2xcorr_obj));
+        obj = (xcorr_obj *) malloc(sizeof(xcorr_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = (frameSize/2)+1;
@@ -16,7 +16,7 @@
 
     }
 
-    void phasex2xcorr_destroy(phasex2xcorr_obj * obj) {
+    void xcorr_destroy(xcorr_obj * obj) {
 
         fft_destroy(obj->fft);
 
@@ -25,7 +25,7 @@
     }
 
 
-    int phasex2xcorr_process(phasex2xcorr_obj * obj, const vector_float * phasex, vector_float * xcorr) {
+    int xcorr_process(xcorr_obj * obj, const vector_float * phasex, vector_float * xcorr) {
 
         unsigned int iPair;
 

@@ -1,11 +1,11 @@
     
-    #include "phase2phasex.h"
+    #include "crossphasor.h"
 
-    phase2phasex_obj * phase2phasex_construct(const unsigned int frameSize) {
+    crossphasor_obj * crossphasor_construct(const unsigned int frameSize) {
 
-        phase2phasex_obj * obj;
+        crossphasor_obj * obj;
 
-        obj = (phase2phasex_obj *) malloc(sizeof(phase2phasex_obj));
+        obj = (crossphasor_obj *) malloc(sizeof(crossphasor_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
@@ -14,13 +14,13 @@
 
     }
 
-    void phase2phasex_destroy(phase2phasex_obj * obj) {
+    void crossphasor_destroy(crossphasor_obj * obj) {
 
         free((void *) obj);
 
     }
 
-    int phase2phasex_process(phase2phasex_obj * obj, const vector_float * phase1, const vector_float * phase2, vector_float * phase12) {
+    int crossphasor_process(crossphasor_obj * obj, const vector_float * phase1, const vector_float * phase2, vector_float * phase12) {
 
         unsigned int iSample;
 

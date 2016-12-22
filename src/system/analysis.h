@@ -1,12 +1,12 @@
-#ifndef __MARS_SYST_HOP2FRAME
-#define __MARS_SYST_HOP2FRAME
+#ifndef __MARS_SYST_ANALYSIS
+#define __MARS_SYST_ANALYSIS
 
     #include "../signal/vector.h"
 
     #include <stdlib.h>
 
     /**
-    * \file     hop2frame.h
+    * \file     analysis.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -28,26 +28,26 @@
     */
 
     //! A structure that holds all the fields to convert hop to frame. 
-    typedef struct hop2frame_obj {
+    typedef struct analysis_obj {
 
         unsigned int hopSize;           ///< Size of the hop.
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int nMics;             ///< Number of microphones.
         vector_float * frame;           ///< Vector that holds the samples.
 
-    } hop2frame_obj;
+    } analysis_obj;
 
     /** Constructor of the object.	
         \param      hopSize     Number of samples per hop.
         \param      frameSize   Number of samples per frame.
         \return                 Pointer to the instantiated object.
     */
-    hop2frame_obj * hop2frame_construct(const unsigned int hopSize, const unsigned int frameSize);
+    analysis_obj * analysis_construct(const unsigned int hopSize, const unsigned int frameSize);
 
     /** Destructor of the object.
         \param      obj             Pointer to the instantiated object.
     */
-    void hop2frame_destroy(hop2frame_obj * obj);
+    void analysis_destroy(analysis_obj * obj);
 
     /** Consume the new hop and generate the next frame
         \param      obj         Pointer to the instantiated object.
@@ -55,6 +55,6 @@
         \param      frame       Pointer to the output frame.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int hop2frame_process(hop2frame_obj * obj, const vector_float * hop, vector_float * frame);
+    int analysis_process(analysis_obj * obj, const vector_float * hop, vector_float * frame);
 
 #endif

@@ -1,8 +1,8 @@
-#ifndef __MARS_SYST_XCORR2AIMG
-#define __MARS_SYST_XCORR2AIMG
+#ifndef __MARS_SYST_AIMG
+#define __MARS_SYST_AIMG
 
     /**
-    * \file     xcorr2aimg.h
+    * \file     aimg.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-11-02
@@ -27,14 +27,14 @@
     #include "../signal/matrix.h"
 
     //! A structure that holds all the fields to generate the acoustic image.
-    typedef struct xcorr2aimg_obj {
+    typedef struct aimg_obj {
 
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int nMics;             ///< Number of microphones.
         unsigned int nPairs;            ///< Number of pairs.
         unsigned int nPoints;           ///< Number of points.
 
-    } xcorr2aimg_obj;
+    } aimg_obj;
 
     /** Constructor of the xcorr2aimg object.	
         \param      frameSize   Number of samples per frame.
@@ -42,12 +42,12 @@
         \param      nPoints     Number of points.
         \return                 Pointer to the instantiated object.
     */
-    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints);
+    aimg_obj * aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints);
 
     /** Destructor of the xcorr2aimg object.
         \param      obj         Pointer to the instantiated object.
     */
-    void xcorr2aimg_destroy(xcorr2aimg_obj * obj);
+    void aimg_destroy(aimg_obj * obj);
 
     /** Generate the acoustic image. 
         \param      obj			    Pointer to the instantiated object.
@@ -58,6 +58,6 @@
         \param      aimg            Vector with the acoustic image.
         \return                     Return -1 if error, 0 otherwise.        
 	*/
-    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * invmap, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg);
+    int aimg_process(const aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * invmap, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg);
 
 #endif

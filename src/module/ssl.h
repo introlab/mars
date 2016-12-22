@@ -30,14 +30,12 @@
     #include "../signal/vector.h"
     #include "../signal/matrix.h"
 
-    #include "../system/freq2mcra.h"
-    #include "../system/freq2phase.h"
-    #include "../system/mcra2mask.h"
-    #include "../system/phase2phasex.h"
-    #include "../system/phasex2phasex.h"
-    #include "../system/phasex2xcorr.h"
-    #include "../system/xcorr2aimg.h"
-    #include "../system/xcorr2xcorr.h"
+    #include "../system/phasor.h"
+    #include "../system/crossphasor.h"
+    #include "../system/bufferphasor.h"
+    #include "../system/xcorr.h"
+    #include "../system/aimg.h"
+    #include "../system/maxxcorr.h"
 
     #include "../general/map.h"
     #include "../general/tdoa.h"
@@ -79,19 +77,18 @@
         vector_unsignedint * deltaDiff;         ///< Difference in delta values between each delta value.
 
         array_1d * freqs;                       ///< Array of spectra.
-        array_1d * masks;                       ///< Array of soft masks.
-        array_1d * freq2phase;                  ///< Array of objects to convert from spectra to phase
+        array_1d * phasors;                     ///< Array of objects to convert from spectra to phase
         array_1d * phases;                      ///< Array of phases.
-        array_1d * phase2phasex;                ///< Array of objects to convert from phases to paired phases.
+        array_1d * crossphasors;                ///< Array of objects to convert from phases to paired phases.
         array_1d * phasexs;                     ///< Array of paired phases.
-        array_1d * phasex2phasex;               ///< Array of objects to buffer paired phases.
+        array_1d * bufferphasors;               ///< Array of objects to buffer paired phases.
         array_1d * phasexsmooths;               
-        array_1d * phasex2xcorr;                ///< Array of objects to convert from paired phases to cross-correlations.
-        array_1d * xcorrs;                      ///< Array of cross-correlations.
-        array_2d * xcorr2xcorr;                 ///< Array of objects to compute max values in cross-correlations.
-        array_2d * xcorrsmax;                   ///< Array of cross-correlations with max values.
-        array_1d * xcorr2aimg;                  ///< Array of objects to convert cross-correlations to acoustic images.
-        array_1d * aimgs;                       ///< Array of acoustic images.
+        array_1d * xcorrs;                      ///< Array of objects to convert from paired phases to cross-correlations.
+        array_1d * xcorrsoriginal;              ///< Array of cross-correlations.
+        array_2d * maxxcorrs;                   ///< Array of objects to compute max values in cross-correlations.
+        array_2d * xcorrsfiltered;              ///< Array of cross-correlations with max values.
+        array_1d * aimgs;                       ///< Array of objects to convert cross-correlations to acoustic images.
+        array_1d * aimages;                     ///< Array of acoustic images.
 
     } ssl_obj;
 

@@ -1,5 +1,5 @@
-#ifndef __MARS_SYST_PHASEX2PHASEX
-#define __MARS_SYST_PHASEX2PHASEX
+#ifndef __MARS_SYST_BUFFERPHASOR
+#define __MARS_SYST_BUFFERPHASOR
 
     #include "../signal/vector.h"
     #include "../utils/fifo.h"
@@ -29,7 +29,7 @@
     */
 
     //! A structure that holds all the fields to convert spectra to phase. 
-    typedef struct phasex2phasex_obj {
+    typedef struct bufferphasor_obj {
 
         unsigned int frameSize;         ///< Size of the frame.
         unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
@@ -38,18 +38,18 @@
         fifo_obj * fifo;                ///< FIFO buffer.
         vector_float * runningSum;      ///< Running sum.
 
-    } phasex2phasex_obj;
+    } bufferphasor_obj;
 
     /** Constructor of the object.	
         \param      frameSize       Number of samples per frame.
         \return                     Pointer to the instantiated object.
     */
-    phasex2phasex_obj * phasex2phasex_construct(const unsigned int frameSize, const unsigned int bufferSize);
+    bufferphasor_obj * bufferphasor_construct(const unsigned int frameSize, const unsigned int bufferSize);
 
     /** Destructor of the object.
         \param      obj             Pointer to the instantiated object.
     */
-    void phasex2phasex_destroy(phasex2phasex_obj * obj);
+    void bufferphasor_destroy(bufferphasor_obj * obj);
 
     /** Convert frame to spectrum
         \param      obj             Pointer to the instantiated object.
@@ -57,7 +57,7 @@
         \param      phase12smooth   Pointer to the output phase.
         \return                     Return -1 if error, 0 otherwise.
     */
-    int phasex2phasex_process(phasex2phasex_obj * obj, const vector_float * phase12, vector_float * phase12smooth);
+    int bufferphasor_process(bufferphasor_obj * obj, const vector_float * phase12, vector_float * phase12smooth);
 
 
 #endif

@@ -27,8 +27,8 @@
 
     #include "../general/window.h"
     #include "../signal/vector.h"
-    #include "../system/hop2frame.h"
-    #include "../system/frame2freq.h"
+    #include "../system/analysis.h"
+    #include "../system/spectrum.h"
     #include "../utils/array.h"
 
     #include "../message/msg_hops.h"
@@ -43,9 +43,9 @@
         unsigned int nMics;             ///< Number of microphones/channels.
 
         array_1d * hops;                ///< Array of hops.
-        array_1d * hop2frame;           ///< Array of objects to convert hops to frames.
+        array_1d * analysis;           ///< Array of objects to convert hops to frames.
         array_1d * frames;              ///< Array of frames.
-        array_1d * frame2freq;          ///< Array of objects to convert frames to freqs.
+        array_1d * spectrum;          ///< Array of objects to convert frames to freqs.
         array_1d * freqs;               ///< Array of spectra.
 
         vector_float * window;          ///< Analysis window.

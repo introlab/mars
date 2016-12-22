@@ -1,12 +1,13 @@
-#ifndef __MARS_SYST_PHASE2PHASEX
-#define __MARS_SYST_PHASE2PHASEX
+#ifndef __MARS_SYST_XCORR
+#define __MARS_SYST_XCORR
 
+    #include "../utils/fft.h"
     #include "../signal/vector.h"
 
     #include <stdlib.h>
 
     /**
-    * \file     phase2phasex.h
+    * \file     xcorr.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -27,32 +28,34 @@
     *
     */
 
-    //! A structure that holds all the fields to convert spectra to phase. 
-    typedef struct phase2phasex_obj {
+    //! A structure that holds all the fields to multiply phases. 
+    typedef struct xcorr_obj {
 
-        unsigned int frameSize;         ///< Size of the frame.
-        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
+        unsigned int frameSize;             ///< Size of the frame.
+        unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
 
-    } phase2phasex_obj;
+        fft_obj * fft;                      ///< Pointer to the FFT object.
+
+    } xcorr_obj;
+
 
     /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
         \return                 Pointer to the instantiated object.
     */
-    phase2phasex_obj * phase2phasex_construct(const unsigned int frameSize);
+    xcorr_obj * xcorr_construct(const unsigned int frameSize);
 
     /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void phase2phasex_destroy(phase2phasex_obj * obj);
+    void xcorr_destroy(xcorr_obj * obj);
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      phase1      Pointer to the input phase 1.
-        \param      phase2      Pointer to the input phase 2.
-        \param      phase12     Pointer to the output phase.
+        \param      phasex      Pointer to the input phase.
+        \param      xcorr       Pointer to the output cross-correlation.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int phase2phasex_process(phase2phasex_obj * obj, const vector_float * phase1, const vector_float * phase2, vector_float * phase12);
+    int xcorr_process(xcorr_obj * obj, const vector_float * phasex, vector_float * xcorr);
 
 #endif

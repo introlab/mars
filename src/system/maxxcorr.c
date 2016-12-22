@@ -1,11 +1,11 @@
     
-    #include "xcorr2xcorr.h"
+    #include "maxxcorr.h"
 
-    xcorr2xcorr_obj * xcorr2xcorr_construct(const unsigned int frameSize, const unsigned int delta, const signed int tdoaMin, const signed int tdoaMax) {
+    maxxcorr_obj * maxxcorr_construct(const unsigned int frameSize, const unsigned int delta, const signed int tdoaMin, const signed int tdoaMax) {
 
-        xcorr2xcorr_obj * obj;
+        maxxcorr_obj * obj;
 
-        obj = (xcorr2xcorr_obj *) malloc(sizeof(xcorr2xcorr_obj));
+        obj = (maxxcorr_obj *) malloc(sizeof(maxxcorr_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2 + 1;
@@ -17,13 +17,13 @@
 
     }
 
-    void xcorr2xcorr_destroy(xcorr2xcorr_obj * obj) {
+    void maxxcorr_destroy(maxxcorr_obj * obj) {
 
         free((void *) obj);
 
     }
 
-    int xcorr2xcorr_process(const xcorr2xcorr_obj * obj, const vector_float * xcorrSrc, vector_float * xcorrDest) {
+    int maxxcorr_process(const maxxcorr_obj * obj, const vector_float * xcorrSrc, vector_float * xcorrDest) {
 
         signed int tdoa;
         signed int delta;

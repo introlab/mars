@@ -1,11 +1,11 @@
     
-    #include "frame2freq.h"
+    #include "spectrum.h"
 
-    frame2freq_obj * frame2freq_construct(const unsigned int frameSize) {
+    spectrum_obj * spectrum_construct(const unsigned int frameSize) {
 
-        frame2freq_obj * obj;
+        spectrum_obj * obj;
 
-        obj = (frame2freq_obj *) malloc(sizeof(frame2freq_obj));
+        obj = (spectrum_obj *) malloc(sizeof(spectrum_obj));
 
         obj->frameSize = frameSize;
         obj->halfFrameSize = frameSize/2+1;
@@ -18,7 +18,7 @@
 
     }
 
-    void frame2freq_destroy(frame2freq_obj * obj) {
+    void spectrum_destroy(spectrum_obj * obj) {
 
         vector_float_free(obj->frameWindowed);
         
@@ -28,7 +28,7 @@
 
     }
 
-    int frame2freq_process(frame2freq_obj * obj, const vector_float * frame, const vector_float * window, vector_float * freq) {
+    int spectrum_process(spectrum_obj * obj, const vector_float * frame, const vector_float * window, vector_float * freq) {
 
         unsigned int iSample;
 

@@ -1,13 +1,13 @@
-#ifndef __MARS_SYST_PHASEX2XCORR
-#define __MARS_SYST_PHASEX2XCORR
+#ifndef __MARS_SYST_PHASOR
+#define __MARS_SYST_PHASOR
 
-    #include "../utils/fft.h"
     #include "../signal/vector.h"
 
+    #include <math.h>
     #include <stdlib.h>
 
     /**
-    * \file     phasex2xcorr.h
+    * \file     phasor.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  1.0
     * \date     2016-10-25
@@ -28,34 +28,34 @@
     *
     */
 
-    //! A structure that holds all the fields to multiply phases. 
-    typedef struct phasex2xcorr_obj {
+    //! A structure that holds all the fields to convert spectra to phase. 
+    typedef struct phasor_obj {
 
-        unsigned int frameSize;             ///< Size of the frame.
-        unsigned int halfFrameSize;         ///< Size of the frame divided by 2 plus 1.
+        unsigned int frameSize;         ///< Size of the frame.
+        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
+        float epsilon;                  ///< Epsilon value (small value) to avoid overflow.
 
-        fft_obj * fft;                      ///< Pointer to the FFT object.
-
-    } phasex2xcorr_obj;
-
+    } phasor_obj;
 
     /** Constructor of the object.	
         \param      frameSize   Number of samples per frame.
+        \param      epsilon     Epsilon value (small value) to avoid overflow.
         \return                 Pointer to the instantiated object.
-    */
-    phasex2xcorr_obj * phasex2xcorr_construct(const unsigned int frameSize);
+	*/
+    phasor_obj * phasor_construct(const unsigned int frameSize, const float epsilon);
 
     /** Destructor of the object.
         \param      obj         Pointer to the instantiated object.
     */
-    void phasex2xcorr_destroy(phasex2xcorr_obj * obj);
+    void phasor_destroy(phasor_obj * obj);
 
     /** Convert frame to spectrum
         \param      obj         Pointer to the instantiated object.
-        \param      phasex      Pointer to the input phase.
-        \param      xcorr       Pointer to the output cross-correlation.
+        \param      freq        Pointer to the input spectrum.
+        \param      mask        Pointer to the input mask.
+        \param      phases      Pointer to the output phase.
         \return                 Return -1 if error, 0 otherwise.
     */
-    int phasex2xcorr_process(phasex2xcorr_obj * obj, const vector_float * phasex, vector_float * xcorr);
+    int phasor_process(phasor_obj * obj, const vector_float * freq, const vector_float * mask, vector_float * phases);
 
 #endif

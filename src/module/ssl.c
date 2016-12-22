@@ -121,54 +121,47 @@
         // Generate all signals and systems
 
         obj->freqs = array_1d_malloc(obj->nMics);
-        obj->masks = array_1d_malloc(obj->nMics);
-        obj->freq2phase = array_1d_malloc(obj->nMics);
+        obj->phasors = array_1d_malloc(obj->nMics);
         obj->phases = array_1d_malloc(obj->nMics);
 
         for (iMic = 0; iMic < obj->nMics; iMic++) {
 
             obj->freqs->ptr[iMic] = vector_float_malloc(obj->halfFrameSize*2);
-            obj->masks->ptr[iMic] = vector_float_malloc(obj->halfFrameSize);
-
-            for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
-                ((vector_float *) obj->masks->ptr[iMic])->array[iSample] = 1.0f;
-            }
-
-            obj->freq2phase->ptr[iMic] = freq2phase_construct(frameSize, epsilon);
+            obj->phasors->ptr[iMic] = phasor_construct(frameSize, epsilon);
             obj->phases->ptr[iMic] = vector_float_malloc(obj->halfFrameSize*2);
 
         }
         
-        obj->phase2phasex = array_1d_malloc(obj->nPairs);
+        obj->crossphasors = array_1d_malloc(obj->nPairs);
         obj->phasexs = array_1d_malloc(obj->nPairs);
-        obj->phasex2phasex = array_1d_malloc(obj->nPairs);
+        obj->bufferphasors = array_1d_malloc(obj->nPairs);
         obj->phasexsmooths = array_1d_malloc(obj->nPairs);
-        obj->phasex2xcorr = array_1d_malloc(obj->nPairs);
         obj->xcorrs = array_1d_malloc(obj->nPairs);
+        obj->xcorrsoriginal = array_1d_malloc(obj->nPairs);
 
         for (iPair = 0; iPair < obj->nPairs; iPair++) {
 
-            obj->phase2phasex->ptr[iPair] = phase2phasex_construct(frameSize);
+            obj->crossphasors->ptr[iPair] = crossphasor_construct(frameSize);
             obj->phasexs->ptr[iPair] = vector_float_malloc(obj->halfFrameSize*2);
-            obj->phasex2phasex->ptr[iPair] = phasex2phasex_construct(frameSize, obj->bufferSize);
+            obj->bufferphasors->ptr[iPair] = bufferphasor_construct(frameSize, obj->bufferSize);
             obj->phasexsmooths->ptr[iPair] = vector_float_malloc(obj->halfFrameSize*2);
-            obj->phasex2xcorr->ptr[iPair] = phasex2xcorr_construct(frameSize);
-            obj->xcorrs->ptr[iPair] = vector_float_malloc(frameSize);
+            obj->xcorrs->ptr[iPair] = xcorr_construct(frameSize);
+            obj->xcorrsoriginal->ptr[iPair] = vector_float_malloc(frameSize);
 
         }
 
-        obj->xcorr2xcorr = array_2d_malloc(obj->nLevels, obj->nPairs);
-        obj->xcorrsmax = array_2d_malloc(obj->nLevels, obj->nPairs);
+        obj->maxxcorrs = array_2d_malloc(obj->nLevels, obj->nPairs);
+        obj->xcorrsfiltered = array_2d_malloc(obj->nLevels, obj->nPairs);
 
         for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
 
             for (iPair = 0; iPair < obj->nPairs; iPair++) {
 
-                obj->xcorr2xcorr->ptr[iLevel][iPair] = xcorr2xcorr_construct(frameSize, obj->deltaDiff->array[iLevel], tdoasMinMax[iLevel]->array[iPair][0], tdoasMinMax[iLevel]->array[iPair][1]);
-                obj->xcorrsmax->ptr[iLevel][iPair] = vector_float_malloc(frameSize);
+                obj->maxxcorrs->ptr[iLevel][iPair] = maxxcorr_construct(frameSize, obj->deltaDiff->array[iLevel], tdoasMinMax[iLevel]->array[iPair][0], tdoasMinMax[iLevel]->array[iPair][1]);
+                obj->xcorrsfiltered->ptr[iLevel][iPair] = vector_float_malloc(frameSize);
 
                 for (iSample = 0; iSample < frameSize; iSample++) {
-                    ((vector_float *) obj->xcorrsmax->ptr[iLevel][iPair])->array[iSample] = 0.0f;
+                    ((vector_float *) obj->xcorrsfiltered->ptr[iLevel][iPair])->array[iSample] = 0.0f;
                 }
 
             }
@@ -179,12 +172,12 @@
 
         free((void *) tdoasMinMax);
 
-        obj->xcorr2aimg = array_1d_malloc(obj->nLevels);
         obj->aimgs = array_1d_malloc(obj->nLevels);
+        obj->aimages = array_1d_malloc(obj->nLevels);
 
         for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
-        	obj->xcorr2aimg->ptr[iLevel] = xcorr2aimg_construct(frameSize, obj->nMics, ((matrix_float *) obj->points->ptr[iLevel])->nRows);
-        	obj->aimgs->ptr[iLevel] = vector_float_malloc(((matrix_float *) obj->points->ptr[iLevel])->nRows);
+        	obj->aimgs->ptr[iLevel] = aimg_construct(frameSize, obj->nMics, ((matrix_float *) obj->points->ptr[iLevel])->nRows);
+        	obj->aimages->ptr[iLevel] = vector_float_malloc(((matrix_float *) obj->points->ptr[iLevel])->nRows);
         }
 
         return obj;
@@ -222,7 +215,7 @@
 
             }
 
-            freq2phase_process(obj->freq2phase->ptr[iMic], obj->freqs->ptr[iMic], obj->masks->ptr[iMic], obj->phases->ptr[iMic]);
+            phasor_process(obj->phasors->ptr[iMic], obj->freqs->ptr[iMic], NULL, obj->phases->ptr[iMic]);
 
         }
 
@@ -232,8 +225,8 @@
 
                 iPair = pair_iPair(obj->nMics, iMic1, iMic2);
 
-                phase2phasex_process(obj->phase2phasex->ptr[iPair], obj->phases->ptr[iMic1], obj->phases->ptr[iMic2], obj->phasexs->ptr[iPair]);
-                phasex2phasex_process(obj->phasex2phasex->ptr[iPair], obj->phasexs->ptr[iPair], obj->phasexsmooths->ptr[iPair]);
+                crossphasor_process(obj->crossphasors->ptr[iPair], obj->phases->ptr[iMic1], obj->phases->ptr[iMic2], obj->phasexs->ptr[iPair]);
+                bufferphasor_process(obj->bufferphasors->ptr[iPair], obj->phasexs->ptr[iPair], obj->phasexsmooths->ptr[iPair]);
 
             }
 
@@ -251,7 +244,7 @@
 
                     iPair = pair_iPair(obj->nMics, iMic1, iMic2);
 
-                    phasex2xcorr_process(obj->phasex2xcorr->ptr[iPair], obj->phasexsmooths->ptr[iPair], obj->xcorrs->ptr[iPair]);
+                    xcorr_process(obj->xcorrs->ptr[iPair], obj->phasexsmooths->ptr[iPair], obj->xcorrsoriginal->ptr[iPair]);
 
                 }
 
@@ -269,12 +262,12 @@
 
                         if (iLevel == 0) {
 
-                            xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrs->ptr[iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
+                            maxxcorr_process(obj->maxxcorrs->ptr[indexSorted][iPair], obj->xcorrsoriginal->ptr[iPair], obj->xcorrsfiltered->ptr[indexSorted][iPair]);
 
                         }
                         else {
 
-                            xcorr2xcorr_process(obj->xcorr2xcorr->ptr[indexSorted][iPair], obj->xcorrsmax->ptr[indexSortedPrev][iPair], obj->xcorrsmax->ptr[indexSorted][iPair]);
+                            maxxcorr_process(obj->maxxcorrs->ptr[indexSorted][iPair], obj->xcorrsfiltered->ptr[indexSortedPrev][iPair], obj->xcorrsfiltered->ptr[indexSorted][iPair]);
 
                         }
 
@@ -290,12 +283,12 @@
 
             for (iLevel = 0; iLevel < obj->nLevels; iLevel++) {
 
-                xcorr2aimg_process(obj->xcorr2aimg->ptr[iLevel], obj->tdoas->ptr[iLevel], obj->invmap->ptr[iLevel], iPoint, (const vector_float **) (obj->xcorrsmax->ptr[iLevel]), obj->aimgs->ptr[iLevel]);
-                iPoint = minmax_max_float(((vector_float *) obj->aimgs->ptr[iLevel])->array, ((vector_float *) obj->aimgs->ptr[iLevel])->nElements);   
+                aimg_process(obj->aimgs->ptr[iLevel], obj->tdoas->ptr[iLevel], obj->invmap->ptr[iLevel], iPoint, (const vector_float **) (obj->xcorrsfiltered->ptr[iLevel]), obj->aimages->ptr[iLevel]);
+                iPoint = minmax_max_float(((vector_float *) obj->aimages->ptr[iLevel])->array, ((vector_float *) obj->aimages->ptr[iLevel])->nElements);   
 
             }
 
-            vPoint = ((vector_float *) obj->aimgs->ptr[obj->nLevels-1])->array[iPoint];
+            vPoint = ((vector_float *) obj->aimages->ptr[obj->nLevels-1])->array[iPoint];
             vPoint /= ((float) obj->bufferSize);
 
             pots->samples[0] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][0];
@@ -303,7 +296,7 @@
             pots->samples[2] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[iPoint][2];
             pots->samples[3] = vPoint;
 
-            pots->id = spectra->id;
+            pots->timeStamp = spectra->timeStamp;
 
             obj->vPointPrev = vPoint;
             obj->iPointPrev = iPoint;
@@ -316,7 +309,7 @@
             pots->samples[2] = ((matrix_float *) obj->points->ptr[obj->nLevels-1])->array[obj->iPointPrev][2];
             pots->samples[3] = obj->vPointPrev;
 
-            pots->id = spectra->id;
+            pots->timeStamp = spectra->timeStamp;
 
         }
 

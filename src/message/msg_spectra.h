@@ -28,12 +28,12 @@
     //! A structure that holds all the fields in a spectra. 
     typedef struct msg_spectra_obj {
 
-        unsigned long long id;      ///< Time stamp
+        unsigned long long timeStamp;   ///< Time stamp
 
-        unsigned int frameSize;     ///< Size of the frame.
-        unsigned int halfFrameSize; ///< Size of the frame divided by 2 plus 1.
-        unsigned int nMics;         ///< Number of microphones/channels.
-        float ** samples;           ///< Samples.
+        unsigned int frameSize;         ///< Size of the frame.
+        unsigned int halfFrameSize;     ///< Size of the frame divided by 2 plus 1.
+        unsigned int nMics;             ///< Number of microphones/channels.
+        float ** samples;               ///< Samples.
 
     } msg_spectra_obj;
 

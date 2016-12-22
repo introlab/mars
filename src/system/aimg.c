@@ -1,12 +1,12 @@
-    #include "xcorr2aimg.h"
+    #include "aimg.h"
 
     #include <stdio.h>
 
-    xcorr2aimg_obj * xcorr2aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints) {
+    aimg_obj * aimg_construct(const unsigned int frameSize, const unsigned int nMics, const unsigned int nPoints) {
 
-        xcorr2aimg_obj * obj;
+        aimg_obj * obj;
 
-        obj = (xcorr2aimg_obj *) malloc(sizeof(xcorr2aimg_obj));
+        obj = (aimg_obj *) malloc(sizeof(aimg_obj));
 
         obj->frameSize = frameSize;
         obj->nMics = nMics;
@@ -17,13 +17,13 @@
 
     }
 
-    void xcorr2aimg_destroy(xcorr2aimg_obj * obj) {
+    void aimg_destroy(aimg_obj * obj) {
 
         free((void *) obj);
 
     }
 
-    int xcorr2aimg_process(const xcorr2aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * invmap, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg) {
+    int aimg_process(const aimg_obj * obj, const matrix_unsignedint * tdoas, const matrix_unsignedint * invmap, const unsigned int iPointCoarse, const vector_float ** xcorrs, vector_float * aimg) {
 
         unsigned int iIndex;
         unsigned int iPair;
