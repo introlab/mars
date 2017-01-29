@@ -24,7 +24,7 @@
     */
 
     #include <stdlib.h>
-    #include "../src/signal/hop.h"
+    #include "../signal/hop.h"
 
     //! Message that contains hops
     typedef struct msg_hops_obj {
