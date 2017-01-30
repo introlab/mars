@@ -386,7 +386,7 @@
                 }
 
                 if ((obj->type[iT] == 'A') &&
-                    (obj->n_inactive[iT] >= obj->N_inactive[obj->T])) {
+                    (obj->n_inactive[iT] >= obj->N_inactive[obj->T-1])) {
 
                     obj->idsRemoved[iT] = obj->ids[iT];
 
