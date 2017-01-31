@@ -532,7 +532,7 @@
         }
 
         if (cfg->N_inactive != NULL) {
-            free((void *) cfg->mode);
+            free((void *) cfg->N_inactive);
         }
 
         free((void *) cfg);
