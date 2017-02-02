@@ -27,8 +27,7 @@ Installation
 ```sudo apt-get install libconfig++-dev```
 5. Run cmake: 
 ```cmake CMakeLists.txt```
-6. Compile code:
-```make```
+6. Compile code with make.
 
 Run
 ---
