@@ -3,9 +3,8 @@
 Authors
 -------
 
-Author: François Grondin
-
-Support: François Grondin, Dominic Létourneau
+* Author: François Grondin
+* Support: François Grondin, Dominic Létourneau
 
 Features
 --------
