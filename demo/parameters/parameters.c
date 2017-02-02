@@ -236,12 +236,21 @@
                 exit(EXIT_FAILURE); 
             }    
 
-            // sigmaR
-            if (config_lookup_float(&cfg, "sst.sigmaR", &valueDouble)) { 
-                obj->sst->sigmaR = (float) valueDouble;
+            // sigmaR_active
+            if (config_lookup_float(&cfg, "sst.sigmaR_prob", &valueDouble)) { 
+                obj->sst->sigmaR_prob = (float) valueDouble;
             } 
             else { 
-                printf("Missing: sst.sigmaR\n"); 
+                printf("Missing: sst.sigmaR_prob\n"); 
+                exit(EXIT_FAILURE); 
+            }    
+
+            // sigmaR_active
+            if (config_lookup_float(&cfg, "sst.sigmaR_active", &valueDouble)) { 
+                obj->sst->sigmaR_active = (float) valueDouble;
+            } 
+            else { 
+                printf("Missing: sst.sigmaR_active\n"); 
                 exit(EXIT_FAILURE); 
             }    
 

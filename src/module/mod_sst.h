@@ -47,45 +47,49 @@
     //! Module to perform sound source tracking
     typedef struct mod_sst_obj {
 
-        unsigned int S;                                 ///< Number of potential sources.
-        unsigned int Tmax;                              ///< Maximum number of tracked sources.
-        unsigned int T;                                 ///< Number of tracked sources.
+        unsigned int S;                                     ///< Number of potential sources.
+        unsigned int Tmax;                                  ///< Maximum number of tracked sources.
+        unsigned int T;                                     ///< Number of tracked sources.
 
-        char * mode;                                    ///< Tracking mode ("particle" or "kalman").
+        char * mode;                                        ///< Tracking mode ("particle" or "kalman").
 
-        mixture_obj ** mixtures;                        ///< List of mixtures.
-        coherences_obj ** coherences;                   ///< List of coherences.
-        postprobs_obj ** postprobs;                     ///< List of postprobs.
+        mixture_obj ** mixtures;                            ///< List of mixtures.
+        coherences_obj ** coherences;                       ///< List of coherences.
+        postprobs_obj ** postprobs;                         ///< List of postprobs.
 
-        unsigned long long * ids;                       ///< List of IDs for tracked sources.
-        unsigned long long * idsAdded;                  ///< List of IDs to be added.
-        unsigned long long * idsRemoved;                ///< List of IDs to be removed.
+        unsigned long long * ids;                           ///< List of IDs for tracked sources.
+        unsigned long long * idsAdded;                      ///< List of IDs to be added.
+        unsigned long long * idsRemoved;                    ///< List of IDs to be removed.
         
-        char * type;                                    ///< Types of sound sources ('I','P','A').
+        char * type;                                        ///< Types of sound sources ('I','P','A').
 
-        kalman_obj ** kalmans;                          ///< List of Kalman filters.
-        kalman2kalman_obj * kalman2kalman;              ///< List of systems to update the Kalman filters.
-        kalman2coherence_obj * kalman2coherence;        ///< List of systems to compute coherence from Kalman filters.
+        kalman_obj ** kalmans;                              ///< List of Kalman filters.
+        kalman2kalman_obj * kalman2kalman_prob;             ///< List of systems to update the Kalman filters (probation).
+        kalman2kalman_obj * kalman2kalman_active;           ///< List of systems to update the Kalman filters (active).
+        kalman2coherence_obj * kalman2coherence_prob;       ///< List of systems to compute coherence from Kalman filters (probation).
+        kalman2coherence_obj * kalman2coherence_active;     ///< List of systems to compute coherence from Kalman filters (active).
         
-        particles_obj ** particles;                     ///< List of particle filters.
-        particle2particle_obj * particle2particle;      ///< List of systems to update the particle filters.
-        particle2coherence_obj * particle2coherence;    ///< List of systems to compute coherence from particle filters.
+        particles_obj ** particles;                         ///< List of particle filters.
+        particle2particle_obj * particle2particle_prob;     ///< List of systems to update the particle filters (probation).
+        particle2particle_obj * particle2particle_active;   ///< List of systems to update the particle filters (active).
+        particle2coherence_obj * particle2coherence_prob;   ///< List of systems to compute coherence from particle filters (probation).
+        particle2coherence_obj * particle2coherence_active; ///< List of systems to compute coherence from particle filters (active).
 
-        mixture2mixture_obj * mixture2mixture;          ///< List of systems to update the mixtures.
+        mixture2mixture_obj * mixture2mixture;              ///< List of systems to update the mixtures.
         
-        float theta_new;                                ///< Parameter \f$\theta_{new}\f$.
-        unsigned int N_prob;                            ///< Parameter \f$N_{prob}\f$.
-        float theta_prob;                               ///< Parameter \f$\theta_{prob}\f$.
-        unsigned int * N_inactive;                      ///< Parameters \f$\mathbf{N}_{inactive}\f$.
-        float theta_inactive;                           ///< Parameter \f$\theta_{inactive}\f$.
+        float theta_new;                                    ///< Parameter \f$\theta_{new}\f$.
+        unsigned int N_prob;                                ///< Parameter \f$N_{prob}\f$.
+        float theta_prob;                                   ///< Parameter \f$\theta_{prob}\f$.
+        unsigned int * N_inactive;                          ///< Parameters \f$\mathbf{N}_{inactive}\f$.
+        float theta_inactive;                               ///< Parameter \f$\theta_{inactive}\f$.
 
-        unsigned int * n_prob;                          ///< Counter for sources that are in probation.
-        float * mean_prob;                              ///< Mean of tracked sources activity.
-        unsigned int * n_inactive;                      ///< Counter for sources that are inactive.
+        unsigned int * n_prob;                              ///< Counter for sources that are in probation.
+        float * mean_prob;                                  ///< Mean of tracked sources activity.
+        unsigned int * n_inactive;                          ///< Counter for sources that are inactive.
 
-        coord_obj * coord;                              ///< Coordinate of a tracked source.
+        coord_obj * coord;                                  ///< Coordinate of a tracked source.
 
-        unsigned long long id;                          ///< ID counter.
+        unsigned long long id;                              ///< ID counter.
 
     } mod_sst_obj;
 
@@ -115,7 +119,8 @@
         float Nmin;                                     ///< \f$N_{min}\f$.
 
         float epsilon;                                  ///< Small value to avoid overflow.
-        float sigmaR;                                   ///< Standard deviation \f$\sigma_R\f$ in the matrix \f$\mathbf{R}\f$.
+        float sigmaR_active;                            ///< Standard deviation \f$\sigma_R\f$ in the matrix \f$\mathbf{R}\f$.
+        float sigmaR_prob;
         gaussians_1d_obj * active_gmm;                  ///< Gaussian mixture model (GMM) for the energy distribution of an active source.
         gaussians_1d_obj * inactive_gmm;                ///< Gaussian mixture model (GMM) for the energy distribution of an inactive source.
         float Pfalse;                                   ///< A priori probability there is a false detection (\f$P_{false}\f$).

@@ -136,6 +136,8 @@
         nHops = 0;
         while(src_raw_process(objects.src_raw, objects.msg_hops) == 0) {
             
+            //printf("%u\n",nHops);
+
             start = clock();
 
             mod_stft_process(objects.mod_stft, objects.msg_hops, objects.msg_spectra);

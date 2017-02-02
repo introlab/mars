@@ -81,8 +81,6 @@
         matrix_mul(obj->sigma_t, obj->HP, obj->Ht);
         matrix_add(obj->sigma_t_epsilon, obj->sigma_t, obj->sigma_epsilon);
 
-        //matrix_printf(obj->sigma_t);
-
         // Compute sigma_t^-1
         matrix_inv(obj->sigma_t_inv, obj->sigma_t_epsilon);
 
@@ -93,22 +91,16 @@
         matrix_mul(obj->mu_t_t_sigma_t_inv_mu_t, obj->mu_t_t, obj->sigma_t_inv_mu_t);
         B3 = obj->mu_t_t_sigma_t_inv_mu_t->array[0][0];
 
-        //matrix_printf(kalman->P_llm1);
-
         for (iS = 0; iS < pots->nSignals; iS++) {
 
             // Compute mu_s
             obj->mu_s->array[0][0] = pots->array[iS]->coord->x;
             obj->mu_s->array[1][0] = pots->array[iS]->coord->y;
             obj->mu_s->array[2][0] = pots->array[iS]->coord->z;
-            matrix_transpose(obj->mu_s_t, obj->mu_s);     
+            matrix_transpose(obj->mu_s_t, obj->mu_s);    
            
             // Compute sigma_st^-1
             matrix_add(obj->sigma_st_inv, obj->sigma_s_inv, obj->sigma_t_inv);
-
-            //matrix_printf(obj->sigma_st_inv);
-            //matrix_printf(obj->sigma_s_inv);
-            //matrix_printf(obj->sigma_t_inv);
 
             // Compute sigma_st
             matrix_inv(obj->sigma_st, obj->sigma_st_inv);
@@ -139,8 +131,6 @@
 
             // Compute weight
             weight = expf(0.5f * (B1+B2-B3-B4));
-
-            //printf("B1 = %f , B2 = %f, B3 = %f, B4 = %f\n",B1,B2,B3,B4);
 
             coherence->probs[iS] = weight;
 

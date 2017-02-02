@@ -94,33 +94,58 @@
         
         if (strcmp(obj->mode, "kalman") == 0) {
 
-            obj->kalman2kalman = kalman2kalman_construct(deltaT,
-                                                         cfg->sigmaQ,
-                                                         cfg->sigmaR,
-                                                         cfg->epsilon);    
+            obj->kalman2kalman_prob = kalman2kalman_construct(deltaT,
+                                                              cfg->sigmaQ,
+                                                              cfg->sigmaR_prob,
+                                                              cfg->epsilon);    
 
-            obj->kalman2coherence = kalman2coherence_construct(cfg->epsilon, 
-                                                               cfg->sigmaR);
+            obj->kalman2kalman_active = kalman2kalman_construct(deltaT,
+                                                                cfg->sigmaQ,
+                                                                cfg->sigmaR_active,
+                                                                cfg->epsilon);    
+
+            obj->kalman2coherence_prob = kalman2coherence_construct(cfg->epsilon, 
+                                                                    cfg->sigmaR_prob);
+
+            obj->kalman2coherence_active = kalman2coherence_construct(cfg->epsilon, 
+                                                                      cfg->sigmaR_active);
 
         }
         else {
 
-            obj->particle2particle = particle2particle_construct(cfg->nParticles,
-                                                                 deltaT,
-                                                                 cfg->st_alpha,
-                                                                 cfg->st_beta,
-                                                                 cfg->st_ratio,
-                                                                 cfg->ve_alpha,
-                                                                 cfg->ve_beta,
-                                                                 cfg->ve_ratio,
-                                                                 cfg->ac_alpha,
-                                                                 cfg->ac_beta,
-                                                                 cfg->ac_ratio,
-                                                                 (double) cfg->epsilon,
-                                                                 cfg->sigmaR,
-                                                                 cfg->Nmin);
+            obj->particle2particle_prob = particle2particle_construct(cfg->nParticles,
+                                                                      deltaT,
+                                                                      cfg->st_alpha,
+                                                                      cfg->st_beta,
+                                                                      cfg->st_ratio,
+                                                                      cfg->ve_alpha,
+                                                                      cfg->ve_beta,
+                                                                      cfg->ve_ratio,
+                                                                      cfg->ac_alpha,
+                                                                      cfg->ac_beta,
+                                                                      cfg->ac_ratio,
+                                                                      (double) cfg->epsilon,
+                                                                      cfg->sigmaR_prob,
+                                                                      cfg->Nmin);
 
-            obj->particle2coherence = particle2coherence_construct(cfg->sigmaR);
+            obj->particle2particle_active = particle2particle_construct(cfg->nParticles,
+                                                                        deltaT,
+                                                                        cfg->st_alpha,
+                                                                        cfg->st_beta,
+                                                                        cfg->st_ratio,
+                                                                        cfg->ve_alpha,
+                                                                        cfg->ve_beta,
+                                                                        cfg->ve_ratio,
+                                                                        cfg->ac_alpha,
+                                                                        cfg->ac_beta,
+                                                                        cfg->ac_ratio,
+                                                                        (double) cfg->epsilon,
+                                                                        cfg->sigmaR_active,
+                                                                        cfg->Nmin);    
+
+            obj->particle2coherence_prob = particle2coherence_construct(cfg->sigmaR_prob);
+
+            obj->particle2coherence_active = particle2coherence_construct(cfg->sigmaR_active);
 
         }
 
@@ -173,14 +198,58 @@
 
                 if (strcmp(obj->mode,"kalman") == 0) {
 
-                    kalman2kalman_predict(obj->kalman2kalman,
-                                          obj->kalmans[iT]);                
+                    switch (obj->type[iT]) {
+                        
+                        case 'P':                    
+
+                            kalman2kalman_predict(obj->kalman2kalman_prob,
+                                                  obj->kalmans[iT]);                
+
+                        break;
+
+                        case 'A':
+
+                            kalman2kalman_predict(obj->kalman2kalman_active,
+                                                  obj->kalmans[iT]);                
+
+                        break;
+
+                        default:
+
+                            printf("Unknown state.\n");
+                            exit(EXIT_FAILURE);                        
+
+                        break;
+
+                    }
 
                 }
                 else {
 
-                    particle2particle_predict(obj->particle2particle,
-                                              obj->particles[iT]);                        
+                    switch (obj->type[iT]) {
+                        
+                        case 'P':    
+
+                            particle2particle_predict(obj->particle2particle_prob,
+                                                      obj->particles[iT]);                        
+
+                        break;
+
+                        case 'A':
+
+                            particle2particle_predict(obj->particle2particle_active,
+                                                      obj->particles[iT]);                        
+
+                        break;
+
+                        default:
+
+                            printf("Unknown state.\n");
+                            exit(EXIT_FAILURE);                        
+
+                        break;
+
+                    }                        
 
                 }
 
@@ -199,18 +268,67 @@
 
                 if (strcmp(obj->mode,"kalman") == 0) {
 
-                    kalman2coherence_process(obj->kalman2coherence,
-                                             obj->kalmans[iT],
-                                             msg_pots->pots,
-                                             obj->coherences[obj->T]->array[iTrack]);
+                    switch (obj->type[iT]) {
+                        
+                        case 'P':  
+
+                            kalman2coherence_process(obj->kalman2coherence_prob,
+                                                     obj->kalmans[iT],
+                                                     msg_pots->pots,
+                                                     obj->coherences[obj->T]->array[iTrack]);
+
+                        break;
+
+                        case 'A':
+
+                            kalman2coherence_process(obj->kalman2coherence_active,
+                                                     obj->kalmans[iT],
+                                                     msg_pots->pots,
+                                                     obj->coherences[obj->T]->array[iTrack]);
+
+                        break;
+
+                        default:
+
+                            printf("Unknown state.\n");
+                            exit(EXIT_FAILURE);                            
+
+                        break;
+
+                    }
+
 
                 }
                 else {
 
-                    particle2coherence_process(obj->particle2coherence,
-                                               obj->particles[iT],
-                                               msg_pots->pots,
-                                               obj->coherences[obj->T]->array[iTrack]);
+                    switch (obj->type[iT]) {
+                        
+                        case 'P':                      
+
+                            particle2coherence_process(obj->particle2coherence_prob,
+                                                       obj->particles[iT],
+                                                       msg_pots->pots,
+                                                       obj->coherences[obj->T]->array[iTrack]);
+
+                        break;
+
+                        case 'A':                      
+
+                            particle2coherence_process(obj->particle2coherence_active,
+                                                       obj->particles[iT],
+                                                       msg_pots->pots,
+                                                       obj->coherences[obj->T]->array[iTrack]);
+
+                        break;
+
+                        default:
+
+                            printf("Unknown state.\n");
+                            exit(EXIT_FAILURE);                            
+
+                        break;                        
+
+                    }
 
                 }
 
@@ -238,17 +356,66 @@
 
                 if (strcmp(obj->mode,"kalman") == 0) {
 
-                    kalman2kalman_update(obj->kalman2kalman,
-                                         obj->postprobs[obj->T]->p_track[iTrack],
-                                         msg_pots->pots,
-                                         obj->kalmans[iT]);
+                    switch (obj->type[iT]) {
+                        
+                        case 'P':                      
+
+                            kalman2kalman_update(obj->kalman2kalman_prob,
+                                                 obj->postprobs[obj->T]->p_track[iTrack],
+                                                 msg_pots->pots,
+                                                 obj->kalmans[iT]);
+
+                        break;
+
+                        case 'A':                      
+
+                            kalman2kalman_update(obj->kalman2kalman_active,
+                                                 obj->postprobs[obj->T]->p_track[iTrack],
+                                                 msg_pots->pots,
+                                                 obj->kalmans[iT]);
+
+                        break;
+
+                        default:
+
+                            printf("Unknown state.\n");
+                            exit(EXIT_FAILURE); 
+
+                        break;
+
+                    }
+
                 }
                 else {
 
-                    particle2particle_update(obj->particle2particle,
-                                             obj->postprobs[obj->T]->p_track[iTrack],
-                                             msg_pots->pots,
-                                             obj->particles[iT]);
+                    switch (obj->type[iT]) {
+                        
+                        case 'P':                      
+
+                            particle2particle_update(obj->particle2particle_prob,
+                                                     obj->postprobs[obj->T]->p_track[iTrack],
+                                                     msg_pots->pots,
+                                                     obj->particles[iT]);
+
+                        break;
+
+                        case 'A':
+
+                            particle2particle_update(obj->particle2particle_active,
+                                                     obj->postprobs[obj->T]->p_track[iTrack],
+                                                     msg_pots->pots,
+                                                     obj->particles[iT]);
+
+                        break;
+
+                        default:
+
+                            printf("Unknown state.\n");
+                            exit(EXIT_FAILURE);                         
+
+                        break;
+
+                    }
 
                 }
 
@@ -285,6 +452,13 @@
                         else {
                             obj->n_inactive[iT]++;   
                         }
+
+                    break;
+
+                    default:
+
+                        printf("Unknown state.\n");
+                        exit(EXIT_FAILURE);
 
                     break;
 
@@ -340,12 +514,12 @@
                         
                         if (strcmp(obj->mode,"kalman") == 0) {
 
-                            kalman2kalman_init(obj->kalman2kalman, msg_pots->pots->array[iS], obj->kalmans[iT]); 
+                            kalman2kalman_init(obj->kalman2kalman_prob, msg_pots->pots->array[iS], obj->kalmans[iT]); 
 
                         }
                         else {
 
-                            particle2particle_init(obj->particle2particle, msg_pots->pots->array[iS], obj->particles[iT]);
+                            particle2particle_init(obj->particle2particle_prob, msg_pots->pots->array[iS], obj->particles[iT]);
 
                         }
                         
@@ -444,12 +618,12 @@
 
                     if (strcmp(obj->mode,"kalman") == 0) {
 
-                        kalman2kalman_estimate(obj->kalman2kalman, obj->kalmans[iT], obj->coord);
+                        kalman2kalman_estimate(obj->kalman2kalman_active, obj->kalmans[iT], obj->coord);
 
                     }
                     else {
 
-                        particle2particle_estimate(obj->particle2particle, obj->particles[iT], obj->coord);
+                        particle2particle_estimate(obj->particle2particle_active, obj->particles[iT], obj->coord);
 
                     }
 
@@ -495,7 +669,8 @@
         cfg->Nmin = 0.0f;
 
         cfg->epsilon = 0.0f;
-        cfg->sigmaR = 0.0f;
+        cfg->sigmaR_prob = 0.0f;
+        cfg->sigmaR_active = 0.0f;
         cfg->active_gmm = (gaussians_1d_obj *) NULL;
         cfg->inactive_gmm = (gaussians_1d_obj *) NULL;
         cfg->Pfalse = 0.0f;

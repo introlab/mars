@@ -70,7 +70,7 @@
 
             for (iS = 0; iS < obj->array[iT]->S; iS++) {
 
-                printf("%+1.3f ",obj->array[iT]->probs[iS]);
+                printf("%+1.3e ",obj->array[iT]->probs[iS]);
 
             }
 

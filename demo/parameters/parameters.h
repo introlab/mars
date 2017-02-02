@@ -43,7 +43,8 @@
         char * mode;
         unsigned int nTracks;
         float sigmaQ;
-        float sigmaR;
+        float sigmaR_prob;
+        float sigmaR_active;
         float epsilon;
         unsigned int active_G;
         float * active_weight;

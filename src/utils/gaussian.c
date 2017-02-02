@@ -12,7 +12,7 @@
         obj->sigma_x = 1.0f;
         obj->scaleFactor = (obj->weight / (obj->sigma_x * powf(2*M_PI,(1.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 
@@ -31,7 +31,7 @@
         obj->sigma_y = 1.0f;
         obj->scaleFactor = (obj->weight / (obj->sigma_x*obj->sigma_y * powf(2*M_PI,(2.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 
@@ -52,7 +52,7 @@
         obj->sigma_z = 1.0f;
         obj->scaleFactor = (obj->weight / (obj->sigma_x*obj->sigma_y*obj->sigma_z * powf(2*M_PI,(3.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 
@@ -69,7 +69,7 @@
         obj->sigma_x = sigma_x;
         obj->scaleFactor = (obj->weight / (obj->sigma_x * powf(2*M_PI,(1.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;        
 
@@ -88,7 +88,7 @@
         obj->sigma_y = sigma_y;
         obj->scaleFactor = (obj->weight / (obj->sigma_x*obj->sigma_y * powf(2*M_PI,(2.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 
@@ -109,7 +109,7 @@
         obj->sigma_z = sigma_z;
         obj->scaleFactor = (obj->weight / (obj->sigma_x*obj->sigma_y*obj->sigma_z * powf(2*M_PI,(3.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 
@@ -126,7 +126,7 @@
         obj->sigma_x = gaussian->sigma_x;
         obj->scaleFactor = (obj->weight / (obj->sigma_x * powf(2*M_PI,(1.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;     
 
@@ -145,7 +145,7 @@
         obj->sigma_y = gaussian->sigma_y;
         obj->scaleFactor = (obj->weight / (obj->sigma_x*obj->sigma_y * powf(2*M_PI,(2.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 
@@ -166,7 +166,7 @@
         obj->sigma_z = gaussian->sigma_z;
         obj->scaleFactor = (obj->weight / (obj->sigma_x*obj->sigma_y*obj->sigma_z * powf(2*M_PI,(3.0f/2.0f))));
 
-        obj->exponential = exp_construct(-10.0f, 0.0f, 1001);
+        obj->exponential = exp_construct(-100.0f, 0.0f, 10001);
 
         return obj;
 

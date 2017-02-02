@@ -35,7 +35,7 @@
 
     void particle_printf(const particle_obj * obj) {
 
-        printf("w: %+1.3f s: %c xx: %+1.3f xy: %+1.3f xz: %+1.3f xx: %+1.3f xy: %+1.3f xz: %+1.3f\n",
+        printf("w: %+1.6f s: %c xx: %+1.3f xy: %+1.3f xz: %+1.3f xx: %+1.3f xy: %+1.3f xz: %+1.3f\n",
                obj->w, obj->state, obj->x->x, obj->x->y, obj->x->z, obj->v->x, obj->v->y, obj->v->z);
 
     }
@@ -93,7 +93,7 @@
 
         for (iSignal = 0; iSignal < obj->nSignals; iSignal++) {
 
-            printf("(%04u): w: %+1.3f s: %c xx: %+1.3f xy: %+1.3f xz: %+1.3f xx: %+1.3f xy: %+1.3f xz: %+1.3f\n",
+            printf("(%04u): w: %+1.6f s: %c xx: %+1.3f xy: %+1.3f xz: %+1.3f xx: %+1.3f xy: %+1.3f xz: %+1.3f\n",
                     iSignal, 
                     obj->array[iSignal]->w, 
                     obj->array[iSignal]->state, 

@@ -106,6 +106,7 @@
         kalman->x_lm1lm1->array[0][0] = pot->coord->x;
         kalman->x_lm1lm1->array[1][0] = pot->coord->y;
         kalman->x_lm1lm1->array[2][0] = pot->coord->z;
+
     }
 
     void kalman2kalman_predict(kalman2kalman_obj * obj, kalman_obj * kalman) {

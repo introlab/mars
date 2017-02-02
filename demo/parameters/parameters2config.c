@@ -141,7 +141,8 @@
         cfg->Nmin = obj->sst->Nmin;
 
         cfg->epsilon = obj->sst->epsilon;
-        cfg->sigmaR = obj->sst->sigmaR;
+        cfg->sigmaR_prob = obj->sst->sigmaR_prob;
+        cfg->sigmaR_active = obj->sst->sigmaR_active;
 
         cfg->active_gmm = gaussians_1d_construct_null(obj->sst->active_G);
 

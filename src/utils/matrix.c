@@ -297,7 +297,7 @@
 
             for (iCol = 0; iCol < obj->nCols; iCol++) {
 
-                printf("%+1.3f ",obj->array[iRow][iCol]);
+                printf("%+1.5f ",obj->array[iRow][iCol]);
 
             }
 

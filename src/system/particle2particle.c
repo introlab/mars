@@ -173,7 +173,9 @@
 
         }
 
-        total = 0.0f;
+        // Set total to a non-zero value, to avoid division by zero.
+        // Set to 1/N^2, which is much smaller than weights
+        total = 1.0f / ((float) (obj->nParticles*obj->nParticles));
 
         for (iParticle = 0; iParticle < obj->nParticles; iParticle++) {
 
