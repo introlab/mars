@@ -19,6 +19,18 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/lib")
 
 set(SRC
 
+    src/general/arguments.c
+    src/general/configs.c
+    src/general/name.c
+    src/general/objects.c
+    src/general/parameters.c
+
+    src/general/args2arguments.c
+    src/general/configs2objects.c
+    src/general/file2parameters.c
+    src/general/objects2objects.c
+    src/general/parameters2configs.c
+
     src/init/combining.c
     src/init/delay.c
     src/init/linking.c
@@ -60,7 +72,7 @@ set(SRC
     src/sink/snk_pots.c
     src/sink/snk_tracks.c
 
-    src/source/src_raw.c
+    src/source/src_raw_file.c
 
     src/system/frame2freq.c
     src/system/freq2freq.c
@@ -92,22 +104,13 @@ add_library(mars SHARED
 target_link_libraries(mars
 	${PC_FFTW3_LIBRARIES}
 	${PC_ALSA_LIBRARIES}
+    ${PC_LIBCONFIG_LIBRARIES}
 	m
 )
 
-add_executable(demo_test
-    demo/demo_test.c
+add_executable(demo
+    demo/demo.c
 )
-target_link_libraries(demo_test
+target_link_libraries(demo
     mars
-)
-
-add_executable(demo_offline
-    demo/demo_offline.c
-    demo/parameters/parameters.c
-    demo/parameters/parameters2config.c
-)
-target_link_libraries(demo_offline
-    mars
-    ${PC_LIBCONFIG_LIBRARIES}
 )

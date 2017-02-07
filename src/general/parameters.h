@@ -1,10 +1,10 @@
+    
+#ifndef __MARS_GENERAL_PARAMETERS
+#define __MARS_GENERAL_PARAMETERS
 
-#ifndef __PARAMETERS
-#define __PARAMETERS
-
-    #include <mars/mars.h>
     #include <stdlib.h>
-    #include <libconfig.h>
+
+    #include "../signal/mic.h"
 
     typedef struct parameters_general_obj {
 
@@ -76,17 +76,19 @@
 
     } parameters_sst_obj;       
 
-    typedef struct parameters_obj {
+    typedef struct parameters {
 
         parameters_general_obj * general;
         parameters_raw_obj * raw;
         parameters_ssl_obj * ssl;
         parameters_sst_obj * sst;    
 
-    } parameters_obj;
+    } parameters;
 
-    parameters_obj * parameters_construct_file(const char * fileName);
+    parameters * parameters_construct_null(void);
 
-    void parameters_destroy(parameters_obj * obj);
+    void parameters_destroy(parameters * params);
+
+    void parameters_printf(const parameters * params);
 
 #endif

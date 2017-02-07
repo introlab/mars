@@ -43,6 +43,7 @@
         float Pfalse;                       ///< A priori probability there is a false detection (\f$P_{false}\f$).
         float Pnew;                         ///< A priori probability there is a new detection (\f$P_{new}\f$).
         float Ptrack;                       ///< A priori probability an tracked source is observed (\f$P_{track}\f$).
+        float epsilon;
 
     } mixture2mixture_obj;
 
@@ -55,7 +56,7 @@
         \param      Ptrack          A priori probability an tracked source is observed (\f$P_{track}\f$).
         \return                     Pointer to the instantiated object.
     */ 
-    mixture2mixture_obj * mixture2mixture_construct(const gaussians_1d_obj * active_gmm, const gaussians_1d_obj * inactive_gmm, const float diffuse_cst, const float Pfalse, const float Pnew, const float Ptrack);
+    mixture2mixture_obj * mixture2mixture_construct(const gaussians_1d_obj * active_gmm, const gaussians_1d_obj * inactive_gmm, const float diffuse_cst, const float Pfalse, const float Pnew, const float Ptrack, const float epsilon);
 
     /** Destructor. Free memory.
         \param      obj             Object to be destroyed.

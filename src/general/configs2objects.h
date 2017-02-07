@@ -1,0 +1,21 @@
+#ifndef __MARS_GENERAL_CONFIGS2OBJECTS
+#define __MARS_GENERAL_CONFIGS2OBJECTS
+
+    #include "../source/src_raw_file.h"
+    #include "../message/msg_hops.h"
+    #include "../module/mod_stft.h"
+    #include "../message/msg_spectra.h"
+    #include "../module/mod_ssl.h"
+    #include "../message/msg_pots.h"
+    #include "../sink/snk_pots.h"
+    #include "../module/mod_sst.h"
+    #include "../message/msg_tracks.h"
+    #include "../sink/snk_tracks.h"
+
+    #include "objects.h"
+    #include "configs.h"
+    #include "arguments.h"
+
+    void configs2objects(objects * objs, const configs * cfgs, const arguments * args);
+
+#endif

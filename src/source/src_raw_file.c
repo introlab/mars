@@ -1,11 +1,11 @@
     
-    #include "src_raw.h"
+    #include "src_raw_file.h"
 
-    src_raw_obj * src_raw_construct(const src_raw_cfg * cfg) {
+    src_raw_file_obj * src_raw_file_construct(const src_raw_file_cfg * cfg) {
 
-        src_raw_obj * obj;
+        src_raw_file_obj * obj;
 
-        obj = (src_raw_obj *) malloc(sizeof(src_raw_obj));
+        obj = (src_raw_file_obj *) malloc(sizeof(src_raw_file_obj));
 
         obj->timeStamp = 0;
 
@@ -16,6 +16,11 @@
         strcpy(obj->fileName, cfg->fileName);
         obj->fp = fopen(obj->fileName,"rb");
 
+        if (obj->fp == NULL) {
+            printf("Cannot open raw file.\n");
+            exit(EXIT_FAILURE);
+        }
+
         if (!((cfg->nBits == 8) | (cfg->nBits == 16) | (cfg->nBits == 32))) {
             printf("Invalid number of bits.\n");
             exit(EXIT_FAILURE);        	
@@ -25,7 +30,7 @@
 
     }
 
-    void src_raw_destroy(src_raw_obj * obj) {
+    void src_raw_file_destroy(src_raw_file_obj * obj) {
 
         fclose(obj->fp);
         free((void *) obj->fileName);
@@ -34,7 +39,7 @@
 
     }
 
-    int src_raw_process(src_raw_obj * obj, msg_hops_obj * hops) {
+    int src_raw_file_process(src_raw_file_obj * obj, msg_hops_obj * hops) {
 
         unsigned int iSample;
         unsigned int iMic;
@@ -90,11 +95,11 @@
 
     }
 
-    src_raw_cfg * src_raw_cfg_construct(void) {
+    src_raw_file_cfg * src_raw_file_cfg_construct(void) {
 
-        src_raw_cfg * cfg;
+        src_raw_file_cfg * cfg;
 
-        cfg = (src_raw_cfg *) malloc(sizeof(src_raw_cfg));
+        cfg = (src_raw_file_cfg *) malloc(sizeof(src_raw_file_cfg));
 
         cfg->hopSize = 0;
         cfg->nMics = 0;
@@ -105,7 +110,7 @@
 
     }
 
-    void src_raw_cfg_destroy(src_raw_cfg * cfg) {
+    void src_raw_file_cfg_destroy(src_raw_file_cfg * cfg) {
 
         if (cfg->fileName != NULL) {
             free((void *) cfg->fileName);    

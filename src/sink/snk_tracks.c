@@ -10,15 +10,14 @@
         obj->fileName = (char *) malloc(sizeof(char) * (strlen(cfg->fileName) + 1));
         strcpy(obj->fileName, cfg->fileName);
 
-        obj->format = (char *) malloc(sizeof(char) * (strlen(cfg->format) + 1));
-        strcpy(obj->format, cfg->format);
+        obj->format = cfg->format;
 
-        if (strcmp(obj->format, "xml") == 0) {
+        if (obj->format == 'x') {
 
             obj->fp = fopen(obj->fileName, "w");
 
         }
-        else if (strcmp(obj->format, "bin") == 0) {
+        else if (obj->format == 'b') {
 
             obj->fp = fopen(obj->fileName, "wb");
 
@@ -37,7 +36,6 @@
     void snk_tracks_destroy(snk_tracks_obj * obj) {
 
         free((void *) obj->fileName);
-        free((void *) obj->format);
         fclose(obj->fp);
 
         free((void *) obj);
@@ -46,12 +44,12 @@
 
     void snk_tracks_process(snk_tracks_obj * obj, msg_tracks_obj * msg_tracks) {
 
-        if (strcmp(obj->format,"xml") == 0) {
+        if (obj->format == 'x') {
             
             snk_tracks_process_xml(obj, msg_tracks);
 
         }
-        if (strcmp(obj->format,"bin") == 0) {
+        if (obj->format == 'b') {
             
             snk_tracks_process_bin(obj, msg_tracks);
 
@@ -90,7 +88,6 @@
         cfg = (snk_tracks_cfg *) malloc(sizeof(snk_tracks_cfg));
 
         cfg->fileName = (char *) NULL;
-        cfg->format = (char *) NULL;
 
         return cfg;
 
@@ -100,10 +97,6 @@
 
         if (cfg->fileName != NULL) {
             free((void *) cfg->fileName);
-        }
-
-        if (cfg->format != NULL) {
-            free((void *) cfg->format);
         }
 
         free((void *) cfg);

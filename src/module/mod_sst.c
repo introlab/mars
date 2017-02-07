@@ -155,7 +155,8 @@
                                                          diffuse_cst,
                                                          cfg->Pfalse,
                                                          cfg->Pnew,
-                                                         cfg->Ptrack);
+                                                         cfg->Ptrack,
+                                                         cfg->epsilon);
 
         obj->coord = coord_construct_zero();
 
@@ -210,7 +211,7 @@
                         case 'A':
 
                             kalman2kalman_predict(obj->kalman2kalman_active,
-                                                  obj->kalmans[iT]);                
+                                                  obj->kalmans[iT]);   
 
                         break;
 

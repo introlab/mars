@@ -1,8 +1,8 @@
-#ifndef __MARS_SOURCE_RAW
-#define __MARS_SOURCE_RAW
+#ifndef __MARS_SOURCE_RAW_FILE
+#define __MARS_SOURCE_RAW_FILE
 
     /**
-    * \file     src_raw.h
+    * \file     src_raw_file.h
     * \author   François Grondin <francois.grondin2@usherbrooke.ca>
     * \version  2.0
     * \date     2017-01-25
@@ -32,7 +32,7 @@
     #include <string.h>
 
     //! Source to generate samples from a RAW file
-    typedef struct src_raw_obj {
+    typedef struct src_raw_file_obj {
 
         unsigned long long timeStamp;   ///< Time stamp.
 
@@ -42,44 +42,44 @@
         char * fileName;                ///< File name.
         FILE * fp;                      ///< File pointer.
 
-    } src_raw_obj;
+    } src_raw_file_obj;
 
     //! Configuration of the source for a RAW file
-    typedef struct src_raw_cfg {
+    typedef struct src_raw_file_cfg {
 
         unsigned int hopSize;           ///< Number of samples per hop.
         unsigned int nMics;             ///< Number of microphones.
         unsigned int nBits;             ///< Number of bits per sample.
         char * fileName;                ///< File name.
 
-    } src_raw_cfg;
+    } src_raw_file_cfg;
 
     /** Constructor. Initialize all elements according to the configuration file.
         \param      cfg             Configuration.
         \return                     Pointer to the instantiated object.
     */  
-    src_raw_obj * src_raw_construct(const src_raw_cfg * cfg);
+    src_raw_file_obj * src_raw_file_construct(const src_raw_file_cfg * cfg);
 
     /** Destructor. Free memory.
         \param      obj             Object to be destroyed.
     */
-    void src_raw_destroy(src_raw_obj * obj);
+    void src_raw_file_destroy(src_raw_file_obj * obj);
 
     /** Get samples from the file.
         \param      hops            List of hops where to get the samples.
         \param      obj             Object to be used.
         \return                     Returns -1 if end of file is reached.
     */
-    int src_raw_process(src_raw_obj * obj, msg_hops_obj * hops);
+    int src_raw_file_process(src_raw_file_obj * obj, msg_hops_obj * hops);
 
     /** Constructor.
         \return                     Pointer to the instantiated object.
     */ 
-    src_raw_cfg * src_raw_cfg_construct(void);
+    src_raw_file_cfg * src_raw_file_cfg_construct(void);
 
     /** Destructor. Free memory.
         \param      cfg             Object to be destroyed.
     */
-    void src_raw_cfg_destroy(src_raw_cfg * cfg);
+    void src_raw_file_cfg_destroy(src_raw_file_cfg * cfg);
 
 #endif

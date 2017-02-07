@@ -36,7 +36,7 @@
 
         char * fileName;                ///< File name.
         FILE * fp;                      ///< File pointer.
-        char * format;                  ///< Storing format ("bin" or "xml").
+        char format;                    ///< Storing format ("(b)in)" or "(x)ml").
 
     } snk_tracks_obj;    
 
@@ -44,7 +44,7 @@
     typedef struct snk_tracks_cfg {
 
         char * fileName;                ///< File name.
-        char * format;                  ///< Storing format ("bin" or "xml").
+        char format;                    ///< Storing format ("(b)in" or "(x)ml").
 
     } snk_tracks_cfg;
 

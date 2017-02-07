@@ -34,17 +34,17 @@
     //! Sink to store the potential sources
     typedef struct snk_pots_obj {
 
-        char * fileName;                ///< File name.
-        FILE * fp;                      ///< File pointer.
-        char * format;                  ///< Storing format ("bin" or "xml").
+        char * fileName;            ///< File name.
+        FILE * fp;                  ///< File pointer.
+        char format;                ///< Storing format ("(b)in" or "(x)ml").
 
     } snk_pots_obj;    
 
     //! Configuration of the sink for potential sources
     typedef struct snk_pots_cfg {
 
-        char * fileName;                ///< File name.
-        char * format;                  ///< Storing format ("bin" or "xml").
+        char * fileName;            ///< File name.
+        char format;                ///< Storing format ("(b)in" or "(x)ml").
 
     } snk_pots_cfg;
 

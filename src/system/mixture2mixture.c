@@ -1,7 +1,7 @@
 
     #include "mixture2mixture.h"
 
-    mixture2mixture_obj * mixture2mixture_construct(const gaussians_1d_obj * active_gmm, const gaussians_1d_obj * inactive_gmm, const float diffuse_cst, const float Pfalse, const float Pnew, const float Ptrack) {
+    mixture2mixture_obj * mixture2mixture_construct(const gaussians_1d_obj * active_gmm, const gaussians_1d_obj * inactive_gmm, const float diffuse_cst, const float Pfalse, const float Pnew, const float Ptrack, const float epsilon) {
 
         mixture2mixture_obj * obj;
 
@@ -14,6 +14,7 @@
         obj->Pfalse = Pfalse;
         obj->Pnew = Pnew;
         obj->Ptrack = Ptrack;
+        obj->epsilon = epsilon;
 
         return obj;
 
@@ -115,7 +116,7 @@
 
         // Posterior probabilities
 
-        total = 0.0f;
+        total = obj->epsilon;
 
         for (iC = 0; iC < mixture->C; iC++) {
 

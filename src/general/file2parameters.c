@@ -1,9 +1,7 @@
 
-    #include "parameters.h"
+    #include "file2parameters.h"
 
-    parameters_obj * parameters_construct_file(const char * fileName) {
-
-        parameters_obj * obj;
+    void file2parameters(parameters * params, const char * fileName) {
 
         config_t cfg;
         config_setting_t * setting;
@@ -13,12 +11,10 @@
         double valueDouble;
         char * valueString;
 
-        obj = (parameters_obj *) malloc(sizeof(parameters_obj));
-
-        obj->general = (parameters_general_obj *) malloc(sizeof(parameters_general_obj));
-        obj->raw = (parameters_raw_obj *) malloc(sizeof(parameters_raw_obj));
-        obj->ssl = (parameters_ssl_obj *) malloc(sizeof(parameters_ssl_obj));
-        obj->sst = (parameters_sst_obj *) malloc(sizeof(parameters_sst_obj));
+        params->general = (parameters_general_obj *) malloc(sizeof(parameters_general_obj));
+        params->raw = (parameters_raw_obj *) malloc(sizeof(parameters_raw_obj));
+        params->ssl = (parameters_ssl_obj *) malloc(sizeof(parameters_ssl_obj));
+        params->sst = (parameters_sst_obj *) malloc(sizeof(parameters_sst_obj));        
 
         config_init(&cfg);        
 
@@ -37,7 +33,7 @@
 
             // hopSize
             if (config_lookup_int(&cfg, "general.hopSize", &valueInt)) { 
-                obj->general->hopSize = valueInt;
+                params->general->hopSize = valueInt;
             }
             else {
                 printf("Missing: general.hopSize\n"); 
@@ -46,7 +42,7 @@
 
             // frameSize
             if (config_lookup_int(&cfg, "general.frameSize", &valueInt)) { 
-                obj->general->frameSize = valueInt; 
+                params->general->frameSize = valueInt; 
             } 
             else {
                 printf("Missing: general.frameSize\n"); 
@@ -55,7 +51,7 @@
 
             // fS
             if (config_lookup_int(&cfg, "general.fS", &valueInt)) {
-                obj->general->fS = valueInt;
+                params->general->fS = valueInt;
             } 
             else { 
                 printf("Missing: general.fS\n"); 
@@ -64,7 +60,7 @@
 
             // c
             if (config_lookup_float(&cfg, "general.c", &valueDouble)) { 
-                obj->general->c = (float) valueDouble; 
+                params->general->c = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: general.c\n"); 
@@ -78,16 +74,16 @@
 
                 N = config_setting_length(setting);
 
-                obj->general->mics = mics_construct_zero(N);
+                params->general->mics = mics_construct_zero(N);
 
                 for (i = 0; i < N; i++) {
 
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"x",&valueDouble);
-                    obj->general->mics->array[i]->coord->x = (float) valueDouble;
+                    params->general->mics->array[i]->coord->x = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"y",&valueDouble);
-                    obj->general->mics->array[i]->coord->y = (float) valueDouble;
+                    params->general->mics->array[i]->coord->y = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"z",&valueDouble);
-                    obj->general->mics->array[i]->coord->z = (float) valueDouble;
+                    params->general->mics->array[i]->coord->z = (float) valueDouble;
 
                 }
 
@@ -102,7 +98,7 @@
 
             // nBits
             if (config_lookup_int(&cfg, "raw.nBits", &valueInt)) { 
-                obj->raw->nBits = valueInt;
+                params->raw->nBits = valueInt;
             } 
             else { 
                 printf("Missing: raw.nBits\n"); 
@@ -113,7 +109,7 @@
 
             // R
             if (config_lookup_int(&cfg, "ssl.R", &valueInt)) { 
-                obj->ssl->R = (unsigned int) valueInt;
+                params->ssl->R = (unsigned int) valueInt;
             }
             else { 
                 printf("Missing: ssl.R\n");
@@ -122,7 +118,7 @@
     
             // alpha    
             if (config_lookup_float(&cfg, "ssl.alpha", &valueDouble)) { 
-                obj->ssl->alpha = (float) valueDouble; 
+                params->ssl->alpha = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: ssl.alpha\n"); 
@@ -131,7 +127,7 @@
 
             // sigma
             if (config_lookup_float(&cfg, "ssl.sigma", &valueDouble)) { 
-                obj->ssl->sigma = (float) valueDouble; 
+                params->ssl->sigma = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: ssl.sigma\n"); 
@@ -140,7 +136,7 @@
 
             // nMatches
             if (config_lookup_int(&cfg, "ssl.nMatches", &valueInt)) { 
-                obj->ssl->nMatches = (unsigned int) valueInt;
+                params->ssl->nMatches = (unsigned int) valueInt;
             } 
             else { 
                 printf("Missing: ssl.nMatches\n"); 
@@ -149,7 +145,7 @@
 
             // epsilon
             if (config_lookup_float(&cfg, "ssl.epsilon", &valueDouble)) { 
-                obj->ssl->epsilon = (float) valueDouble;
+                params->ssl->epsilon = (float) valueDouble;
             } 
             else { 
                 printf("Missing: ssl.epsilon\n"); 
@@ -158,7 +154,7 @@
 
             // deltaReset
             if (config_lookup_int(&cfg, "ssl.deltaReset", &valueInt)) { 
-                obj->ssl->deltaReset = (unsigned int) valueInt;
+                params->ssl->deltaReset = (unsigned int) valueInt;
             } 
             else { 
                 printf("Missing: ssl.nMatches\n"); 
@@ -167,7 +163,7 @@
         
             // nPots
             if (config_lookup_int(&cfg, "ssl.nPots", &valueInt)) { 
-                obj->ssl->nPots = (unsigned int) valueInt;
+                params->ssl->nPots = (unsigned int) valueInt;
             } 
             else {
                 printf("Missing: ssl.nPots\n"); 
@@ -181,16 +177,16 @@
 
                 N = config_setting_length(setting);
 
-                obj->ssl->nLevels = N;
-                obj->ssl->levels = (unsigned int *) malloc(sizeof(unsigned int) * N);
-                obj->ssl->deltasMax = (unsigned int *) malloc(sizeof(unsigned int) * N);
+                params->ssl->nLevels = N;
+                params->ssl->levels = (unsigned int *) malloc(sizeof(unsigned int) * N);
+                params->ssl->deltasMax = (unsigned int *) malloc(sizeof(unsigned int) * N);
 
                 for (i = 0; i < N; i++) {
 
                     config_setting_lookup_int(config_setting_get_elem(setting, i),"level",&valueInt);
-                    obj->ssl->levels[i] = valueInt;
+                    params->ssl->levels[i] = valueInt;
                     config_setting_lookup_int(config_setting_get_elem(setting, i),"deltaMax",&valueInt);
-                    obj->ssl->deltasMax[i] = valueInt;
+                    params->ssl->deltasMax[i] = valueInt;
 
                 }
 
@@ -210,8 +206,8 @@
                 exit(EXIT_FAILURE); 
             }    
 
-            obj->ssl->shape = (char *) malloc(sizeof(char) * (strlen(valueString)+1));
-            strcpy(obj->ssl->shape, valueString);
+            params->ssl->shape = (char *) malloc(sizeof(char) * (strlen(valueString)+1));
+            strcpy(params->ssl->shape, valueString);
 
         // SST
 
@@ -224,12 +220,12 @@
                 exit(EXIT_FAILURE); 
             }    
 
-            obj->sst->mode = (char *) malloc(sizeof(char) * (strlen(valueString)+1));
-            strcpy(obj->sst->mode, valueString);
+            params->sst->mode = (char *) malloc(sizeof(char) * (strlen(valueString)+1));
+            strcpy(params->sst->mode, valueString);
         
             // epsilon
             if (config_lookup_float(&cfg, "sst.epsilon", &valueDouble)) { 
-                obj->sst->epsilon = (float) valueDouble;
+                params->sst->epsilon = (float) valueDouble;
             } 
             else { 
                 printf("Missing: sst.epsilon\n"); 
@@ -238,7 +234,7 @@
 
             // sigmaR_active
             if (config_lookup_float(&cfg, "sst.sigmaR_prob", &valueDouble)) { 
-                obj->sst->sigmaR_prob = (float) valueDouble;
+                params->sst->sigmaR_prob = (float) valueDouble;
             } 
             else { 
                 printf("Missing: sst.sigmaR_prob\n"); 
@@ -247,7 +243,7 @@
 
             // sigmaR_active
             if (config_lookup_float(&cfg, "sst.sigmaR_active", &valueDouble)) { 
-                obj->sst->sigmaR_active = (float) valueDouble;
+                params->sst->sigmaR_active = (float) valueDouble;
             } 
             else { 
                 printf("Missing: sst.sigmaR_active\n"); 
@@ -261,19 +257,19 @@
 
                 N = config_setting_length(setting);
 
-                obj->sst->active_G = N;
-                obj->sst->active_weight = (float *) malloc(sizeof(float) * N);
-                obj->sst->active_mu = (float *) malloc(sizeof(float) * N);
-                obj->sst->active_sigma = (float *) malloc(sizeof(float) * N);
+                params->sst->active_G = N;
+                params->sst->active_weight = (float *) malloc(sizeof(float) * N);
+                params->sst->active_mu = (float *) malloc(sizeof(float) * N);
+                params->sst->active_sigma = (float *) malloc(sizeof(float) * N);
 
                 for (i = 0; i < N; i++) {
 
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"weight",&valueDouble);
-                    obj->sst->active_weight[i] = (float) valueDouble;
+                    params->sst->active_weight[i] = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"mu",&valueDouble);
-                    obj->sst->active_mu[i] = (float) valueDouble;
+                    params->sst->active_mu[i] = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"sigma",&valueDouble);
-                    obj->sst->active_sigma[i] = (float) valueDouble;
+                    params->sst->active_sigma[i] = (float) valueDouble;
 
                 }
 
@@ -292,19 +288,19 @@
 
                 N = config_setting_length(setting);
 
-                obj->sst->inactive_G = N;
-                obj->sst->inactive_weight = (float *) malloc(sizeof(float) * N);
-                obj->sst->inactive_mu = (float *) malloc(sizeof(float) * N);
-                obj->sst->inactive_sigma = (float *) malloc(sizeof(float) * N);
+                params->sst->inactive_G = N;
+                params->sst->inactive_weight = (float *) malloc(sizeof(float) * N);
+                params->sst->inactive_mu = (float *) malloc(sizeof(float) * N);
+                params->sst->inactive_sigma = (float *) malloc(sizeof(float) * N);
 
                 for (i = 0; i < N; i++) {
 
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"weight",&valueDouble);
-                    obj->sst->inactive_weight[i] = (float) valueDouble;
+                    params->sst->inactive_weight[i] = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"mu",&valueDouble);
-                    obj->sst->inactive_mu[i] = (float) valueDouble;
+                    params->sst->inactive_mu[i] = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"sigma",&valueDouble);
-                    obj->sst->inactive_sigma[i] = (float) valueDouble;
+                    params->sst->inactive_sigma[i] = (float) valueDouble;
 
                 }
 
@@ -317,7 +313,7 @@
 
             // Pfalse
             if (config_lookup_float(&cfg, "sst.Pfalse", &valueDouble)) { 
-                obj->sst->Pfalse = (float) valueDouble; 
+                params->sst->Pfalse = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: sst.Pfalse\n"); 
@@ -326,7 +322,7 @@
 
             // Pnew
             if (config_lookup_float(&cfg, "sst.Pnew", &valueDouble)) { 
-                obj->sst->Pnew = (float) valueDouble; 
+                params->sst->Pnew = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: sst.Pnew\n"); 
@@ -335,7 +331,7 @@
 
             // Ptrack
             if (config_lookup_float(&cfg, "sst.Ptrack", &valueDouble)) { 
-                obj->sst->Ptrack = (float) valueDouble; 
+                params->sst->Ptrack = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: sst.Ptrack\n"); 
@@ -344,7 +340,7 @@
 
             // Theta
             if (config_lookup_float(&cfg, "sst.theta_new", &valueDouble)) { 
-                obj->sst->theta_new = (float) valueDouble; 
+                params->sst->theta_new = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: sst.theta_new\n"); 
@@ -353,7 +349,7 @@
 
             // N_prob
             if (config_lookup_int(&cfg, "sst.N_prob", &valueInt)) { 
-                obj->sst->N_prob = (unsigned int) valueInt; 
+                params->sst->N_prob = (unsigned int) valueInt; 
             } 
             else { 
                 printf("Missing: sst.N_prob\n"); 
@@ -362,7 +358,7 @@
 
             // theta_prob
             if (config_lookup_float(&cfg, "sst.theta_prob", &valueDouble)) { 
-                obj->sst->theta_prob = (float) valueDouble; 
+                params->sst->theta_prob = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: sst.theta_prob\n"); 
@@ -376,13 +372,13 @@
 
                 N = config_setting_length(setting);
 
-                obj->sst->nTracks = N;
+                params->sst->nTracks = N;
 
-                obj->sst->N_inactive = (unsigned int *) malloc(sizeof(unsigned int) * N);
+                params->sst->N_inactive = (unsigned int *) malloc(sizeof(unsigned int) * N);
 
                 for (i = 0; i < N; i++) {
 
-                    obj->sst->N_inactive[i] = (unsigned int) config_setting_get_int_elem(setting, i);
+                    params->sst->N_inactive[i] = (unsigned int) config_setting_get_int_elem(setting, i);
 
                 }
 
@@ -395,7 +391,7 @@
 
             // theta_inactive
             if (config_lookup_float(&cfg, "sst.theta_inactive", &valueDouble)) { 
-                obj->sst->theta_inactive = (float) valueDouble; 
+                params->sst->theta_inactive = (float) valueDouble; 
             } 
             else { 
                 printf("Missing: sst.theta_inactive\n"); 
@@ -406,7 +402,7 @@
         
                 // sigmaQ
                 if (config_lookup_float(&cfg, "sst.kalman.sigmaQ", &valueDouble)) { 
-                    obj->sst->sigmaQ = (float) valueDouble; 
+                    params->sst->sigmaQ = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.kalman.sigmaQ\n"); 
@@ -417,7 +413,7 @@
 
                 // nParticles
                 if (config_lookup_int(&cfg, "sst.particle.nParticles", &valueInt)) { 
-                    obj->sst->nParticles = (unsigned int) valueInt; 
+                    params->sst->nParticles = (unsigned int) valueInt; 
                 } 
                 else { 
                     printf("Missing: sst.particle.nParticles\n"); 
@@ -426,7 +422,7 @@
 
                 // st_alpha
                 if (config_lookup_float(&cfg, "sst.particle.st_alpha", &valueDouble)) { 
-                    obj->sst->st_alpha = (float) valueDouble; 
+                    params->sst->st_alpha = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.st_alpha\n"); 
@@ -435,7 +431,7 @@
 
                 // st_beta
                 if (config_lookup_float(&cfg, "sst.particle.st_beta", &valueDouble)) { 
-                    obj->sst->st_beta = (float) valueDouble;
+                    params->sst->st_beta = (float) valueDouble;
                 } 
                 else { 
                     printf("Missing: sst.particle.st_beta\n"); 
@@ -444,7 +440,7 @@
         
                 // st_ratio
                 if (config_lookup_float(&cfg, "sst.particle.st_ratio", &valueDouble)) { 
-                    obj->sst->st_ratio = (float) valueDouble; 
+                    params->sst->st_ratio = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.st_ratio\n"); 
@@ -453,7 +449,7 @@
         
                 // ve_alpha
                 if (config_lookup_float(&cfg, "sst.particle.ve_alpha", &valueDouble)) { 
-                    obj->sst->ve_alpha = (float) valueDouble; 
+                    params->sst->ve_alpha = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.ve_alpha\n"); 
@@ -462,7 +458,7 @@
         
                 // ve_beta
                 if (config_lookup_float(&cfg, "sst.particle.ve_beta", &valueDouble)) { 
-                    obj->sst->ve_beta = (float) valueDouble; 
+                    params->sst->ve_beta = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.ve_beta\n"); 
@@ -471,7 +467,7 @@
 
                 // ve_ratio
                 if (config_lookup_float(&cfg, "sst.particle.ve_ratio", &valueDouble)) { 
-                    obj->sst->ve_ratio = (float) valueDouble; 
+                    params->sst->ve_ratio = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.ve_ratio\n"); 
@@ -480,7 +476,7 @@
 
                 // ac_alpha
                 if (config_lookup_float(&cfg, "sst.particle.ac_alpha", &valueDouble)) { 
-                    obj->sst->ac_alpha = (float) valueDouble; 
+                    params->sst->ac_alpha = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.ac_alpha\n"); 
@@ -489,7 +485,7 @@
 
                 // ac_beta
                 if (config_lookup_float(&cfg, "sst.particle.ac_beta", &valueDouble)) { 
-                    obj->sst->ac_beta = (float) valueDouble;
+                    params->sst->ac_beta = (float) valueDouble;
                 } 
                 else { 
                     printf("Missing: sst.particle.ac_beta\n"); 
@@ -498,7 +494,7 @@
 
                 // ac_ratio
                 if (config_lookup_float(&cfg, "sst.particle.ac_ratio", &valueDouble)) { 
-                    obj->sst->ac_ratio = (float) valueDouble; 
+                    params->sst->ac_ratio = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.ac_ratio\n"); 
@@ -507,19 +503,13 @@
         
                 // Nmin
                 if (config_lookup_float(&cfg, "sst.particle.Nmin", &valueDouble)) { 
-                    obj->sst->Nmin = (float) valueDouble; 
+                    params->sst->Nmin = (float) valueDouble; 
                 } 
                 else { 
                     printf("Missing: sst.particle.Nmin\n"); 
                     exit(EXIT_FAILURE); 
                 }    
 
-        config_destroy(&cfg);        
-
-        return obj;
-
-    }
-
-    void parameters_destroy(parameters_obj * obj) {
+        config_destroy(&cfg);    
 
     }
