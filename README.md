@@ -36,6 +36,6 @@ The recommended RAW file format is Little endian signed 16-bit PCM, and no headi
 The number of channels and the sampling rate must match those specified in the configuration file.
 To process a recorded file ```file.raw``` with the configuration file ```config.cfg```, and store the results of localization and tracking in files ```potentialSources.pot.bin``` and ```trackedSources.track.bin```, respectively:
 
-```bin/demo_offline -i file.raw -c config.cfg -o potentialsources.pot.bin -t trackedSources.track.bin```
+```bin/demo -i file.raw -c config.cfg -o potentialsources.pot.bin -t trackedSources.track.bin```
 
 We will soon add an option to export the localization and tracking results in XML format.
