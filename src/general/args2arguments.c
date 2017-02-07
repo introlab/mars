@@ -10,7 +10,7 @@
         nInputs = 0;
         configFile = 0x00;
 
-        while ((c = getopt(argc,argv, "c:i:o:v")) != -1) {
+        while ((c = getopt(argc,argv, "c:i:o:vf")) != -1) {
 
             switch(c) {
 
@@ -114,6 +114,12 @@
                 case 'v':
 
                     args->verbose = 0x01;
+
+                break;
+
+                case 'f':
+
+                    args->force = 0x01;
 
                 break;
 

@@ -8,7 +8,6 @@
         parameters * params;
         configs * cfgs;
         objects * objs;
-        unsigned int nHops;
 
         float timeProcessing, timeSignal;
 
@@ -31,7 +30,19 @@
         configs2objects(objs, cfgs, args);
 
         // Process
-        while(objects2objects_process(objs, &timeProcessing, &timeSignal, params->general->fS) == 0);
+        while(objects2objects_process(objs, &timeProcessing, &timeSignal, params->general->fS) == 0) {
+
+            if (args->verbose == 0x01) {
+
+                if (objs->msg_tracks != NULL) {
+
+                    tracks_printf(objs->msg_tracks->tracks);
+
+                }
+                
+            }
+
+        }
 
         // Free objects
         arguments_destroy(args);

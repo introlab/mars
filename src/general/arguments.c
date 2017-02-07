@@ -19,6 +19,7 @@
         args->output_track_file_bin = (char *) NULL;
         args->output_track_file_xml = (char *) NULL;
         args->verbose = 0x00;
+        args->force = 0x00;
 
         return args;
 

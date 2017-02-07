@@ -23,6 +23,7 @@
         char * output_track_file_xml;
 
         char verbose;
+        char force;
 
     } arguments;
 

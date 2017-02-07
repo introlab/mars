@@ -61,7 +61,8 @@
             (args->output_pot_file_xml != NULL) ||
             (args->output_track_file_bin != NULL) ||
             (args->output_track_file_xml != NULL) ||
-            (args->verbose == 0x01)) {
+            (args->verbose == 0x01) ||
+            (args->force == 0x01)) {
 
             objs->mod_stft = mod_stft_construct(cfgs->mod_stft);
             objs->msg_spectra = msg_spectra_construct(cfgs->msg_spectra);
@@ -96,7 +97,8 @@
 
         if ((args->output_track_file_bin != NULL) ||
             (args->output_track_file_xml != NULL) ||
-            (args->verbose == 0x01)) {
+            (args->verbose == 0x01) ||
+            (args->force == 0x01)) {
 
             objs->mod_sst = mod_sst_construct(cfgs->mod_sst);
             objs->msg_tracks = msg_tracks_construct(cfgs->msg_tracks);
