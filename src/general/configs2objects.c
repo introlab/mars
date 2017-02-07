@@ -71,23 +71,23 @@
 
             if (args->output_pot_file_bin != NULL) {
 
-                cfgs->snk_pots->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_bin)+1));
-                strcpy(cfgs->snk_pots->fileName, args->output_pot_file_bin);
+                cfgs->snk_pots_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_bin)+1));
+                strcpy(cfgs->snk_pots_file->fileName, args->output_pot_file_bin);
 
-                cfgs->snk_pots->format = 'b';
+                cfgs->snk_pots_file->format = 'b';
 
-                objs->snk_pots = snk_pots_construct(cfgs->snk_pots);
+                objs->snk_pots_file = snk_pots_file_construct(cfgs->snk_pots_file);
 
             }
 
             if (args->output_pot_file_xml != NULL) {
 
-                cfgs->snk_pots->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_xml)+1));
-                strcpy(cfgs->snk_pots->fileName, args->output_pot_file_xml);
+                cfgs->snk_pots_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_xml)+1));
+                strcpy(cfgs->snk_pots_file->fileName, args->output_pot_file_xml);
 
-                cfgs->snk_pots->format = 'x';
+                cfgs->snk_pots_file->format = 'x';
 
-                objs->snk_pots = snk_pots_construct(cfgs->snk_pots);
+                objs->snk_pots_file = snk_pots_file_construct(cfgs->snk_pots_file);
 
             }
 
@@ -105,23 +105,23 @@
 
             if (args->output_track_file_bin != NULL) {
 
-                cfgs->snk_tracks->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_bin)+1));
-                strcpy(cfgs->snk_tracks->fileName, args->output_track_file_bin);
+                cfgs->snk_tracks_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_bin)+1));
+                strcpy(cfgs->snk_tracks_file->fileName, args->output_track_file_bin);
 
-                cfgs->snk_tracks->format = 'b';
+                cfgs->snk_tracks_file->format = 'b';
 
-                objs->snk_tracks = snk_tracks_construct(cfgs->snk_tracks);
+                objs->snk_tracks_file = snk_tracks_file_construct(cfgs->snk_tracks_file);
 
             }           
 
             if (args->output_track_file_xml != NULL) {
 
-                cfgs->snk_tracks->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_xml)+1));
-                strcpy(cfgs->snk_tracks->fileName, args->output_track_file_xml);
+                cfgs->snk_tracks_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_xml)+1));
+                strcpy(cfgs->snk_tracks_file->fileName, args->output_track_file_xml);
 
-                cfgs->snk_tracks->format = 'x';
+                cfgs->snk_tracks_file->format = 'x';
 
-                objs->snk_tracks = snk_tracks_construct(cfgs->snk_tracks);
+                objs->snk_tracks_file = snk_tracks_file_construct(cfgs->snk_tracks_file);
 
             }                   
 

@@ -35,12 +35,12 @@
 
         // Write results to file
 
-        if (objs->snk_pots != NULL) {
-            snk_pots_process(objs->snk_pots, objs->msg_pots);
+        if (objs->snk_pots_file != NULL) {
+            snk_pots_file_process(objs->snk_pots_file, objs->msg_pots);
         }
 
-        if (objs->snk_tracks != NULL) {
-            snk_tracks_process(objs->snk_tracks, objs->msg_tracks);
+        if (objs->snk_tracks_file != NULL) {
+            snk_tracks_file_process(objs->snk_tracks_file, objs->msg_tracks);
         }
 
         // Display results in terminal

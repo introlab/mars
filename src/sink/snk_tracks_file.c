@@ -1,11 +1,11 @@
  
-    #include "snk_tracks.h"
+    #include "snk_tracks_file.h"
 
-    snk_tracks_obj * snk_tracks_construct(const snk_tracks_cfg * cfg) {
+    snk_tracks_file_obj * snk_tracks_file_construct(const snk_tracks_file_cfg * cfg) {
 
-        snk_tracks_obj * obj;
+        snk_tracks_file_obj * obj;
 
-        obj = (snk_tracks_obj *) malloc(sizeof(snk_tracks_obj));
+        obj = (snk_tracks_file_obj *) malloc(sizeof(snk_tracks_file_obj));
 
         obj->fileName = (char *) malloc(sizeof(char) * (strlen(cfg->fileName) + 1));
         strcpy(obj->fileName, cfg->fileName);
@@ -33,7 +33,7 @@
 
     }
 
-    void snk_tracks_destroy(snk_tracks_obj * obj) {
+    void snk_tracks_file_destroy(snk_tracks_file_obj * obj) {
 
         free((void *) obj->fileName);
         fclose(obj->fp);
@@ -42,29 +42,29 @@
 
     }
 
-    void snk_tracks_process(snk_tracks_obj * obj, msg_tracks_obj * msg_tracks) {
+    void snk_tracks_file_process(snk_tracks_file_obj * obj, msg_tracks_obj * msg_tracks) {
 
         if (obj->format == 'x') {
             
-            snk_tracks_process_xml(obj, msg_tracks);
+            snk_tracks_file_process_xml(obj, msg_tracks);
 
         }
         if (obj->format == 'b') {
             
-            snk_tracks_process_bin(obj, msg_tracks);
+            snk_tracks_file_process_bin(obj, msg_tracks);
 
         }
 
     }
 
-    void snk_tracks_process_xml(snk_tracks_obj * obj, msg_tracks_obj * msg_tracks) {
+    void snk_tracks_file_process_xml(snk_tracks_file_obj * obj, msg_tracks_obj * msg_tracks) {
 
         printf("Not available yet\n");
         exit(EXIT_FAILURE);
 
     }
 
-    void snk_tracks_process_bin(snk_tracks_obj * obj, msg_tracks_obj * msg_tracks) {
+    void snk_tracks_file_process_bin(snk_tracks_file_obj * obj, msg_tracks_obj * msg_tracks) {
 
         unsigned int iTrack;
         float tmpId;
@@ -81,11 +81,11 @@
 
     }
 
-    snk_tracks_cfg * snk_tracks_cfg_construct(void) {
+    snk_tracks_file_cfg * snk_tracks_file_cfg_construct(void) {
 
-        snk_tracks_cfg * cfg;
+        snk_tracks_file_cfg * cfg;
 
-        cfg = (snk_tracks_cfg *) malloc(sizeof(snk_tracks_cfg));
+        cfg = (snk_tracks_file_cfg *) malloc(sizeof(snk_tracks_file_cfg));
 
         cfg->fileName = (char *) NULL;
 
@@ -93,7 +93,7 @@
 
     }
 
-    void snk_tracks_cfg_destroy(snk_tracks_cfg * cfg) {
+    void snk_tracks_file_cfg_destroy(snk_tracks_file_cfg * cfg) {
 
         if (cfg->fileName != NULL) {
             free((void *) cfg->fileName);

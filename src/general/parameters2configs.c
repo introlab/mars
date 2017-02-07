@@ -9,10 +9,10 @@
         cfgs->msg_spectra = parameters2configs_msg_spectra(params);
         cfgs->mod_ssl = parameters2configs_mod_ssl(params);
         cfgs->msg_pots = parameters2configs_msg_pots(params);
-        cfgs->snk_pots = parameters2configs_snk_pots(params);
+        cfgs->snk_pots_file = parameters2configs_snk_pots_file(params);
         cfgs->mod_sst = parameters2configs_mod_sst(params);
         cfgs->msg_tracks = parameters2configs_msg_tracks(params);
-        cfgs->snk_tracks = parameters2configs_snk_tracks(params);
+        cfgs->snk_tracks_file = parameters2configs_snk_tracks_file(params);
 
     }
 
@@ -113,11 +113,11 @@
 
     }
 
-    snk_pots_cfg * parameters2configs_snk_pots(const parameters * params) {
+    snk_pots_file_cfg * parameters2configs_snk_pots_file(const parameters * params) {
 
-        snk_pots_cfg * cfg;
+        snk_pots_file_cfg * cfg;
 
-        cfg = snk_pots_cfg_construct();
+        cfg = snk_pots_file_cfg_construct();
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
@@ -205,11 +205,11 @@
 
     }
 
-    snk_tracks_cfg * parameters2configs_snk_tracks(const parameters * params) {
+    snk_tracks_file_cfg * parameters2configs_snk_tracks_file(const parameters * params) {
 
-        snk_tracks_cfg * cfg;
+        snk_tracks_file_cfg * cfg;
 
-        cfg = snk_tracks_cfg_construct();
+        cfg = snk_tracks_file_cfg_construct();
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");

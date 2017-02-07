@@ -13,10 +13,10 @@
         objs->msg_spectra = (msg_spectra_obj *) NULL;
         objs->mod_ssl = (mod_ssl_obj *) NULL;
         objs->msg_pots = (msg_pots_obj *) NULL;
-        objs->snk_pots = (snk_pots_obj *) NULL;
+        objs->snk_pots_file = (snk_pots_file_obj *) NULL;
         objs->mod_sst = (mod_sst_obj *) NULL;
         objs->msg_tracks = (msg_tracks_obj *) NULL;
-        objs->snk_tracks = (snk_tracks_obj *) NULL;
+        objs->snk_tracks_file = (snk_tracks_file_obj *) NULL;
 
         return objs;
 
@@ -39,8 +39,8 @@
         if (objs->mod_ssl != NULL) {
             mod_ssl_destroy(objs->mod_ssl);
         }
-        if (objs->snk_pots != NULL) {
-            snk_pots_destroy(objs->snk_pots);
+        if (objs->snk_pots_file != NULL) {
+            snk_pots_file_destroy(objs->snk_pots_file);
         }
         if (objs->mod_sst != NULL) {
             mod_sst_destroy(objs->mod_sst);
@@ -48,8 +48,8 @@
         if (objs->msg_tracks != NULL) {
             msg_tracks_destroy(objs->msg_tracks);
         }
-        if (objs->snk_tracks != NULL) {
-            snk_tracks_destroy(objs->snk_tracks);
+        if (objs->snk_tracks_file != NULL) {
+            snk_tracks_file_destroy(objs->snk_tracks_file);
         }
 
         free((void *) objs);

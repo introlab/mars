@@ -1,11 +1,11 @@
  
-    #include "snk_pots.h"
+    #include "snk_pots_file.h"
 
-    snk_pots_obj * snk_pots_construct(const snk_pots_cfg * cfg) {
+    snk_pots_file_obj * snk_pots_file_construct(const snk_pots_file_cfg * cfg) {
 
-        snk_pots_obj * obj;
+        snk_pots_file_obj * obj;
 
-        obj = (snk_pots_obj *) malloc(sizeof(snk_pots_obj));
+        obj = (snk_pots_file_obj *) malloc(sizeof(snk_pots_file_obj));
 
         obj->fileName = (char *) malloc(sizeof(char) * (strlen(cfg->fileName) + 1));
         strcpy(obj->fileName, cfg->fileName);
@@ -33,7 +33,7 @@
 
     }
 
-    void snk_pots_destroy(snk_pots_obj * obj) {
+    void snk_pots_file_destroy(snk_pots_file_obj * obj) {
 
         free((void *) obj->fileName);
         fclose(obj->fp);
@@ -42,22 +42,22 @@
 
     }
 
-    void snk_pots_process(snk_pots_obj * obj, msg_pots_obj * msg_pots) {
+    void snk_pots_file_process(snk_pots_file_obj * obj, msg_pots_obj * msg_pots) {
 
         if (obj->format == 'x') {
             
-            snk_pots_process_xml(obj, msg_pots);
+            snk_pots_file_process_xml(obj, msg_pots);
 
         }
         if (obj->format == 'b') {
             
-            snk_pots_process_bin(obj, msg_pots);
+            snk_pots_file_process_bin(obj, msg_pots);
 
         }
 
     }
 
-    void snk_pots_process_xml(snk_pots_obj * obj, msg_pots_obj * msg_pots) {
+    void snk_pots_file_process_xml(snk_pots_file_obj * obj, msg_pots_obj * msg_pots) {
 
         unsigned int iPot;
 
@@ -78,7 +78,7 @@
 
     }
 
-    void snk_pots_process_bin(snk_pots_obj * obj, msg_pots_obj * msg_pots) {
+    void snk_pots_file_process_bin(snk_pots_file_obj * obj, msg_pots_obj * msg_pots) {
 
         unsigned int iPot;
 
@@ -93,11 +93,11 @@
 
     }
 
-    snk_pots_cfg * snk_pots_cfg_construct(void) {
+    snk_pots_file_cfg * snk_pots_file_cfg_construct(void) {
 
-        snk_pots_cfg * cfg;
+        snk_pots_file_cfg * cfg;
 
-        cfg = (snk_pots_cfg *) malloc(sizeof(snk_pots_cfg));
+        cfg = (snk_pots_file_cfg *) malloc(sizeof(snk_pots_file_cfg));
 
         cfg->fileName = (char *) NULL;
 
@@ -105,7 +105,7 @@
 
     }
 
-    void snk_pots_cfg_destroy(snk_pots_cfg * cfg) {
+    void snk_pots_file_cfg_destroy(snk_pots_file_cfg * cfg) {
 
         if (cfg->fileName != NULL) {
             free((void *) cfg->fileName);

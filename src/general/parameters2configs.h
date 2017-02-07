@@ -18,12 +18,12 @@
 
     msg_pots_cfg * parameters2configs_msg_pots(const parameters * params);
 
-    snk_pots_cfg * parameters2configs_snk_pots(const parameters * params);
+    snk_pots_file_cfg * parameters2configs_snk_pots_file(const parameters * params);
 
     mod_sst_cfg * parameters2configs_mod_sst(const parameters * params);
 
     msg_tracks_cfg * parameters2configs_msg_tracks(const parameters * params);
 
-    snk_tracks_cfg * parameters2configs_snk_tracks(const parameters * params);
+    snk_tracks_file_cfg * parameters2configs_snk_tracks_file(const parameters * params);
 
 #endif

@@ -7,10 +7,10 @@
     #include "../message/msg_spectra.h"
     #include "../module/mod_ssl.h"
     #include "../message/msg_pots.h"
-    #include "../sink/snk_pots.h"
+    #include "../sink/snk_pots_file.h"
     #include "../module/mod_sst.h"
     #include "../message/msg_tracks.h"
-    #include "../sink/snk_tracks.h"
+    #include "../sink/snk_tracks_file.h"
 
     #include "objects.h"
     #include "configs.h"
