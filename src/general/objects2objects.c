@@ -18,6 +18,14 @@
             return rtnValue;
         }
 
+        // Write raw to file
+
+        if (objs->snk_raw_file != NULL) {
+
+            snk_raw_file_process(objs->snk_raw_file, objs->msg_hops);
+
+        }
+
         // Perform processing       
 
         start = clock();
