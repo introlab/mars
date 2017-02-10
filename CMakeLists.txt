@@ -8,9 +8,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(PC_FFTW3 REQUIRED fftw3f)
 pkg_check_modules(PC_ALSA REQUIRED alsa)
 pkg_check_modules(PC_LIBCONFIG REQUIRED libconfig)
+pkg_check_modules(PC_NCURSES REQUIRED ncurses)
 
-include_directories(${PC_FFTW3_INCLUDE_DIRS} ${PC_ALSA_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}/include")
-link_directories(${PC_FFTW3_LIBRARY_DIRS} ${PC_ALSA_LIBRARY_DIRS})
+include_directories("${PROJECT_SOURCE_DIR}/include")
 
 set(CMAKE_BUILD_TYPE "Release")
 
@@ -112,4 +112,5 @@ add_executable(demo
 )
 target_link_libraries(demo
     mars
+    ${PC_NCURSES}
 )
