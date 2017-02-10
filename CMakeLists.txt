@@ -69,9 +69,10 @@ set(SRC
     src/signal/window.c
     src/signal/xcorr.c
 
-    src/sink/snk_pots.c
-    src/sink/snk_tracks.c
+    src/sink/snk_pots_file.c
+    src/sink/snk_tracks_file.c
 
+    #src/source/src_raw_8soundusb.c
     src/source/src_raw_file.c
 
     src/system/frame2freq.c
@@ -86,10 +87,7 @@ set(SRC
     src/system/xcorr2aimg.c
     src/system/xcorr2xcorr.c
 
-    src/utils/coord.c
-    src/utils/exp.c
     src/utils/fft.c
-    src/utils/fifo.c
     src/utils/gaussian.c   
     src/utils/matrix.c
     src/utils/pcm.c

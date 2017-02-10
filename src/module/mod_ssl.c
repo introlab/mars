@@ -11,23 +11,24 @@
 
         obj = (mod_ssl_obj *) malloc(sizeof(mod_ssl_obj));
 
-        obj->nMics = cfg->mics->nSignals;
+        obj->nMics = cfg->mics->nMics;
         obj->nPairs = obj->nMics * (obj->nMics - 1) / 2;
         obj->nPots = cfg->nPots;
         obj->nScans = cfg->nLevels;
 
         if (strcmp(cfg->shape,"halfsphere") == 0) {
-            obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize);
+
+            obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);
+
         }
         else {
-            obj->scans = scanning_init_sphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize);	
+
+            obj->scans = scanning_init_sphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);	
+
         }
 
         obj->deltasMax = (unsigned int *) malloc(sizeof(unsigned int) * cfg->nLevels);
-        
-        for (iLevel = 0; iLevel < cfg->nLevels; iLevel++) {
-        	obj->deltasMax[iLevel] = cfg->deltasMax[iLevel];
-        }
+        memcpy(obj->deltasMax, cfg->deltasMax, sizeof(unsigned int) * cfg->nLevels);
 
         obj->deltaReset = cfg->deltaReset;
         obj->r = 0;
@@ -50,7 +51,7 @@
             for (iLevel = 0; iLevel < cfg->nLevels; iLevel++) {
 
                 obj->xcorrsMax[iPot][iLevel] = xcorrs_construct_zero(obj->nPairs,cfg->frameSize);
-                obj->aimgs[iPot][iLevel] = aimg_construct_zero(obj->scans->array[iLevel]->points->nSignals);
+                obj->aimgs[iPot][iLevel] = aimg_construct_zero(obj->scans->points[iLevel]->nPoints);
 
             }
 
@@ -63,7 +64,7 @@
         obj->xcorr2aimg = (xcorr2aimg_obj **) malloc(sizeof(xcorr2aimg_obj *) * cfg->nLevels);
 
         for (iLevel = 0; iLevel < cfg->nLevels; iLevel++) {
-            obj->xcorr2aimg[iLevel] = xcorr2aimg_construct_zero(obj->scans->array[iLevel]->points->nSignals);	
+            obj->xcorr2aimg[iLevel] = xcorr2aimg_construct_zero(obj->scans->points[iLevel]->nPoints);	
         }       
 
         obj->pots = pots_construct_zero(cfg->nPots);
@@ -127,11 +128,10 @@
 
         float maxValue;
         unsigned int maxIndex;
-        point_obj * point;
 
-        freq2freq_process_phasor_many(obj->freq2freq, msg_spectra->freqs, obj->phasors);
-        freq2freq_process_product_many(obj->freq2freq, obj->phasors, obj->phasors, obj->products);
-        freq2freq_process_smooth_many(obj->freq2freq, obj->products, obj->smooths);
+        freq2freq_process_phasor(obj->freq2freq, msg_spectra->freqs, obj->phasors);
+        freq2freq_process_product(obj->freq2freq, obj->phasors, obj->phasors, obj->products);
+        freq2freq_process_smooth(obj->freq2freq, obj->products, obj->smooths);
 
         obj->r++;
 
@@ -143,22 +143,22 @@
 
                 if (iPot == 0) {
 
-                    freq2xcorr_process_many(obj->freq2xcorr, 
-                    	                    obj->smooths, 
-                                            obj->scans->array[obj->nScans-1]->tdoaMin,
-                                            obj->scans->array[obj->nScans-1]->tdoaMax,
-                    	                    obj->xcorrsReset[0]);
+                    freq2xcorr_process(obj->freq2xcorr, 
+                    	               obj->smooths, 
+                                       obj->scans->tdoas[obj->nScans-1],
+                    	               obj->xcorrsReset[0]);
+
+
 
                 }
                 else {
 
-                    xcorr2xcorr_process_reset_many(obj->xcorr2xcorr, 
-                	                               obj->xcorrsReset[iPot-1],
-                	                               obj->scans->array[obj->nScans-1]->tdoas->array[maxIndex],
-                	                               obj->scans->array[obj->nScans-1]->tdoaMin,
-                	                               obj->scans->array[obj->nScans-1]->tdoaMax,
-                                                   obj->deltaReset,
-                                                   obj->xcorrsReset[iPot]);
+                    xcorr2xcorr_process_reset(obj->xcorr2xcorr, 
+                	                          obj->xcorrsReset[iPot-1],
+                	                          obj->scans->tdoas[obj->nScans-1],
+                                              obj->deltaReset,
+                                              maxIndex,
+                                              obj->xcorrsReset[iPot]);
 
                 }
 
@@ -166,16 +166,16 @@
 
                 for (iScan = 0; iScan < obj->nScans; iScan++) {
 
-                    xcorr2xcorr_process_max_many(obj->xcorr2xcorr, 
-            	                                 obj->xcorrsReset[iPot], 
-            	                                 obj->scans->array[obj->nScans-1]->tdoaMin,
-            	                                 obj->scans->array[obj->nScans-1]->tdoaMax,
-            	                                 obj->deltasMax[iScan],
-            	                                 obj->xcorrsMax[iPot][iScan]);
+                    xcorr2xcorr_process_max(obj->xcorr2xcorr, 
+            	                            obj->xcorrsReset[iPot], 
+            	                            obj->scans->tdoas[obj->nScans-1],
+         	                                obj->deltasMax[iScan],
+            	                            obj->xcorrsMax[iPot][iScan]);
 
                     xcorr2aimg_process(obj->xcorr2aimg[iScan],
-                	                   obj->scans->array[iScan]->tdoas,
-                	                   obj->scans->array[iScan]->indexes->array[maxIndex],
+                	                   obj->scans->tdoas[iScan],
+                	                   obj->scans->indexes[iScan],
+                                       maxIndex,
                 	                   obj->xcorrsMax[iPot][iScan],
                 	                   obj->aimgs[iPot][iScan]);
 
@@ -194,15 +194,16 @@
 
                 }
 
-                point = obj->scans->array[obj->nScans-1]->points->array[maxIndex];
-                coord_copy_coord(obj->pots->array[iPot]->coord, point->coord);
-                obj->pots->array[iPot]->E = maxValue / ((float) obj->nPairs);
+                obj->pots->array[iPot * 4 + 0] = obj->scans->points[obj->nScans-1]->array[maxIndex * 3 + 0];
+                obj->pots->array[iPot * 4 + 1] = obj->scans->points[obj->nScans-1]->array[maxIndex * 3 + 1];
+                obj->pots->array[iPot * 4 + 2] = obj->scans->points[obj->nScans-1]->array[maxIndex * 3 + 2];
+                obj->pots->array[iPot * 4 + 3] = maxValue / ((float) obj->nPairs);
 
             }
 
         }
 
-        pots_copy_pots(msg_pots->pots, obj->pots);
+        memcpy(msg_pots->pots->array, obj->pots->array, sizeof(float) * obj->pots->nPots * 4);
         msg_pots->timeStamp = msg_spectra->timeStamp;
 
     }

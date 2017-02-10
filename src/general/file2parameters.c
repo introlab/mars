@@ -79,11 +79,11 @@
                 for (i = 0; i < N; i++) {
 
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"x",&valueDouble);
-                    params->general->mics->array[i]->coord->x = (float) valueDouble;
+                    params->general->mics->array[i * 3 + 0] = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"y",&valueDouble);
-                    params->general->mics->array[i]->coord->y = (float) valueDouble;
+                    params->general->mics->array[i * 3 + 1] = (float) valueDouble;
                     config_setting_lookup_float(config_setting_get_elem(setting, i),"z",&valueDouble);
-                    params->general->mics->array[i]->coord->z = (float) valueDouble;
+                    params->general->mics->array[i * 3 + 2] = (float) valueDouble;
 
                 }
 

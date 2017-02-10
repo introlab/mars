@@ -20,25 +20,21 @@
 
     }
 
-    void hop2frame_process_single(hop2frame_obj * obj, const hop_obj * hop, frame_obj * frame) {
-
-        unsigned int iSample;
-
-        for (iSample = 0; iSample < (obj->frameSize-obj->hopSize); iSample++) {
-            frame->array[iSample] = frame->array[iSample+obj->hopSize];
-        }
-        for (iSample = 0; iSample < obj->hopSize; iSample++) {
-        	frame->array[iSample+(obj->frameSize-obj->hopSize)] = hop->array[iSample];
-        }
-
-    }
-
-    void hop2frame_process_many(hop2frame_obj * obj, const hops_obj * hops, frames_obj * frames) {
+    void hop2frame_process(hop2frame_obj * obj, const hops_obj * hops, frames_obj * frames) {
 
         unsigned int iSignal;
+        unsigned int iSample;
 
         for (iSignal = 0; iSignal < hops->nSignals; iSignal++) {
-            hop2frame_process_single(obj,hops->array[iSignal],frames->array[iSignal]);
+
+            memmove(&(frames->array[iSignal * obj->frameSize]),
+                    &(frames->array[iSignal * obj->frameSize + obj->hopSize]),
+                    sizeof(float) * (obj->frameSize-obj->hopSize));
+
+            memcpy(&(frames->array[iSignal * obj->frameSize + (obj->frameSize-obj->hopSize)]),
+                   &(hops->array[iSignal * obj->hopSize]),
+                   sizeof(float) * obj->hopSize);
+
         }        
 
     }

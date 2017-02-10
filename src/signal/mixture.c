@@ -1,7 +1,7 @@
     
     #include "mixture.h"
 
-    mixture_obj * mixture_construct_zero(const unsigned int S, const unsigned int T) {
+    mixture_obj * mixture_construct_zero(const unsigned int nPots, const unsigned int nTracks) {
 
         mixture_obj * obj;
         unsigned int iT;
@@ -10,69 +10,30 @@
 
         obj = (mixture_obj *) malloc(sizeof(mixture_obj));
 
-        obj->assignations = combining_generate(S, T);
+        obj->assignations = combining_generate(nPots, nTracks);
 
-        obj->S = S;
-        obj->T = T;
-        obj->TND = T + 2;
-        obj->C = obj->assignations->nSignals;
+        obj->nPots = nPots;
+        obj->nTracks = nTracks;
+        obj->nTracksNewFalse = nTracks + 2;
+        obj->nCombinations = obj->assignations->nAssignations;
        
-        obj->p_E_A = (float *) malloc(sizeof(float) * obj->S);
-        obj->p_E_I = (float *) malloc(sizeof(float) * obj->S);
-        obj->p_z_D = (float *) malloc(sizeof(float) * obj->S);
+        obj->p_Ez_AICD = (float *) malloc(sizeof(float) * (3+nTracks) * obj->nPots );
+        memset(obj->p_Ez_AICD, 0x00, sizeof(float) * (3+nTracks) * obj->nPots );
 
-        for (iS = 0; iS < S; iS++) {
+        obj->p_Eszs_phics = (float *) malloc(sizeof(float) * obj->nTracksNewFalse * obj->nPots);
+        memset(obj->p_Eszs_phics, 0x00, sizeof(float) * obj->nTracksNewFalse * obj->nPots);
 
-            obj->p_E_A[iS] = 0.0f;
-            obj->p_E_I[iS] = 0.0f;
-            obj->p_z_D[iS] = 0.0f;
+        obj->p_phics = (float *) malloc(sizeof(float) * obj->nTracksNewFalse * obj->nPots);        
+        memset(obj->p_phics, 0x00, sizeof(float) * obj->nTracksNewFalse * obj->nPots);
 
-        }
+        obj->p_Ez_phic = (float *) malloc(sizeof(float) * obj->nCombinations);
+        memset(obj->p_Ez_phic, 0x00, sizeof(float) * obj->nCombinations);
 
-        obj->p_z_C = (float **) malloc(sizeof(float *) * obj->T);
+        obj->p_phic = (float *) malloc(sizeof(float) * obj->nCombinations);
+        memset(obj->p_phic, 0x00, sizeof(float) * obj->nCombinations);
 
-        for (iT = 0; iT < obj->T; iT++) {
-
-            obj->p_z_C[iT] = malloc(sizeof(float) * obj->S);
-
-            for (iS = 0; iS < obj->S; iS++) {
-
-                obj->p_z_C[iT][iS] = 0.0f;
-
-            }
-
-        }
-
-
-        obj->p_Eszs_phics = (float **) malloc(sizeof(float *) * obj->S);
-        obj->p_phics = (float **) malloc(sizeof(float *) * obj->S);
-
-        for (iS = 0; iS < obj->S; iS++) {
-
-            obj->p_Eszs_phics[iS] = (float *) malloc(sizeof(float) * obj->TND);
-            obj->p_phics[iS] = (float *) malloc(sizeof(float) * obj->TND);
-
-            for (iT = 0; iT < obj->TND; iT++) {
-
-                obj->p_Eszs_phics[iS][iT] = 0.0f;
-                obj->p_phics[iS][iT] = 0.0f;
-
-            }
-
-        }
-
-
-        obj->p_Ez_phic = (float *) malloc(sizeof(float) * obj->C);
-        obj->p_phic = (float *) malloc(sizeof(float) * obj->C);
-        obj->p_phic_Ez = (float *) malloc(sizeof(float) * obj->C);
-
-        for (iC = 0; iC < obj->C; iC++) {
-
-            obj->p_Ez_phic[iC] = 0.0f;
-            obj->p_phic[iC] = 0.0f;
-            obj->p_phic_Ez[iC] = 0.0f;
-
-        }
+        obj->p_phic_Ez = (float *) malloc(sizeof(float) * obj->nCombinations);
+        memset(obj->p_phic_Ez, 0x00, sizeof(float) * obj->nCombinations);
 
         return obj;
 
@@ -80,215 +41,87 @@
 
     void mixture_destroy(mixture_obj * obj) {
 
-
+        free((void *) obj->p_Ez_AICD);
+        free((void *) obj->p_Eszs_phics);
+        free((void *) obj->p_phics);
+        free((void *) obj->p_Ez_phic);
+        free((void *) obj->p_phic);
+        free((void *) obj->p_phic_Ez);
 
     }
 
     void mixture_printf(const mixture_obj * obj) {
 
-        unsigned int iS;
-        unsigned int iT;
-        unsigned int iCp;
-        unsigned int iCs;
-        unsigned int iC;
+        unsigned int iTrack;
+        unsigned int iTrackNewFalse;
+        unsigned int iPot;
+        unsigned int iCombination;
 
-        printf("    s = ");
-
-        for (iS = 0; iS < obj->S; iS++) {
-            printf("   %01u   ",iS);
+        printf("p(E|A) = ");
+        for (iPot = 0; iPot < obj->nPots; iPot++) {
+            printf("%+1.3e ",obj->p_Ez_AICD[0 * obj->nPots + iPot]);
         }
-
         printf("\n");
 
-        printf("p_E_A = ");
-
-        for (iS = 0; iS < obj->S; iS++) {
-            printf("%+1.3f ",obj->p_E_A[iS]);
+        printf("p(E|I) = ");
+        for (iPot = 0; iPot < obj->nPots; iPot++) {
+            printf("%+1.3e ",obj->p_Ez_AICD[1 * obj->nPots + iPot]);
         }
-
         printf("\n");
 
-        printf("p_E_I = ");
-
-        for (iS = 0; iS < obj->S; iS++) {
-            printf("%+1.3f ",obj->p_E_I[iS]);
+        printf("p(z|D) = ");
+        for (iPot = 0; iPot < obj->nPots; iPot++) {
+            printf("%+1.3e ",obj->p_Ez_AICD[2 * obj->nPots + iPot]);
         }
-
         printf("\n");
 
-        printf("\n");
-        printf("p_z_C:\n\n");
-
-        printf("        ");
-        for (iS = 0; iS < obj->S; iS++) {
-            printf(" s = %01u  ",iS);
-        }
-
-        printf("\n");
-
-        for (iT = 0; iT < obj->T; iT++) {
-
-            printf("t = %+01d ",((signed int) iT));
-
-            for (iS = 0; iS < obj->S; iS++) {
-                printf(" %+1.3f ",obj->p_z_C[iT][iS]);
+        for (iTrack = 0; iTrack < obj->nTracks; iTrack++) {
+            printf("p(z|C,%u) = ",iTrack);
+            for (iPot = 0; iPot < obj->nPots; iPot++) {
+                printf("%+1.3e ", obj->p_Ez_AICD[3 * obj->nPots + iPot]);
             }
-
             printf("\n");
-
         }
-
         printf("\n");
 
-        printf("p_z_D = ");
-
-        for (iS = 0; iS < obj->S; iS++) {
-            printf("%+1.3f ",obj->p_z_D[iS]);
-        }
-
-        printf("\n");
-
-        printf("\n");
-        printf("p_Eszs_phics:\n\n");
-
-        printf("        ");
-        for (iS = 0; iS < obj->S; iS++) {
-            printf(" s = %01u  ",iS);
-        }
-
-        printf("\n");
-
-        for (iT = 0; iT < obj->TND; iT++) {
-
-            printf("t = %+01d ",((signed int) iT)-2);
-
-            for (iS = 0; iS < obj->S; iS++) {
-                printf(" %+1.3f ",obj->p_Eszs_phics[iS][iT]);
-            }
-
-            printf("\n");
-
-        }
-
-        printf("\n");
-        printf("p_phics:\n\n");
-
-        printf("        ");
-        for (iS = 0; iS < obj->S; iS++) {
-            printf(" s = %01u  ",iS);
-        }
-
-        printf("\n");
-
-        for (iT = 0; iT < obj->TND; iT++) {
-
-            printf("t = %+01d ",((signed int) iT)-2);
-
-            for (iS = 0; iS < obj->S; iS++) {
-                printf(" %+1.3f ",obj->p_phics[iS][iT]);
-            }
-
-            printf("\n");
-
-        }
-
-        printf("\n");
-        printf("p_Ez_phic:\n\n");
-
-        iC = 0;
-
-        for (iCp = 0; iCp < (obj->C/obj->S); iCp++) {
-
-            for (iCs = 0; iCs < obj->S; iCs++) {
-
-                printf("(");
-
-                for (iS = 0; iS < obj->S; iS++) {
-
-                    printf("%+1d",obj->assignations->array[iC]->array[iS]);
-
-                    if (iS != (obj->S-1)) {
-                    	printf(",");
-                    }
-
-                }
-
-                printf("): ");
+        printf("p(E,z|phi(s)):\n");
+        for (iTrackNewFalse = 0; iTrackNewFalse < obj->nTracksNewFalse; iTrackNewFalse++) {
             
-                printf("%+1.3f - ",obj->p_Ez_phic[iC]);
-
-                iC++;
-
+            printf("  phi = %d: ",iTrackNewFalse-2);
+            for (iPot = 0; iPot < obj->nPots; iPot++) {
+                printf("%+1.3e ",obj->p_Eszs_phics[iTrackNewFalse * obj->nPots + iPot]);
             }
-
             printf("\n");
 
         }
-
         printf("\n");
-        printf("p_phic:\n\n");
 
-        iC = 0;
-
-        for (iCp = 0; iCp < (obj->C/obj->S); iCp++) {
-
-            for (iCs = 0; iCs < obj->S; iCs++) {
-
-                printf("(");
-
-                for (iS = 0; iS < obj->S; iS++) {
-
-                    printf("%+1d",obj->assignations->array[iC]->array[iS]);
-
-                    if (iS != (obj->S-1)) {
-                    	printf(",");
-                    }
-
-                }
-
-                printf("): ");
+        printf("p(phi(s)):\n");
+        for (iTrackNewFalse = 0; iTrackNewFalse < obj->nTracksNewFalse; iTrackNewFalse++) {
             
-                printf("%+1.3f - ",obj->p_phic[iC]);
-
-                iC++;
-
+            printf("  phi = %d: ",iTrackNewFalse-2);
+            for (iPot = 0; iPot < obj->nPots; iPot++) {
+                printf("%+1.3e ",obj->p_phics[iTrackNewFalse * obj->nPots + iPot]);
             }
-
             printf("\n");
 
         }
-
         printf("\n");
-        printf("p_phic_Ez:\n\n");
 
-        iC = 0;
+        printf("p(E,z|phi), p(phi), p(phi|E,z):\n");
 
-        for (iCp = 0; iCp < (obj->C/obj->S); iCp++) {
+        for (iCombination = 0; iCombination < obj->nCombinations; iCombination++) {
 
-            for (iCs = 0; iCs < obj->S; iCs++) {
+            printf("  ");
 
-                printf("(");
+            for (iPot = 0; iPot < obj->nPots; iPot++) {
 
-                for (iS = 0; iS < obj->S; iS++) {
-
-                    printf("%+1d",obj->assignations->array[iC]->array[iS]);
-
-                    if (iS != (obj->S-1)) {
-                    	printf(",");
-                    }
-
-                }
-
-                printf("): ");
-            
-                printf("%+1.3f - ",obj->p_phic_Ez[iC]);
-
-                iC++;
+                printf("%+01d ",obj->assignations->array[iCombination * obj->nPots + iPot]);
 
             }
 
-            printf("\n");
+            printf(": %+1.3e %+1.3e %+1.3e\n",obj->p_Ez_phic[iCombination],obj->p_phic[iCombination],obj->p_phic_Ez[iCombination]);
 
-        }    
+        }       
 
     }

@@ -22,14 +22,20 @@
 
     void mixture2mixture_destroy(mixture2mixture_obj * obj) {
 
+        gaussians_1d_destroy(obj->active);
+        gaussians_1d_destroy(obj->inactive);
+
+        free((void *) obj);
+
     }
 
     void mixture2mixture_process(mixture2mixture_obj * obj, mixture_obj * mixture, const pots_obj * pots, const coherences_obj * coherences, postprobs_obj * postprobs) {
 
-        unsigned int iS;
-        unsigned int iP;
-        unsigned int iC;
-        unsigned int iT;
+        unsigned int iPot;
+        unsigned int iTrack;
+        unsigned int iTrackNewFalse;
+        unsigned int iCombination;
+
         signed int t;
         float total;
         unsigned char match;
@@ -38,47 +44,47 @@
 
         // p(E^s_l|A), p(E^s_l|I) & p(z^s_l|D)
 
-        for (iS = 0; iS < mixture->S; iS++) {
+        for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-             mixture->p_E_A[iS] = gaussians_1d_eval(obj->active, pots->array[iS]->E);
-             mixture->p_E_I[iS] = gaussians_1d_eval(obj->inactive, pots->array[iS]->E);
-             mixture->p_z_D[iS] = obj->diffuse;
+            mixture->p_Ez_AICD[0 * pots->nPots + iPot] = gaussians_1d_eval(obj->active, pots->array[iPot * 4 + 3]);
+            mixture->p_Ez_AICD[1 * pots->nPots + iPot] = gaussians_1d_eval(obj->inactive, pots->array[iPot * 4 + 3]);
+            mixture->p_Ez_AICD[2 * pots->nPots + iPot] = obj->diffuse;
 
         }
 
         // p(z^s_l|C,t)
 
-        for (iT = 0; iT < mixture->T; iT++) {
+        for (iTrack = 0; iTrack < mixture->nTracks; iTrack++) {
 
-            for (iS = 0; iS < mixture->S; iS++) {
+            for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-                mixture->p_z_C[iT][iS] = coherences->array[iT]->probs[iS];
+                mixture->p_Ez_AICD[(3 + iTrack) * pots->nPots + iPot] = coherences->array[iTrack * mixture->nPots + iPot];
 
             }
 
         }
 
-        // p(E^s_l,z^s_l|phis_c) & p(phis_c)
+        // p(E^s_l,z^s_l|phis_c)
 
-        for (iS = 0; iS < mixture->S; iS++) {
+        for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-            for (iT = 0; iT < mixture->TND; iT++) {
+            for (iTrackNewFalse = 0; iTrackNewFalse < mixture->nTracksNewFalse; iTrackNewFalse++) {
 
-                t = (((signed int) iT) - 2);
+                t = (((signed int) iTrackNewFalse) - 2);
 
                 if (t == -2) {
 
-                    mixture->p_Eszs_phics[iS][iT] = mixture->p_E_I[iS] * mixture->p_z_D[iS];
+                    mixture->p_Eszs_phics[iTrackNewFalse * mixture->nPots + iPot] = mixture->p_Ez_AICD[1 * pots->nPots + iPot] * mixture->p_Ez_AICD[2 * pots->nPots + iPot];
 
                 }
                 else if (t == -1) {
 
-                    mixture->p_Eszs_phics[iS][iT] = mixture->p_E_A[iS] * mixture->p_z_D[iS];
+                    mixture->p_Eszs_phics[iTrackNewFalse * mixture->nPots + iPot] = mixture->p_Ez_AICD[0 * pots->nPots + iPot] * mixture->p_Ez_AICD[2 * pots->nPots + iPot];
 
                 }
                 else {
 
-                	mixture->p_Eszs_phics[iS][iT] = mixture->p_E_A[iS] * mixture->p_z_C[t][iS];
+                    mixture->p_Eszs_phics[iTrackNewFalse * mixture->nPots + iPot] = mixture->p_Ez_AICD[0 * pots->nPots + iPot] * mixture->p_Ez_AICD[(t + 3) * pots->nPots + iPot];
 
                 }
 
@@ -88,25 +94,25 @@
 
         // Prior probabilities
 
-        for (iS = 0; iS < mixture->S; iS++) {
+        for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-            for (iT = 0; iT < mixture->TND; iT++) {
+            for (iTrackNewFalse = 0; iTrackNewFalse < mixture->nTracksNewFalse; iTrackNewFalse++) {
 
-                t = (((signed int) iT) - 2);
+                t = (((signed int) iTrackNewFalse) - 2);
 
                 if (t == -2) {
 
-                    mixture->p_phics[iS][iT] = obj->Pfalse;
+                    mixture->p_phics[iTrackNewFalse * mixture->nPots + iPot] = obj->Pfalse;
 
                 }
                 else if (t == -1) {
 
-                    mixture->p_phics[iS][iT] = obj->Pnew;                        
+                    mixture->p_phics[iTrackNewFalse * mixture->nPots + iPot] = obj->Pnew;
 
                 }
                 else {
 
-                	mixture->p_phics[iS][iT] = obj->Ptrack;
+                    mixture->p_phics[iTrackNewFalse * mixture->nPots + iPot] = obj->Ptrack;
 
                 }                    
 
@@ -118,48 +124,48 @@
 
         total = obj->epsilon;
 
-        for (iC = 0; iC < mixture->C; iC++) {
+        for (iCombination = 0; iCombination < mixture->nCombinations; iCombination++) {
 
-            mixture->p_Ez_phic[iC] = 1.0f;
-            mixture->p_phic[iC] = 1.0f;
+            mixture->p_Ez_phic[iCombination] = 1.0f;
+            mixture->p_phic[iCombination] = 1.0f;
 
-            for (iS = 0; iS < mixture->S; iS++) {
+            for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-                t = mixture->assignations->array[iC]->array[iS];
-                iT = (unsigned int) (t + 2);
+                t = mixture->assignations->array[iCombination * mixture->nPots + iPot];
+                iTrackNewFalse = (unsigned int) (t + 2);
 
-                mixture->p_Ez_phic[iC] *= mixture->p_Eszs_phics[iS][iT];
-                mixture->p_phic[iC] *= mixture->p_phics[iS][iT];
+                mixture->p_Ez_phic[iCombination] *= mixture->p_Eszs_phics[iTrackNewFalse * mixture->nPots + iPot];
+                mixture->p_phic[iCombination] *= mixture->p_phics[iTrackNewFalse * mixture->nPots + iPot];
 
             }
 
-            mixture->p_phic_Ez[iC] = mixture->p_Ez_phic[iC] * mixture->p_phic[iC];
+            mixture->p_phic_Ez[iCombination] = mixture->p_Ez_phic[iCombination] * mixture->p_phic[iCombination];
 
-            total += mixture->p_phic_Ez[iC];
+            total += mixture->p_phic_Ez[iCombination];
 
         }
 
-        for (iC = 0; iC < mixture->C; iC++) {
+        for (iCombination = 0; iCombination < mixture->nCombinations; iCombination++) {
 
-            mixture->p_phic_Ez[iC] /= total;
+            mixture->p_phic_Ez[iCombination] /= total;
 
         }
 
         // Tracking - Potential probabilities
 
-        for (iT = 0; iT < mixture->T; iT++) {
+        for (iTrack = 0; iTrack < mixture->nTracks; iTrack++) {
 
-            t = ((signed int) iT);
+            t = ((signed int) iTrack);
 
-            for (iS = 0; iS < mixture->S; iS++) {
+            for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-                postprobs->p_track[iT]->probs[iS] = 0.0f;
+                postprobs->arrayTrack[iTrack * mixture->nPots + iPot] = 0.0f;
 
-                for (iC = 0; iC < mixture->C; iC++) {
+                for (iCombination = 0; iCombination < mixture->nCombinations; iCombination++) {
 
-                    if (mixture->assignations->array[iC]->array[iS] == t) {
+                    if (mixture->assignations->array[iCombination * mixture->nPots + iPot] == t) {
 
-                        postprobs->p_track[iT]->probs[iS] += mixture->p_phic_Ez[iC];
+                        postprobs->arrayTrack[iTrack * mixture->nPots + iPot] += mixture->p_phic_Ez[iCombination];
 
                     }
 
@@ -171,15 +177,17 @@
 
         // New probabilities
 
-        for (iS = 0; iS < mixture->S; iS++) {
+        postprobs->arrayNew[0] = 0.0f;
 
-            postprobs->p_new->probs[iS] = 0.0f;
+        for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-            for (iC = 0; iC < mixture->C; iC++) {
+            postprobs->arrayNew[iPot] = 0.0f;
 
-                if (mixture->assignations->array[iC]->array[iS] == -1) {
+            for (iCombination = 0; iCombination < mixture->nCombinations; iCombination++) {
 
-                    postprobs->p_new->probs[iS] += mixture->p_phic_Ez[iC];
+                if (mixture->assignations->array[iCombination * mixture->nPots + iPot] == -1) {
+
+                    postprobs->arrayNew[iPot] += mixture->p_phic_Ez[iCombination];
 
                 }
 
@@ -189,18 +197,18 @@
 
         // Tracking probabilities
 
-        for (iT = 0; iT < mixture->T; iT++) {
+        for (iTrack = 0; iTrack < mixture->nTracks; iTrack++) {
 
-            t = ((signed int) iT);
-            postprobs->p_track[iT]->probTotal = 0.0f;
+            t = ((signed int) iTrack);
+            postprobs->arrayTrackTotal[iTrack] = 0.0f;
 
-            for (iC = 0; iC < mixture->C; iC++) {
+            for (iCombination = 0; iCombination < mixture->nCombinations; iCombination++) {
 
                 match = 0;
 
-                for (iS = 0; iS < mixture->S; iS++) {
+                for (iPot = 0; iPot < mixture->nPots; iPot++) {
 
-                    if (mixture->assignations->array[iC]->array[iS] == t) {
+                    if (mixture->assignations->array[iCombination * mixture->nPots + iPot] == t) {
 
                         match = 1;
                         break;
@@ -211,7 +219,7 @@
 
                 if (match == 1) {
 
-                    postprobs->p_track[iT]->probTotal += mixture->p_phic_Ez[iC];
+                    postprobs->arrayTrackTotal[iTrack] += mixture->p_phic_Ez[iCombination];
 
                 }
 

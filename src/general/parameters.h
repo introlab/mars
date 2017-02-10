@@ -3,6 +3,7 @@
 #define __MARS_GENERAL_PARAMETERS
 
     #include <stdlib.h>
+    #include <stdio.h>
 
     #include "../signal/mic.h"
 

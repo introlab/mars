@@ -19,67 +19,54 @@
 
     }
 
-    void xcorr2xcorr_process_max_single(xcorr2xcorr_obj * obj, const xcorr_obj * xcorr, const unsigned int minTdoa, const unsigned maxTdoa, const unsigned int delta, xcorr_obj * xcorrMax) {
+    void xcorr2xcorr_process_max(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const unsigned int delta, xcorrs_obj * xcorrsMax) {
 
+        unsigned int iSignal;
         unsigned int iSampleMax;
         unsigned int iSample;
         float maxValue;
 
-        for (iSampleMax = minTdoa; iSampleMax <= maxTdoa; iSampleMax++) {
+        for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
-            maxValue = xcorr->array[iSampleMax];
+            for (iSampleMax = tdoas->arrayMin[iSignal]; iSampleMax <= tdoas->arrayMax[iSignal]; iSampleMax++) {
 
-            for (iSample = (iSampleMax-delta); iSample <= (iSampleMax+delta); iSample++) {
+                maxValue = xcorrs->array[iSignal * obj->frameSize + iSampleMax];
 
-                if (xcorr->array[iSample] > maxValue) {
-                	maxValue = xcorr->array[iSample];
+                for (iSample = (iSampleMax-delta); iSample <= (iSampleMax+delta); iSample++) {
+
+                    if (xcorrs->array[iSignal * obj->frameSize + iSample] > maxValue) {
+
+                        maxValue = xcorrs->array[iSignal * obj->frameSize + iSample];
+
+                    }
+
                 }
+
+                xcorrsMax->array[iSignal * obj->frameSize + iSampleMax] = maxValue;
 
             }
 
-            xcorrMax->array[iSampleMax] = maxValue;
-
         }
 
     }
 
-    void xcorr2xcorr_process_reset_single(xcorr2xcorr_obj * obj, const xcorr_obj * xcorr, const unsigned int tdoa, const unsigned int minTdoa, const unsigned maxTdoa, const unsigned int delta, xcorr_obj * xcorrReset) {
+    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const unsigned int delta, const unsigned int iPoint, xcorrs_obj * xcorrsReset) {
 
+        unsigned int iSignal;
         unsigned int iSample;
-
-        for (iSample = minTdoa; iSample <= maxTdoa; iSample++) {
-
-            xcorrReset->array[iSample] = xcorr->array[iSample];
-
-        }
-
-        for (iSample = (tdoa-delta); iSample <= (tdoa+delta); iSample++) {
-
-            xcorrReset->array[iSample] = 0.0f;
-
-        }
-
-    }
-
-    void xcorr2xcorr_process_max_many(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoa_obj * minTdoas, const tdoa_obj * maxTdoas, const unsigned int delta, xcorrs_obj * xcorrsMax) {
-
-        unsigned int iSignal;
+        unsigned int nSamples;
 
         for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
-            xcorr2xcorr_process_max_single(obj, xcorrs->array[iSignal], minTdoas->array[iSignal], maxTdoas->array[iSignal], delta, xcorrsMax->array[iSignal]);
+            iSample = iSignal * obj->frameSize + tdoas->arrayMin[iSignal];
+            nSamples = (tdoas->arrayMax[iSignal] - tdoas->arrayMin[iSignal] + 1);
 
-        }
+            memcpy(&(xcorrsReset->array[iSample]), &(xcorrs->array[iSample]), sizeof(float) * nSamples);
 
-    }
+            iSample = iSignal * obj->frameSize + tdoas->array[iPoint * tdoas->nPairs + iSignal] - delta;
+            nSamples = 2 * delta + 1;
 
-    void xcorr2xcorr_process_reset_many(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoa_obj * tdoa, const tdoa_obj * minTdoas, const tdoa_obj * maxTdoas, const unsigned int delta, xcorrs_obj * xcorrsReset) {
-
-        unsigned int iSignal;
-
-        for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
-
-            xcorr2xcorr_process_reset_single(obj, xcorrs->array[iSignal], tdoa->array[iSignal], minTdoas->array[iSignal], maxTdoas->array[iSignal], delta, xcorrsReset->array[iSignal]);
+            memset(&(xcorrsReset->array[iSample]), 0x00, sizeof(float) * nSamples);
 
         }
 

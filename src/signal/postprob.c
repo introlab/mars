@@ -1,101 +1,64 @@
 
     #include "postprob.h"
 
-    postprob_obj * postprob_construct_zero(const unsigned int nPots) {
-
-        postprob_obj * obj;
-        unsigned int iPot;
-
-        obj = (postprob_obj *) malloc(sizeof(postprob_obj));
-
-        obj->nPots = nPots;
-        obj->probs = (float *) malloc(sizeof(float) * nPots);
-
-        for (iPot = 0; iPot < nPots; iPot++) {
-            obj->probs[iPot] = 0.0f;
-        }
-
-        obj->probTotal = 0.0f;
-
-        return obj;
-
-    }
-
-    void postprob_destroy(postprob_obj * obj) {
-
-        free((void *) obj->probs);
-        free((void *) obj);
-
-    }
-
-    void postprob_printf(const postprob_obj * obj) {
-
-        unsigned int iPot;
-
-        for (iPot = 0; iPot < obj->nPots; iPot++) {
-
-            printf("(%02u): %+1.3f",iPot,obj->probs[iPot]);
-
-            if (iPot != (obj->nPots - 1)) {
-                printf(" - ");
-            }
-
-        }       
-
-        printf(" > %f",obj->probTotal);
-
-        printf("\n");
-
-    }
-
-
     postprobs_obj * postprobs_construct_zero(const unsigned int nPots, const unsigned int nTracks) {
 
         postprobs_obj * obj;
-        unsigned int iTrack;
 
         obj = (postprobs_obj *) malloc(sizeof(postprobs_obj));
 
+        obj->nPots = nPots;
         obj->nTracks = nTracks;
 
-        obj->p_track = (postprob_obj **) malloc(sizeof(postprob_obj *) * nTracks);
+        obj->arrayNew = (float *) malloc(sizeof(float) * nPots);
+        memset(obj->arrayNew, 0x00, sizeof(float) * nPots);
 
-        for (iTrack = 0; iTrack < nTracks; iTrack++) {
+        obj->arrayTrack = (float *) malloc(sizeof(float) * nTracks * nPots);
+        memset(obj->arrayTrack, 0x00, sizeof(float) * nTracks * nPots);
 
-            obj->p_track[iTrack] = postprob_construct_zero(nPots);
-
-        }
-
-        obj->p_new = postprob_construct_zero(nPots);
-
+        obj->arrayTrackTotal = (float *) malloc(sizeof(float) * nTracks);
+        memset(obj->arrayTrackTotal, 0x00, sizeof(float) * nTracks);        
+        
         return obj;
 
-    }
+    }    
 
     void postprobs_destroy(postprobs_obj * obj) {
 
-        unsigned int iTrack;
-
-        for (iTrack = 0; iTrack < obj->nTracks; iTrack++) {
-
-            postprob_destroy(obj->p_track[iTrack]);
-
-        }
-
-        free((void *) obj->p_track);
-
-        postprob_destroy(obj->p_new);
+        free((void *) obj->arrayNew);
+        free((void *) obj->arrayTrack);
+        free((void *) obj->arrayTrackTotal);
+        free((void *) obj);
 
     }
 
     void postprobs_printf(const postprobs_obj * obj) {
 
         unsigned int iTrack;
+        unsigned int iPot;
 
-        postprob_printf(obj->p_new);
+        printf("p(new|E,z): ");
+
+        for (iPot = 0; iPot < obj->nPots; iPot++) {
+        
+            printf("%+1.3e ",obj->arrayNew[iPot]);
+
+        }
+
+        printf("\n");
 
         for (iTrack = 0; iTrack < obj->nTracks; iTrack++) {
-            postprob_printf(obj->p_track[iTrack]);
+
+            printf("  p(%u|E,z): ",iTrack);
+
+            for (iPot = 0; iPot < obj->nPots; iPot++) {
+
+                printf("%+1.3e ",obj->arrayTrack[iTrack * obj->nPots + iPot]);
+
+            }
+
+            printf("> %+1.3f\n",obj->arrayTrackTotal[iTrack]);
+
         }
 
     }

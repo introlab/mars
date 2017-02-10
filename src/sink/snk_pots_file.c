@@ -63,13 +63,13 @@
 
         fprintf(obj->fp, "<frame timestamp = \"%llu\">\n",msg_pots->timeStamp);
         
-        for (iPot = 0; iPot < msg_pots->pots->nSignals; iPot++) {
+        for (iPot = 0; iPot < msg_pots->pots->nPots; iPot++) {
             
             fprintf(obj->fp, "    <src q = %u>\n",iPot);
-            fprintf(obj->fp, "        <x>%+1.3f</x>\n",msg_pots->pots->array[iPot]->coord->x);
-            fprintf(obj->fp, "        <y>%+1.3f</y>\n",msg_pots->pots->array[iPot]->coord->y);
-            fprintf(obj->fp, "        <z>%+1.3f</z>\n",msg_pots->pots->array[iPot]->coord->z);
-            fprintf(obj->fp, "        <E>%+1.3f</E>\n",msg_pots->pots->array[iPot]->E);
+            fprintf(obj->fp, "        <x>%+1.3f</x>\n",msg_pots->pots->array[iPot * 3 + 0]);
+            fprintf(obj->fp, "        <y>%+1.3f</y>\n",msg_pots->pots->array[iPot * 3 + 1]);
+            fprintf(obj->fp, "        <z>%+1.3f</z>\n",msg_pots->pots->array[iPot * 3 + 2]);
+            fprintf(obj->fp, "        <E>%+1.3f</E>\n",msg_pots->pots->array[iPot * 3 + 3]);
             fprintf(obj->fp, "    </src>\n");
 
         }
@@ -82,14 +82,7 @@
 
         unsigned int iPot;
 
-        for (iPot = 0; iPot < msg_pots->pots->nSignals; iPot++) {
-
-            fwrite(&(msg_pots->pots->array[iPot]->coord->x), sizeof(float), 1, obj->fp);
-            fwrite(&(msg_pots->pots->array[iPot]->coord->y), sizeof(float), 1, obj->fp);
-            fwrite(&(msg_pots->pots->array[iPot]->coord->z), sizeof(float), 1, obj->fp);
-            fwrite(&(msg_pots->pots->array[iPot]->E), sizeof(float), 1, obj->fp);
-
-        }
+        fwrite(msg_pots->pots->array, sizeof(float), 4 * msg_pots->pots->nPots, obj->fp);
 
     }
 

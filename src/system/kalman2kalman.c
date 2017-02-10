@@ -89,7 +89,7 @@
 
     }
 
-    void kalman2kalman_init(kalman2kalman_obj * obj, const pot_obj * pot, kalman_obj * kalman) {
+    void kalman2kalman_init(kalman2kalman_obj * obj, const pots_obj * pots, const unsigned int iPot, kalman_obj * kalman) {
 
         matrix_copy_zero(kalman->x_llm1);
         matrix_copy_zero(kalman->x_lm1lm1);
@@ -103,9 +103,9 @@
         kalman->P_lm1lm1->array[4][4] = obj->sigmaQ * obj->sigmaQ;
         kalman->P_lm1lm1->array[5][5] = obj->sigmaQ * obj->sigmaQ;
 
-        kalman->x_lm1lm1->array[0][0] = pot->coord->x;
-        kalman->x_lm1lm1->array[1][0] = pot->coord->y;
-        kalman->x_lm1lm1->array[2][0] = pot->coord->z;
+        kalman->x_lm1lm1->array[0][0] = pots->array[iPot * 3 + 0];
+        kalman->x_lm1lm1->array[1][0] = pots->array[iPot * 3 + 1];
+        kalman->x_lm1lm1->array[2][0] = pots->array[iPot * 3 + 2];
 
     }
 
@@ -140,30 +140,30 @@
 
     }
 
-    void kalman2kalman_update(kalman2kalman_obj * obj, const postprob_obj * postprob, const pots_obj * pots, kalman_obj * kalman) {
+    void kalman2kalman_update(kalman2kalman_obj * obj, const postprobs_obj * postprobs, const unsigned int iTrack, const pots_obj * pots, kalman_obj * kalman) {
 
-        unsigned int iS;
+        unsigned int iPot;
         float maxValue;
         unsigned int maxIndex;
         float updateFactor;
         
         // Find potential source with max prob
 
-        maxValue = postprob->probs[0];
+        maxValue = postprobs->arrayTrack[iTrack * postprobs->nPots];
         maxIndex = 0;
 
-        for (iS = 1; iS < postprob->nPots; iS++) {
+        for (iPot = 1; iPot < postprobs->nPots; iPot++) {
 
-            if (maxValue < postprob->probs[iS]) {
-                maxValue = postprob->probs[iS];
-                maxIndex = iS;
+            if (maxValue < postprobs->arrayTrack[iTrack * postprobs->nPots + iPot]) {
+                maxValue = postprobs->arrayTrack[iTrack * postprobs->nPots + iPot];
+                maxIndex = iPot;
             }
 
         }
 
-        obj->z->array[0][0] = pots->array[maxIndex]->coord->x;
-        obj->z->array[1][0] = pots->array[maxIndex]->coord->y;
-        obj->z->array[2][0] = pots->array[maxIndex]->coord->z;
+        obj->z->array[0][0] = pots->array[maxIndex * 3 + 0];
+        obj->z->array[1][0] = pots->array[maxIndex * 3 + 1];
+        obj->z->array[2][0] = pots->array[maxIndex * 3 + 2];
 
         // Compute K
         matrix_mul(obj->HP, obj->H, kalman->P_llm1);
@@ -173,7 +173,7 @@
         matrix_mul(obj->PHt, kalman->P_llm1, obj->Ht);
         matrix_mul(obj->K, obj->PHt, obj->HPHt_Rinv);
 
-        updateFactor = postprob->probTotal;
+        updateFactor = postprobs->arrayTrackTotal[iTrack];
 
         // Update x
         matrix_mul(obj->Hx, obj->H, kalman->x_llm1);
@@ -190,10 +190,10 @@
 
     }
 
-    void kalman2kalman_estimate(kalman2kalman_obj * obj, const kalman_obj * kalman, coord_obj * coord) {
+    void kalman2kalman_estimate(kalman2kalman_obj * obj, const kalman_obj * kalman, float * x, float * y, float * z) {
 
-        coord->x = kalman->x_lm1lm1->array[0][0];
-        coord->y = kalman->x_lm1lm1->array[1][0];
-        coord->z = kalman->x_lm1lm1->array[2][0];
+        *x = kalman->x_lm1lm1->array[0][0];
+        *y = kalman->x_lm1lm1->array[1][0];
+        *z = kalman->x_lm1lm1->array[2][0];
 
     }

@@ -1,67 +1,22 @@
     
     #include "scan.h"
 
-    scan_obj * scan_construct_null(void) {
-
-        scan_obj * obj;
-
-        obj = (scan_obj *) malloc(sizeof(scan_obj));
-
-        obj->points = NULL;
-        obj->tdoas = NULL;
-        obj->indexes = NULL;
-
-        return obj;
-
-    }
-
-    void scan_destroy(scan_obj * obj) {
-
-        if (obj->points != NULL) {
-            points_destroy(obj->points);	
-        }
-        
-        if (obj->tdoas != NULL) {
-            tdoas_destroy(obj->tdoas);	
-        }
-        
-        if (obj->indexes != NULL) {
-            indexes_destroy(obj->indexes);	
-        }
-        
-        free((void *) obj);
-
-    }
-
-    void scan_printf(scan_obj * obj) {
-
-        if (obj->points != NULL) {
-            points_printf(obj->points);
-        }
-        
-        if (obj->tdoas != NULL) {
-            tdoas_printf(obj->tdoas);
-        }
-
-        if (obj->indexes != NULL) {
-            indexes_printf(obj->indexes);
-        }
-
-    }
-
-    scans_obj * scans_construct_null(const unsigned int nSignals) {
+    scans_obj * scans_construct_null(const unsigned int nScans) {
 
         scans_obj * obj;
-        unsigned int iSignal;
 
-        obj = (scans_obj *) malloc(sizeof(scans_obj)); 
+        obj = (scans_obj *) malloc(sizeof(scans_obj));
 
-        obj->nSignals = nSignals;
-        obj->array = (scan_obj **) malloc(sizeof(scan_obj *) * nSignals);
+        obj->nScans = nScans;
+        
+        obj->points = (points_obj **) malloc(sizeof(points_obj *) * nScans);
+        memset(obj->points, 0x00, sizeof(points_obj *) * nScans);
 
-        for (iSignal = 0; iSignal < nSignals; iSignal++) {
-            obj->array[iSignal] = scan_construct_null();
-        }
+        obj->tdoas = (tdoas_obj **) malloc(sizeof(tdoas_obj *) * nScans);
+        memset(obj->tdoas, 0x00, sizeof(tdoas_obj *) * nScans);
+
+        obj->indexes = (indexes_obj **) malloc(sizeof(indexes_obj *) * nScans);
+        memset(obj->indexes, 0x00, sizeof(indexes_obj *) * nScans);
 
         return obj;
 
@@ -69,27 +24,25 @@
 
     void scans_destroy(scans_obj * obj) {
 
-        unsigned int iSignal;
+        unsigned int iScan;
 
-        for (iSignal = 0; iSignal < obj->nSignals; iSignal++) {
-        	if (obj->array[iSignal] != NULL) {
-        	    scan_destroy(obj->array[iSignal]);	
-        	}
+        for (iScan = 0; iScan < obj->nScans; iScan++) {
+
+            if (obj->points[iScan] != NULL) {
+                points_destroy(obj->points[iScan]);
+            }
+            if (obj->tdoas[iScan] != NULL) {
+                tdoas_destroy(obj->tdoas[iScan]);
+            }
+            if (obj->indexes[iScan] != NULL) {
+                indexes_destroy(obj->indexes[iScan]);
+            }
+
         }
 
-        free((void *) obj->array);
+        free((void *) obj->points);
+        free((void *) obj->tdoas);
+        free((void *) obj->indexes);
         free((void *) obj);
-
-    }
-
-    void scans_printf(scans_obj * obj) {
-
-        unsigned int iSignal;
-
-        for (iSignal = 0; iSignal < obj->nSignals; iSignal++) {
-        	if (obj->array[iSignal] != NULL) {
-        	    scan_printf(obj->array[iSignal]);	
-        	}
-        }
 
     }

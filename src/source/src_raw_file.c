@@ -34,12 +34,11 @@
 
         fclose(obj->fp);
         free((void *) obj->fileName);
-
         free((void *) obj);
 
     }
 
-    int src_raw_file_process(src_raw_file_obj * obj, msg_hops_obj * hops) {
+    int src_raw_file_process(src_raw_file_obj * obj, msg_hops_obj * msg_hops) {
 
         unsigned int iSample;
         unsigned int iMic;
@@ -81,7 +80,7 @@
 
                 }
 
-                hops->hops->array[iMic]->array[iSample] = sample;
+                msg_hops->hops->array[iMic * msg_hops->hops->hopSize + iSample] = sample;
 
             }
 
@@ -89,7 +88,7 @@
 
         obj->timeStamp++;
 
-        hops->timeStamp = obj->timeStamp;
+        msg_hops->timeStamp = obj->timeStamp;
 
         return rtnValue;
 

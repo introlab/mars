@@ -10,9 +10,9 @@
         obj->frameSize = frameSize;
         obj->halfFrameSize = halfFrameSize;
 
-        obj->win =windowing_hann(frameSize);
-        obj->frame = frame_construct_zero(frameSize);
-
+        obj->win = windowing_hann(frameSize);
+        obj->frame = (float *) malloc(sizeof(float) * frameSize);
+        memset(obj->frame, 0x00, sizeof(float) * frameSize);
         obj->fft = fft_construct(frameSize);
 
         return obj;
@@ -22,31 +22,29 @@
     void frame2freq_destroy(frame2freq_obj * obj) {
 
         window_destroy(obj->win);
-        frame_destroy(obj->frame);
+        free((void *) obj->frame);
+        fft_destroy(obj->fft);
 
         free((void *) obj);
 
     }
 
-    void frame2freq_process_single(frame2freq_obj * obj, const frame_obj * frame, freq_obj * freq) {
-
-        unsigned int iSample;
-
-        for (iSample = 0; iSample < obj->frameSize; iSample++) {
-        	obj->frame->array[iSample] = obj->win->array[iSample] * frame->array[iSample];
-        }
-
-        fft_r2c(obj->fft, obj->frame->array, freq->array);
-
-    }
-
-    void frame2freq_process_many(frame2freq_obj * obj, const frames_obj * frames, freqs_obj * freqs) {
+    void frame2freq_process(frame2freq_obj * obj, const frames_obj * frames, freqs_obj * freqs) {
 
         unsigned int iSignal;
+        unsigned int iSample;
 
         for (iSignal = 0; iSignal < frames->nSignals; iSignal++) {
 
-            frame2freq_process_single(obj, frames->array[iSignal], freqs->array[iSignal]);
+            for (iSample = 0; iSample < obj->frameSize; iSample++) {
+
+                obj->frame[iSample] = obj->win->array[iSample] * frames->array[iSignal * obj->frameSize + iSample];
+
+            }
+
+            fft_r2c(obj->fft, 
+                    &(frames->array[iSignal * obj->frameSize]),
+                    &(freqs->array[iSignal * (obj->halfFrameSize * 2)]));
 
         }
 

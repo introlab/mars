@@ -1,7 +1,7 @@
 
     #include "scanning.h"
 
-    scans_obj * scanning_init_sphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const float c, const float sigma, const unsigned int nMatches, const unsigned int frameSize) {
+    scans_obj * scanning_init_sphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const float c, const float sigma, const unsigned int nMatches, const unsigned int frameSize, const unsigned int delta) {
 
         scans_obj * obj;
         unsigned int iLevel;
@@ -10,12 +10,8 @@
 
         for (iLevel = 0; iLevel < nLevels; iLevel++) {
 
-            obj->array[iLevel] = scan_construct_null();
-
-            obj->array[iLevel]->points = space_sphere(levels[iLevel]);
-            obj->array[iLevel]->tdoas = delay_tdoas(obj->array[iLevel]->points, mics, c, fS, frameSize);
-            obj->array[iLevel]->tdoaMin = delay_mins(obj->array[iLevel]->tdoas);
-            obj->array[iLevel]->tdoaMax = delay_maxs(obj->array[iLevel]->tdoas);
+            obj->points[iLevel] = space_sphere(levels[iLevel]);
+            obj->tdoas[iLevel] = delay_tdoas(obj->points[iLevel], mics, c, fS, frameSize, delta);
 
         }
 
@@ -25,7 +21,7 @@
 
     }
 
-    scans_obj * scanning_init_halfsphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const float c, const float sigma, const unsigned int nMatches, const unsigned int frameSize) {
+    scans_obj * scanning_init_halfsphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const float c, const float sigma, const unsigned int nMatches, const unsigned int frameSize, const unsigned int delta) {
 
         scans_obj * obj;
         unsigned int iLevel;
@@ -34,12 +30,8 @@
 
         for (iLevel = 0; iLevel < nLevels; iLevel++) {
 
-            obj->array[iLevel] = scan_construct_null();
-
-            obj->array[iLevel]->points = space_halfsphere(levels[iLevel]);
-            obj->array[iLevel]->tdoas = delay_tdoas(obj->array[iLevel]->points, mics, c, fS, frameSize);
-            obj->array[iLevel]->tdoaMin = delay_mins(obj->array[iLevel]->tdoas);
-            obj->array[iLevel]->tdoaMax = delay_maxs(obj->array[iLevel]->tdoas);
+            obj->points[iLevel] = space_halfsphere(levels[iLevel]);
+            obj->tdoas[iLevel] = delay_tdoas(obj->points[iLevel], mics, c, fS, frameSize, delta);
 
         }
 
@@ -54,20 +46,20 @@
         unsigned int iLevel;
         maps_obj * maps;
 
-        for (iLevel = 0; iLevel < scans->nSignals; iLevel++) {
+        for (iLevel = 0; iLevel < scans->nScans; iLevel++) {
 
             if (iLevel == 0) {
 
-                maps = linking_maps(NULL, scans->array[0]->tdoas, sigma, nMatches);    
+                maps = linking_maps(NULL, scans->tdoas[0], sigma, nMatches);    
 
             }
             else {
 
-                maps = linking_maps(scans->array[iLevel-1]->tdoas, scans->array[iLevel]->tdoas, sigma, nMatches);    
+                maps = linking_maps(scans->tdoas[iLevel-1], scans->tdoas[iLevel], sigma, nMatches);    
 
             }
 
-            scans->array[iLevel]->indexes = linking_indexes(maps);
+            scans->indexes[iLevel] = linking_indexes(maps);
 
             maps_destroy(maps);
 

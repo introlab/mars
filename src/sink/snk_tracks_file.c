@@ -67,15 +67,11 @@
     void snk_tracks_file_process_bin(snk_tracks_file_obj * obj, msg_tracks_obj * msg_tracks) {
 
         unsigned int iTrack;
-        float tmpId;
 
-        for (iTrack = 0; iTrack < msg_tracks->tracks->nSignals; iTrack++) {
+        for (iTrack = 0; iTrack < msg_tracks->tracks->nTracks; iTrack++) {
 
-            tmpId = (float) (msg_tracks->tracks->array[iTrack]->id);
-            fwrite(&(tmpId), sizeof(float), 1, obj->fp);
-            fwrite(&(msg_tracks->tracks->array[iTrack]->coord->x), sizeof(float), 1, obj->fp);
-            fwrite(&(msg_tracks->tracks->array[iTrack]->coord->y), sizeof(float), 1, obj->fp);
-            fwrite(&(msg_tracks->tracks->array[iTrack]->coord->z), sizeof(float), 1, obj->fp);
+            fwrite(&(msg_tracks->tracks->ids[iTrack]), sizeof(float), 1, obj->fp);
+            fwrite(&(msg_tracks->tracks->array[iTrack * 3]), sizeof(float), 3, obj->fp);
             
         }
 

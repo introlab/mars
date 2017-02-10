@@ -17,87 +17,26 @@
 
     void freq2freq_destroy(freq2freq_obj * obj) {
 
-    	free((void *) obj);
+        free((void *) obj);
 
     }
 
-    void freq2freq_process_phasor_single(freq2freq_obj * obj, const freq_obj * freq, freq_obj * phasor) {
+    void freq2freq_process_phasor(freq2freq_obj * obj, const freqs_obj * freqs, freqs_obj * phasors) {
 
-        unsigned int iSample;
+        unsigned int iSignal, iSample;
         float real, imag;
-        float magnitude;
-
-        for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
-
-            real = freq->array[iSample*2+0];
-            imag = freq->array[iSample*2+1];
-            magnitude = sqrtf(real*real+imag*imag) + obj->epsilon;
-
-            phasor->array[iSample*2+0] = real / magnitude;
-            phasor->array[iSample*2+1] = imag / magnitude;
-
-        }
-
-    }
-
-    void freq2freq_process_product_single(freq2freq_obj * obj, const freq_obj * phasor1, const freq_obj * phasor2, freq_obj * phasor12) {
-
-        unsigned int iSample;
-        float real1, imag1;
-        float real2, imag2;
-
-        for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
-
-            real1 = phasor1->array[iSample*2+0];
-            imag1 = phasor1->array[iSample*2+1];
-            real2 = phasor2->array[iSample*2+0];
-            imag2 = phasor2->array[iSample*2+1];
-
-            phasor12->array[iSample*2+0] = real1*real2+imag1*imag2;
-            phasor12->array[iSample*2+1] = imag1*real2-imag2*real1;
-
-        }
-
-    }
-
-    void freq2freq_process_smooth_single(freq2freq_obj * obj, const freq_obj * phasor, freq_obj * smooth) {
-
-        unsigned int iSample;
-
-        for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
-
-            smooth->array[iSample*2+0] = (1-obj->alpha) * smooth->array[iSample*2+0] + obj->alpha * phasor->array[iSample*2+0];
-            smooth->array[iSample*2+1] = (1-obj->alpha) * smooth->array[iSample*2+1] + obj->alpha * phasor->array[iSample*2+1];
-
-        }        
-
-    }
-
-    void freq2freq_process_phasor_many(freq2freq_obj * obj, const freqs_obj * freqs, freqs_obj * phasors) {
-
-        unsigned int iSignal;
+        float magnitude;        
 
         for (iSignal = 0; iSignal < freqs->nSignals; iSignal++) {
-        	freq2freq_process_phasor_single(obj, freqs->array[iSignal], phasors->array[iSignal]);
-        }
 
-    }
+            for (iSample = 0; iSample < freqs->halfFrameSize; iSample++) {
 
-    void freq2freq_process_product_many(freq2freq_obj * obj, const freqs_obj * phasors1, const freqs_obj * phasors2, freqs_obj * phasors12) {
+                real = freqs->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 0];
+                imag = freqs->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 1];
+                magnitude = sqrtf(real*real+imag*imag) + obj->epsilon;
 
-        unsigned int iSignal1;
-        unsigned int iSignal2;
-        unsigned int iSignal;
-
-        iSignal = 0;
-
-        for (iSignal1 = 0; iSignal1 < phasors1->nSignals; iSignal1++) {
-
-            for (iSignal2 = (iSignal1+1); iSignal2 < phasors2->nSignals; iSignal2++) {
-
-                freq2freq_process_product_single(obj, phasors1->array[iSignal1], phasors2->array[iSignal2], phasors12->array[iSignal]);
-
-                iSignal++;
+                phasors->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 0] = real / magnitude;
+                phasors->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 1] = imag / magnitude;
 
             }
 
@@ -105,12 +44,58 @@
 
     }
 
-    void freq2freq_process_smooth_many(freq2freq_obj * obj, const freqs_obj * phasors, freqs_obj * smooths) {
+    void freq2freq_process_product(freq2freq_obj * obj, const freqs_obj * phasors1, const freqs_obj * phasors2, freqs_obj * phasors12) {
+
+        unsigned int iSignal1, iSignal2, iSignal12, iSample;
+        float real1, imag1;
+        float real2, imag2;
+
+        iSignal12 = 0;
+
+        for (iSignal1 = 0; iSignal1 < phasors1->nSignals; iSignal1++) {
+
+            for (iSignal2 = (iSignal1+1); iSignal2 < phasors2->nSignals; iSignal2++) {
+
+                for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
+
+                    real1 = phasors1->array[iSignal1 * obj->halfFrameSize * 2 + iSample * 2 + 0];
+                    imag1 = phasors1->array[iSignal1 * obj->halfFrameSize * 2 + iSample * 2 + 1];
+                    real2 = phasors2->array[iSignal2 * obj->halfFrameSize * 2 + iSample * 2 + 0];
+                    imag2 = phasors2->array[iSignal2 * obj->halfFrameSize * 2 + iSample * 2 + 1];
+
+                    phasors12->array[iSignal12 * obj->halfFrameSize * 2 + iSample * 2 + 0] = real1 * real2 + imag1 * imag2;
+                    phasors12->array[iSignal12 * obj->halfFrameSize * 2 + iSample * 2 + 1] = imag1 * real2 - imag2 * real1;                    
+
+                }
+
+                iSignal12++;
+
+            }
+
+        }
+
+    }
+
+    void freq2freq_process_smooth(freq2freq_obj * obj, const freqs_obj * phasors, freqs_obj * smooths) {
 
         unsigned int iSignal;
+        unsigned int iSample;
+        float smooth;
+        float phasor;
 
         for (iSignal = 0; iSignal < phasors->nSignals; iSignal++) {
-        	freq2freq_process_smooth_single(obj, phasors->array[iSignal], smooths->array[iSignal]);
+
+            for (iSample = 0; iSample < obj->halfFrameSize * 2; iSample++) {
+
+                smooth = smooths->array[iSignal * obj->halfFrameSize * 2 + iSample];
+                phasor = phasors->array[iSignal * obj->halfFrameSize * 2 + iSample];
+
+                smooth = (1-obj->alpha) * smooth + obj->alpha * phasor;
+
+                smooths->array[iSignal * obj->halfFrameSize * 2 + iSample] = smooth;
+
+            }
+
         }
 
     }

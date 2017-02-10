@@ -8,7 +8,6 @@
         obj = (msg_hops_obj *) malloc(sizeof(msg_hops_obj));
 
         obj->timeStamp = 0;
-
         obj->hops = hops_construct_zero(cfg->nMics, cfg->hopSize);
 
         return obj;
@@ -18,7 +17,6 @@
     void msg_hops_destroy(msg_hops_obj * obj) {
 
         hops_destroy(obj->hops);
-
         free((void *) obj);
 
     }

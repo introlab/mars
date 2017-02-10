@@ -23,7 +23,7 @@
         cfg = src_raw_file_cfg_construct();
 
         cfg->hopSize = params->general->hopSize;
-        cfg->nMics = params->general->mics->nSignals;
+        cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBits;
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
@@ -39,7 +39,7 @@
         cfg = msg_hops_cfg_construct();
 
         cfg->hopSize = params->general->hopSize;
-        cfg->nMics = params->general->mics->nSignals;
+        cfg->nMics = params->general->mics->nMics;
 
         return cfg;        
 
@@ -53,7 +53,7 @@
 
         cfg->hopSize = params->general->hopSize;
         cfg->frameSize = params->general->frameSize;
-        cfg->nMics = params->general->mics->nSignals;
+        cfg->nMics = params->general->mics->nMics;
 
         return cfg;
 
@@ -66,7 +66,7 @@
         cfg = msg_spectra_cfg_construct();
 
         cfg->frameSize = params->general->frameSize;
-        cfg->nMics = params->general->mics->nSignals;
+        cfg->nMics = params->general->mics->nMics;
 
         return cfg;
 
@@ -78,7 +78,9 @@
 
         cfg = mod_ssl_cfg_construct();
 
-        cfg->mics = mics_construct_mics(params->general->mics);
+        cfg->mics = mics_construct_zero(params->general->mics->nMics);
+        memcpy(cfg->mics->array, params->general->mics->array, sizeof(float) * 3 * params->general->mics->nMics);
+
         cfg->nPots = params->ssl->nPots;
         cfg->fS = params->general->fS;
         cfg->c = params->general->c;

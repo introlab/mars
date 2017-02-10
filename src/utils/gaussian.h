@@ -27,8 +27,6 @@
     #include <stdio.h>
     #include <math.h>
 
-    #include "../utils/exp.h"
-
     //! 1-D gaussian
     typedef struct gaussian_1d_obj {
 
@@ -36,8 +34,6 @@
         float mu_x;                             ///< Mean of the gaussian.
         float sigma_x;                          ///< Standard deviation of the gaussian.
         float scaleFactor;                      ///< Precomputed scale factor for the exponential function.
-
-        exp_obj * exponential;                  ///< Exponential estimation to speed up computations.
 
     } gaussian_1d_obj;
 
@@ -50,8 +46,6 @@
         float sigma_x;                          ///< X-component of the standard deviation of the gaussian.
         float sigma_y;                          ///< Y-component of the standard deviation of the gaussian.
         float scaleFactor;                      ///< Precomputed scale factor for the exponential function.
-
-        exp_obj * exponential;                  ///< Exponential estimation to speed up computations.        
 
     } gaussian_2d_obj;
 
@@ -66,8 +60,6 @@
         float sigma_y;                          ///< Y-component of the standard deviation of the gaussian.
         float sigma_z;                          ///< Z-component of the standard deviation of the gaussian.
         float scaleFactor;                      ///< Precomputed scale factor for the exponential function.
-
-        exp_obj * exponential;                  ///< Exponential estimation to speed up computations.        
 
     } gaussian_3d_obj;
 

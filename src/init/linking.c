@@ -5,28 +5,49 @@
 
         maps_obj * obj;
         float * scores;
+        
+        float score;
+        float tauCoarse;
+        float tauFine;
+        float tauDiff;
+
         unsigned int iFine;
         unsigned int iCoarse;
+        unsigned int iPair;
         unsigned int iMatch;
+
         float maxValue;
         unsigned int maxIndex;
 
         if (tdoasCoarse != NULL) {
 
-            obj = maps_construct_null(tdoasFine->nSignals);
-        
-            for (iFine = 0; iFine < tdoasFine->nSignals; iFine++) {
+            obj = maps_construct_zero(tdoasCoarse->nPoints, tdoasFine->nPoints);
+            scores = (float *) malloc(sizeof(float) * tdoasCoarse->nPoints);
 
-                obj->array[iFine] = map_construct_zero(tdoasCoarse->nSignals);
+            for (iFine = 0; iFine < tdoasFine->nPoints; iFine++) {
 
-                scores = linking_scores(tdoasCoarse, tdoasFine->array[iFine], sigma);
+                for (iCoarse = 0; iCoarse < tdoasCoarse->nPoints; iCoarse++) {
 
-                for (iMatch = 0; iMatch < nMatches; iMatch++) {
+                    scores[iCoarse] = 0.0f;
 
-                    maxValue = scores[0];
+                    for (iPair = 0; iPair < tdoasFine->nPairs; iPair++) {
+
+                        tauCoarse = (float) (tdoasCoarse->array[iCoarse * tdoasCoarse->nPairs + iPair]);
+                        tauFine = (float) (tdoasFine->array[iFine * tdoasFine->nPairs + iPair]);
+                        tauDiff = tauCoarse - tauFine;
+
+                        scores[iCoarse] += exp(-1.0f * tauDiff * tauDiff / (2.0f * sigma));
+
+                    }
+
+                }
+
+                for (iMatch = 0; iMatch <  nMatches; iMatch++) {
+
                     maxIndex = 0;
+                    maxValue = scores[maxIndex];
 
-                    for (iCoarse = 0; iCoarse < tdoasCoarse->nSignals; iCoarse++) {
+                    for (iCoarse = 1; iCoarse < tdoasCoarse->nPoints; iCoarse++) {
 
                         if (scores[iCoarse] > maxValue) {
 
@@ -37,24 +58,20 @@
 
                     }
 
-                    obj->array[iFine]->array[maxIndex] = 1;
-                    scores[maxIndex] = 0.0f;
+                    obj->array[iFine * obj->nCoarses + maxIndex] = 0x01;
+                    scores[maxIndex] = -INFINITY;
 
                 }
 
-                free((void *) scores);
-
             }
+
+            free((void *) scores);
 
         }
         else {
 
-            obj = maps_construct_null(tdoasFine->nSignals);
-
-            for (iFine = 0; iFine < tdoasFine->nSignals; iFine++) {
-            	obj->array[iFine] = map_construct_zero(1);
-            	obj->array[iFine]->array[0] = 1;
-            }
+            obj = maps_construct_zero(1, tdoasFine->nPoints);
+            memset(obj->array, 0x01, sizeof(unsigned char) * tdoasFine->nPoints);
 
         }
 
@@ -62,104 +79,57 @@
 
     }
 
-    float * linking_scores(const tdoas_obj * tdoasCoarse, const tdoa_obj * tdoaFine, const float sigma) {
-
-        unsigned int iSignal;
-        float * scores;
-
-        scores = (float *) malloc(sizeof(float) * tdoasCoarse->nSignals);
-
-        for (iSignal = 0; iSignal < tdoasCoarse->nSignals; iSignal++) {
-        	scores[iSignal] = linking_score(tdoasCoarse->array[iSignal],tdoaFine,sigma);
-        }
-
-        return scores;
-
-    }
-
-    float linking_score(const tdoa_obj * tdoaCoarse, const tdoa_obj * tdoaFine, const float sigma) {
-
-        unsigned int iPair;
-        float tauCoarse;
-        float tauFine;
-        float tauDiff;
-        float score;
-
-        score = 0.0f;
-
-        for (iPair = 0; iPair < tdoaCoarse->nPairs; iPair++) {
-
-            tauCoarse = (float) (tdoaCoarse->array[iPair]);
-            tauFine = (float) (tdoaFine->array[iPair]);
-            tauDiff = tauCoarse - tauFine;
-
-            score += exp(-1.0f * tauDiff * tauDiff / (2.0f * sigma));
-
-        }
-
-        return score;
-
-    }
-
     indexes_obj * linking_indexes(const maps_obj * maps) {
 
         indexes_obj * obj;
 
-        unsigned int iSignal;
-        unsigned int iLink;
-        unsigned int nLinks;
-        unsigned int nIndexes;
+        unsigned int iFine;
+        unsigned int iCoarse;
+        unsigned int nFines;
+        unsigned int nFinesMax;
 
-        nLinks = 0;
+        nFinesMax = 0;
 
-        for (iSignal = 0; iSignal < maps->nSignals; iSignal++) {
+        for (iCoarse = 0; iCoarse < maps->nCoarses; iCoarse++) {
 
-            if (maps->array[iSignal]->nLinks > nLinks) {
-            	nLinks = maps->array[iSignal]->nLinks;
-            }
+            nFines = 0;
 
-        }
+            for (iFine = 0; iFine < maps->nFines; iFine++) {
 
-        obj = indexes_construct_null(nLinks);
+                if (maps->array[iFine * maps->nCoarses + iCoarse] == 0x01) {
 
-        for (iLink = 0; iLink < nLinks; iLink++) {
-
-            nIndexes = 0;
-
-            for (iSignal = 0; iSignal < maps->nSignals; iSignal++) {
-
-                if (iLink < maps->array[iSignal]->nLinks) {
-
-                    if (maps->array[iSignal]->array[iLink] == 1) {
-
-                        nIndexes++;
-
-                    }
+                    nFines++;
 
                 }
 
             }
 
-            obj->array[iLink] = index_construct_zero(nIndexes);
+            if (nFines > nFinesMax) {
+                nFinesMax = nFines;
+            }
 
-            nIndexes = 0;
+        }
 
-            for (iSignal = 0; iSignal < maps->nSignals; iSignal++) {
+        obj = indexes_construct_zero(maps->nCoarses,nFinesMax);
 
-                if (iLink < maps->array[iSignal]->nLinks) {
+        for (iCoarse = 0; iCoarse < maps->nCoarses; iCoarse++) {
 
-                    if (maps->array[iSignal]->array[iLink] == 1) {
+            nFines = 0;
 
-                        obj->array[iLink]->array[nIndexes] = iSignal;
-                        nIndexes++;
+            for (iFine = 0; iFine < maps->nFines; iFine++) {
 
-                    }
+                if (maps->array[iFine * maps->nCoarses + iCoarse] == 0x01) {
+
+                    obj->array[iCoarse * nFinesMax + nFines] = iFine;
+                    nFines++;
 
                 }
 
-            }            
+            }
 
-        }
+            obj->count[iCoarse] = nFines;
+
+        }        
 
         return obj;
 

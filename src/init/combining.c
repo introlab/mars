@@ -3,10 +3,14 @@
 
     assignations_obj * combining_generate(const unsigned int nPots, const unsigned int nTracks) {
 
+        assignations_obj * obj;
+        
         unsigned int nCombinations;
         unsigned int iCombination;
         unsigned int iPot;
-        assignations_obj * obj;
+        
+        signed int carry;
+        signed int digit;
 
         nCombinations = 1;
 
@@ -16,49 +20,37 @@
 
         }
 
-        obj = assignations_construct_null(nCombinations);      
+        obj = assignations_construct_zero(nCombinations, nPots);      
 
-        obj->array[0] = assignation_construct_zero(nPots);
         for (iPot = 0; iPot < nPots; iPot++) {
 
-            obj->array[0]->array[iPot] = -2;
+            obj->array[iPot] = -2;
 
         }
-
 
         for (iCombination = 1; iCombination < nCombinations; iCombination++) {
 
-            obj->array[iCombination] = combining_increment(obj->array[iCombination-1],nTracks);
+            carry = 1;
 
-        }
+            for (iPot = 0; iPot < obj->nPots; iPot++) {
 
-        return obj;
+                digit = obj->array[(iCombination-1) * obj->nPots + obj->nPots - iPot - 1];
 
-    }
+                digit += carry;
 
-    assignation_obj * combining_increment(const assignation_obj * src, const unsigned int nTracks) {
+                if (digit == nTracks) {
 
-        assignation_obj * obj;
-        unsigned int iPot;
-        signed int carry;
+                    digit = -2;
+                    carry = 1;
 
-        obj = assignation_construct_assignation(src);
+                }
+                else {
 
-        carry = 1;
+                    carry = 0;
 
-        for (iPot = 0; iPot < obj->nPots; iPot++) {
+                }
 
-            obj->array[obj->nPots - iPot - 1] += carry;
-
-            if (obj->array[obj->nPots - iPot - 1] == nTracks) {
-
-            	obj->array[obj->nPots - iPot - 1] = -2;
-            	carry = 1;
-
-            }
-            else {
-            	
-            	carry = 0;
+                obj->array[iCombination * obj->nPots + obj->nPots - iPot - 1] = digit;
 
             }
 

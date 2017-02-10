@@ -48,7 +48,7 @@
         // Update times
 
         *processingTime += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
-        *signalTime += ((float) (objs->msg_hops->hops->array[0]->hopSize)) / ((float) sampleRate);
+        *signalTime += ((float) (objs->msg_hops->hops->hopSize)) / ((float) sampleRate);
 
         return 0;
 

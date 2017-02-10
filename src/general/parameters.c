@@ -18,6 +18,47 @@
 
     void parameters_destroy(parameters * params) {
 
+        if (params->general != NULL) {
+
+            mics_destroy(params->general->mics);
+            
+            free((void *) params->general);
+
+        }
+
+        if (params->raw != NULL) {
+
+            free((void *) params->raw);
+
+        }
+
+        if (params->ssl != NULL) {
+
+            free((void *) params->ssl->levels);
+            free((void *) params->ssl->deltasMax);
+            free((void *) params->ssl->shape);
+            
+            free((void *) params->ssl);
+
+        }
+
+        if (params->sst != NULL) {
+
+            free((void *) params->sst->mode);
+            free((void *) params->sst->active_weight);
+            free((void *) params->sst->active_mu);
+            free((void *) params->sst->active_sigma);
+            free((void *) params->sst->inactive_weight);
+            free((void *) params->sst->inactive_mu);
+            free((void *) params->sst->inactive_sigma);
+            free((void *) params->sst->N_inactive);
+
+            free((void *) params->sst);
+
+        }
+
+        free((void *) params);
+
     }
 
     void parameters_printf(const parameters * params) {
@@ -33,13 +74,13 @@
 
         printf(" - mics:\n");
 
-        for (iMic = 0; iMic < params->general->mics->nSignals; iMic++) {
+        for (iMic = 0; iMic < params->general->mics->nMics; iMic++) {
             
             printf("    - (%02u): (%+1.3f, %+1.3f, %+1.3f)\n",
                    iMic,
-                   params->general->mics->array[iMic]->coord->x,
-                   params->general->mics->array[iMic]->coord->y,
-                   params->general->mics->array[iMic]->coord->z);    
+                   params->general->mics->array[iMic * 3 + 0],
+                   params->general->mics->array[iMic * 3 + 1],
+                   params->general->mics->array[iMic * 3 + 2]);    
 
         }
 

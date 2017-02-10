@@ -1,12 +1,10 @@
 
     #include "delay.h"
 
-    tdoas_obj * delay_tdoas(const points_obj * points, const mics_obj * mics, const float c, const unsigned int fS, const unsigned int frameSize) {
+    tdoas_obj * delay_tdoas(const points_obj * points, const mics_obj * mics, const float c, const unsigned int fS, const unsigned int frameSize, const unsigned int delta) {
 
         tdoas_obj * obj;
 
-        unsigned int nMics;
-        unsigned int nPoints;
         unsigned int nPairs;
         
         unsigned int iMic1;
@@ -14,29 +12,28 @@
         unsigned int iPair;
         unsigned int iPoint;
 
-        float dist;
-        float tau;
+        float diff, dist, tau;
 
-        nPoints = points->nSignals;
-        nMics = mics->nSignals;
-        nPairs = nMics * (nMics -1) / 2;
+        nPairs = mics->nMics * (mics->nMics -1) / 2;
 
-        obj = tdoas_construct_null(nPoints);
+        obj = tdoas_construct_zero(points->nPoints,nPairs);
 
-        for (iPoint = 0; iPoint < nPoints; iPoint++) {
-
-            obj->array[iPoint] = tdoa_construct_zero(nPairs);
+        for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
 
             iPair = 0;
 
-            for (iMic1 = 0; iMic1 < nMics; iMic1++) {
+            for (iMic1 = 0; iMic1 < mics->nMics; iMic1++) {
 
-                for (iMic2 = (iMic1+1); iMic2 < nMics; iMic2++) {
+                for (iMic2 = (iMic1+1); iMic2 < mics->nMics; iMic2++) {
 
-                    dist = delay_dist(points->array[iPoint],mics->array[iMic2],mics->array[iMic1]);
+                    dist = 0.0f;
+                    dist += (mics->array[iMic1*3+0] - mics->array[iMic2*3+0]) * points->array[iPoint*3+0];
+                    dist += (mics->array[iMic1*3+1] - mics->array[iMic2*3+1]) * points->array[iPoint*3+1];                    
+                    dist += (mics->array[iMic1*3+2] - mics->array[iMic2*3+2]) * points->array[iPoint*3+2];                    
+
                     tau = (((float) fS) / c) * dist;
 
-                    obj->array[iPoint]->array[iPair] = (unsigned int) (roundf(tau)+(float) (frameSize/2));
+                    obj->array[iPoint*nPairs+iPair] = (unsigned int) (roundf(tau)+(float) (frameSize/2));
 
                     iPair++;
 
@@ -46,71 +43,26 @@
 
         }
 
-        return obj;
+        for (iPair = 0; iPair < nPairs; iPair++) {
 
-    }
+            obj->arrayMin[iPair] = obj->array[iPair];
+            obj->arrayMax[iPair] = obj->array[iPair];
 
-    float delay_dist(const point_obj * point, const mic_obj * mic1, const mic_obj * mic2) {
+            for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
 
-        float dist;
-        float dx, dy, dz;
+                if (obj->array[iPoint*nPairs+iPair] < obj->arrayMin[iPair]) {
+                    obj->arrayMin[iPair] = obj->array[iPoint*nPairs+iPair];
+                }
 
-        dx = mic1->coord->x - mic2->coord->x;
-        dy = mic1->coord->y - mic2->coord->y;
-        dz = mic1->coord->z - mic2->coord->z;
-
-        dist = dx * point->coord->x + dy * point->coord->y + dz * point->coord->z;
-
-        return dist;
-
-    }
-
-    tdoa_obj * delay_mins(const tdoas_obj * tdoas) {
-
-        tdoa_obj * obj;
-        unsigned int iPair;
-        unsigned int iSignal;
-
-        obj = tdoa_construct_tdoa(tdoas->array[0]);
-
-        for (iSignal = 0; iSignal < tdoas->nSignals; iSignal++) {
-            
-            for (iPair = 0; iPair < tdoas->array[0]->nPairs; iPair++) {
-
-                if (tdoas->array[iSignal]->array[iPair] < obj->array[iPair]) {
-
-                    obj->array[iPair] = tdoas->array[iSignal]->array[iPair];
-
+                if (obj->array[iPoint*nPairs+iPair] > obj->arrayMax[iPair]) {
+                    obj->arrayMax[iPair] = obj->array[iPoint*nPairs+iPair];
                 }
 
             }
 
-        }
+            obj->arrayMin[iPair] -= delta;
+            obj->arrayMax[iPair] += delta;
 
-        return obj;
-
-    }
-
-    tdoa_obj * delay_maxs(const tdoas_obj * tdoas) {
-
-        tdoa_obj * obj;
-        unsigned int iPair;
-        unsigned int iSignal;
-
-        obj = tdoa_construct_tdoa(tdoas->array[0]);
-
-        for (iSignal = 0; iSignal < tdoas->nSignals; iSignal++) {
-            
-            for (iPair = 0; iPair < tdoas->array[0]->nPairs; iPair++) {
-
-                if (tdoas->array[iSignal]->array[iPair] > obj->array[iPair]) {
-
-                    obj->array[iPair] = tdoas->array[iSignal]->array[iPair];
-
-                }
-
-            }
-        	
         }
 
         return obj;

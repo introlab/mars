@@ -19,28 +19,24 @@
 
     }
 
-    void xcorr2aimg_process(xcorr2aimg_obj * obj, const tdoas_obj * tdoas, const index_obj * index, const xcorrs_obj * xcorrs, aimg_obj * aimg) {
+    void xcorr2aimg_process(xcorr2aimg_obj * obj, const tdoas_obj * tdoas, const indexes_obj * indexes, const unsigned int iCoarse, const xcorrs_obj * xcorrs, aimg_obj * aimg) {
 
         unsigned int iPair;
-        unsigned int iIndex;
+        unsigned int iFine;
         unsigned int iPoint;
         unsigned int tau;
 
-        for (iPoint = 0; iPoint < aimg->aimgSize; iPoint++) {
+        memset(aimg->array, 0x00, sizeof(float) * aimg->aimgSize);
 
-            aimg->array[iPoint] = 0.0f;
+        for (iFine = 0; iFine < indexes->count[iCoarse]; iFine++) {
 
-        }
-
-        for (iIndex = 0; iIndex < index->nIndexes; iIndex++) {
-
-            iPoint = index->array[iIndex];
+            iPoint = indexes->array[iCoarse * indexes->nFines + iFine];
 
             for (iPair = 0; iPair < xcorrs->nSignals; iPair++) {               
 
-                tau = tdoas->array[iPoint]->array[iPair];
+                tau = tdoas->array[iPoint * tdoas->nPairs + iPair];
 
-                aimg->array[iPoint] += xcorrs->array[iPair]->array[tau];
+                aimg->array[iPoint] += xcorrs->array[iPair * xcorrs->frameSize + tau];
 
             }
 

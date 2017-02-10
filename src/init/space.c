@@ -1,39 +1,6 @@
 
     #include "space.h"
 
-    triangles_obj * space_triangles_triangle_divide(const triangle_obj * triangle) {
-
-        triangles_obj * triangles;
-        point_obj * point1;
-        point_obj * point2;
-        point_obj * point3;
-        point_obj * pointA;
-        point_obj * pointB;
-        point_obj * pointC;
-
-        triangles = triangles_construct_null(4);
-
-        pointA = triangle->pointA;
-        pointB = triangle->pointB;
-        pointC = triangle->pointC;
-
-        point1 = space_point_point(pointA, pointB);
-        point2 = space_point_point(pointB, pointC);
-        point3 = space_point_point(pointC, pointA);
-
-        triangles->array[0] = triangle_construct_point(pointA, point1, point3);
-        triangles->array[1] = triangle_construct_point(point1, pointB, point2);
-        triangles->array[2] = triangle_construct_point(point1, point2, point3);
-        triangles->array[3] = triangle_construct_point(point3, point2, pointC);
-
-        point_destroy(point1);
-        point_destroy(point2);
-        point_destroy(point3);
-
-        return triangles;
-
-    }
-
     triangles_obj * space_triangles_level_zero(void) {
 
         points_obj * points;
@@ -47,45 +14,248 @@
         h = sqrtf(5.0f)/5.0f;
         r = (2.0f/5.0f)*sqrtf(5.0f);
 
-        points = points_construct_null(12);
+        points = points_construct_zero(12);
 
-        points->array[0] = point_construct_xyz(0.0f, 0.0f, 1.0f);
-        points->array[11] = point_construct_xyz(0.0f, 0.0f, -1.0f);        
+        points->array[0 * 3 + 0] = 0.0f;
+        points->array[0 * 3 + 1] = 0.0f;
+        points->array[0 * 3 + 2] = 1.0f;
+        points->array[11 * 3 + 0] = 0.0f;
+        points->array[11 * 3 + 1] = 0.0f;
+        points->array[11 * 3 + 2] = -1.0f;
 
         for (iPoint = 0; iPoint < 5; iPoint++) {
 
-            points->array[iPoint+1] = point_construct_xyz(r * sinf(2*M_PI*((float) iPoint)/5.0f), 
-                                                        r * cosf(2*M_PI*((float) iPoint)/5.0f), 
-                                                        h);
+            points->array[(iPoint+1) * 3 + 0] = r * sinf(2*M_PI*((float) iPoint)/5.0f);
+            points->array[(iPoint+1) * 3 + 1] = r * cosf(2*M_PI*((float) iPoint)/5.0f);
+            points->array[(iPoint+1) * 3 + 2] = h;
 
-            points->array[iPoint+6] = point_construct_xyz(-1.0f * r * sinf(2*M_PI*((float) iPoint)/5.0f), 
-                                                          -1.0f * r * cosf(2*M_PI*((float) iPoint)/5.0f), 
-                                                          -1.0f * h);
+            points->array[(iPoint+6) * 3 + 0] = -1.0f * r * sinf(2*M_PI*((float) iPoint)/5.0f);
+            points->array[(iPoint+6) * 3 + 1] = -1.0f * r * cosf(2*M_PI*((float) iPoint)/5.0f);
+            points->array[(iPoint+6) * 3 + 2] = -1.0f * h;
 
         }        
 
-        triangles = triangles_construct_null(20);
+        triangles = triangles_construct_zero(20);
 
-        triangles->array[0] = triangle_construct_point(points->array[0], points->array[2], points->array[1]);
-        triangles->array[1] = triangle_construct_point(points->array[0], points->array[3], points->array[2]);
-        triangles->array[2] = triangle_construct_point(points->array[0], points->array[4], points->array[3]);
-        triangles->array[3] = triangle_construct_point(points->array[0], points->array[5], points->array[4]);
-        triangles->array[4] = triangle_construct_point(points->array[0], points->array[1], points->array[5]);
-        triangles->array[5] = triangle_construct_point(points->array[9], points->array[1], points->array[2]);
-        triangles->array[6] = triangle_construct_point(points->array[10], points->array[2], points->array[3]);
-        triangles->array[7] = triangle_construct_point(points->array[6], points->array[3], points->array[4]);
-        triangles->array[8] = triangle_construct_point(points->array[7], points->array[4], points->array[5]);
-        triangles->array[9] = triangle_construct_point(points->array[8], points->array[5], points->array[1]);
-        triangles->array[10] = triangle_construct_point(points->array[4], points->array[7], points->array[6]);
-        triangles->array[11] = triangle_construct_point(points->array[5], points->array[8], points->array[7]);
-        triangles->array[12] = triangle_construct_point(points->array[1], points->array[9], points->array[8]);
-        triangles->array[13] = triangle_construct_point(points->array[2], points->array[10], points->array[9]);
-        triangles->array[14] = triangle_construct_point(points->array[3], points->array[6], points->array[10]);
-        triangles->array[15] = triangle_construct_point(points->array[11], points->array[6], points->array[7]);
-        triangles->array[16] = triangle_construct_point(points->array[11], points->array[7], points->array[8]);
-        triangles->array[17] = triangle_construct_point(points->array[11], points->array[8], points->array[9]);
-        triangles->array[18] = triangle_construct_point(points->array[11], points->array[9], points->array[10]);
-        triangles->array[19] = triangle_construct_point(points->array[11], points->array[10], points->array[6]);
+        // Triangle 0: Points 0, 2, 1
+        triangles->array[0 * 9 + 0] = points->array[0 * 3 + 0];
+        triangles->array[0 * 9 + 1] = points->array[0 * 3 + 1];
+        triangles->array[0 * 9 + 2] = points->array[0 * 3 + 2];
+        triangles->array[0 * 9 + 3] = points->array[2 * 3 + 0];
+        triangles->array[0 * 9 + 4] = points->array[2 * 3 + 1];
+        triangles->array[0 * 9 + 5] = points->array[2 * 3 + 2];
+        triangles->array[0 * 9 + 6] = points->array[1 * 3 + 0];
+        triangles->array[0 * 9 + 7] = points->array[1 * 3 + 1];
+        triangles->array[0 * 9 + 8] = points->array[1 * 3 + 2];
+
+        // Triangle 1: Points 0, 3, 2
+        triangles->array[1 * 9 + 0] = points->array[0 * 3 + 0];
+        triangles->array[1 * 9 + 1] = points->array[0 * 3 + 1];
+        triangles->array[1 * 9 + 2] = points->array[0 * 3 + 2];
+        triangles->array[1 * 9 + 3] = points->array[3 * 3 + 0];
+        triangles->array[1 * 9 + 4] = points->array[3 * 3 + 1];
+        triangles->array[1 * 9 + 5] = points->array[3 * 3 + 2];
+        triangles->array[1 * 9 + 6] = points->array[2 * 3 + 0];
+        triangles->array[1 * 9 + 7] = points->array[2 * 3 + 1];
+        triangles->array[1 * 9 + 8] = points->array[2 * 3 + 2];
+
+        // Triangle 2: Points 0, 4, 3
+        triangles->array[2 * 9 + 0] = points->array[0 * 3 + 0];
+        triangles->array[2 * 9 + 1] = points->array[0 * 3 + 1];
+        triangles->array[2 * 9 + 2] = points->array[0 * 3 + 2];
+        triangles->array[2 * 9 + 3] = points->array[4 * 3 + 0];
+        triangles->array[2 * 9 + 4] = points->array[4 * 3 + 1];
+        triangles->array[2 * 9 + 5] = points->array[4 * 3 + 2];
+        triangles->array[2 * 9 + 6] = points->array[3 * 3 + 0];
+        triangles->array[2 * 9 + 7] = points->array[3 * 3 + 1];
+        triangles->array[2 * 9 + 8] = points->array[3 * 3 + 2];
+        
+        // Triangle 3: Points 0, 5, 4
+        triangles->array[3 * 9 + 0] = points->array[0 * 3 + 0];
+        triangles->array[3 * 9 + 1] = points->array[0 * 3 + 1];
+        triangles->array[3 * 9 + 2] = points->array[0 * 3 + 2];
+        triangles->array[3 * 9 + 3] = points->array[5 * 3 + 0];
+        triangles->array[3 * 9 + 4] = points->array[5 * 3 + 1];
+        triangles->array[3 * 9 + 5] = points->array[5 * 3 + 2];
+        triangles->array[3 * 9 + 6] = points->array[4 * 3 + 0];
+        triangles->array[3 * 9 + 7] = points->array[4 * 3 + 1];
+        triangles->array[3 * 9 + 8] = points->array[4 * 3 + 2];
+
+        // Triangle 4: Points 0, 1, 5
+        triangles->array[4 * 9 + 0] = points->array[0 * 3 + 0];
+        triangles->array[4 * 9 + 1] = points->array[0 * 3 + 1];
+        triangles->array[4 * 9 + 2] = points->array[0 * 3 + 2];
+        triangles->array[4 * 9 + 3] = points->array[1 * 3 + 0];
+        triangles->array[4 * 9 + 4] = points->array[1 * 3 + 1];
+        triangles->array[4 * 9 + 5] = points->array[1 * 3 + 2];
+        triangles->array[4 * 9 + 6] = points->array[5 * 3 + 0];
+        triangles->array[4 * 9 + 7] = points->array[5 * 3 + 1];
+        triangles->array[4 * 9 + 8] = points->array[5 * 3 + 2];
+
+        // Triangle 5: Points 9, 1, 2
+        triangles->array[5 * 9 + 0] = points->array[9 * 3 + 0];
+        triangles->array[5 * 9 + 1] = points->array[9 * 3 + 1];
+        triangles->array[5 * 9 + 2] = points->array[9 * 3 + 2];
+        triangles->array[5 * 9 + 3] = points->array[1 * 3 + 0];
+        triangles->array[5 * 9 + 4] = points->array[1 * 3 + 1];
+        triangles->array[5 * 9 + 5] = points->array[1 * 3 + 2];
+        triangles->array[5 * 9 + 6] = points->array[2 * 3 + 0];
+        triangles->array[5 * 9 + 7] = points->array[2 * 3 + 1];
+        triangles->array[5 * 9 + 8] = points->array[2 * 3 + 2];
+
+        // Triangle 6: Points 10, 2, 3
+        triangles->array[6 * 9 + 0] = points->array[10 * 3 + 0];
+        triangles->array[6 * 9 + 1] = points->array[10 * 3 + 1];
+        triangles->array[6 * 9 + 2] = points->array[10 * 3 + 2];
+        triangles->array[6 * 9 + 3] = points->array[2 * 3 + 0];
+        triangles->array[6 * 9 + 4] = points->array[2 * 3 + 1];
+        triangles->array[6 * 9 + 5] = points->array[2 * 3 + 2];
+        triangles->array[6 * 9 + 6] = points->array[3 * 3 + 0];
+        triangles->array[6 * 9 + 7] = points->array[3 * 3 + 1];
+        triangles->array[6 * 9 + 8] = points->array[3 * 3 + 2];
+
+        // Triangle 7: Points 6, 3, 4
+        triangles->array[7 * 9 + 0] = points->array[6 * 3 + 0];
+        triangles->array[7 * 9 + 1] = points->array[6 * 3 + 1];
+        triangles->array[7 * 9 + 2] = points->array[6 * 3 + 2];
+        triangles->array[7 * 9 + 3] = points->array[3 * 3 + 0];
+        triangles->array[7 * 9 + 4] = points->array[3 * 3 + 1];
+        triangles->array[7 * 9 + 5] = points->array[3 * 3 + 2];
+        triangles->array[7 * 9 + 6] = points->array[4 * 3 + 0];
+        triangles->array[7 * 9 + 7] = points->array[4 * 3 + 1];
+        triangles->array[7 * 9 + 8] = points->array[4 * 3 + 2];
+        
+        // Triangle 8: Points 7, 4, 5
+        triangles->array[8 * 9 + 0] = points->array[7 * 3 + 0];
+        triangles->array[8 * 9 + 1] = points->array[7 * 3 + 1];
+        triangles->array[8 * 9 + 2] = points->array[7 * 3 + 2];
+        triangles->array[8 * 9 + 3] = points->array[4 * 3 + 0];
+        triangles->array[8 * 9 + 4] = points->array[4 * 3 + 1];
+        triangles->array[8 * 9 + 5] = points->array[4 * 3 + 2];
+        triangles->array[8 * 9 + 6] = points->array[5 * 3 + 0];
+        triangles->array[8 * 9 + 7] = points->array[5 * 3 + 1];
+        triangles->array[8 * 9 + 8] = points->array[5 * 3 + 2];
+
+        // Triangle 9: Points 8, 5, 1
+        triangles->array[9 * 9 + 0] = points->array[8 * 3 + 0];
+        triangles->array[9 * 9 + 1] = points->array[8 * 3 + 1];
+        triangles->array[9 * 9 + 2] = points->array[8 * 3 + 2];
+        triangles->array[9 * 9 + 3] = points->array[5 * 3 + 0];
+        triangles->array[9 * 9 + 4] = points->array[5 * 3 + 1];
+        triangles->array[9 * 9 + 5] = points->array[5 * 3 + 2];
+        triangles->array[9 * 9 + 6] = points->array[1 * 3 + 0];
+        triangles->array[9 * 9 + 7] = points->array[1 * 3 + 1];
+        triangles->array[9 * 9 + 8] = points->array[1 * 3 + 2];
+
+        // Triangle 10: Points 4, 7, 6
+        triangles->array[10 * 9 + 0] = points->array[4 * 3 + 0];
+        triangles->array[10 * 9 + 1] = points->array[4 * 3 + 1];
+        triangles->array[10 * 9 + 2] = points->array[4 * 3 + 2];
+        triangles->array[10 * 9 + 3] = points->array[7 * 3 + 0];
+        triangles->array[10 * 9 + 4] = points->array[7 * 3 + 1];
+        triangles->array[10 * 9 + 5] = points->array[7 * 3 + 2];
+        triangles->array[10 * 9 + 6] = points->array[6 * 3 + 0];
+        triangles->array[10 * 9 + 7] = points->array[6 * 3 + 1];
+        triangles->array[10 * 9 + 8] = points->array[6 * 3 + 2];
+        
+        // Triangle 11: Points 5, 8, 7
+        triangles->array[11 * 9 + 0] = points->array[5 * 3 + 0];
+        triangles->array[11 * 9 + 1] = points->array[5 * 3 + 1];
+        triangles->array[11 * 9 + 2] = points->array[5 * 3 + 2];
+        triangles->array[11 * 9 + 3] = points->array[8 * 3 + 0];
+        triangles->array[11 * 9 + 4] = points->array[8 * 3 + 1];
+        triangles->array[11 * 9 + 5] = points->array[8 * 3 + 2];
+        triangles->array[11 * 9 + 6] = points->array[7 * 3 + 0];
+        triangles->array[11 * 9 + 7] = points->array[7 * 3 + 1];
+        triangles->array[11 * 9 + 8] = points->array[7 * 3 + 2];
+        
+        // Triangle 12: Points 1, 9, 8
+        triangles->array[12 * 9 + 0] = points->array[1 * 3 + 0];
+        triangles->array[12 * 9 + 1] = points->array[1 * 3 + 1];
+        triangles->array[12 * 9 + 2] = points->array[1 * 3 + 2];
+        triangles->array[12 * 9 + 3] = points->array[9 * 3 + 0];
+        triangles->array[12 * 9 + 4] = points->array[9 * 3 + 1];
+        triangles->array[12 * 9 + 5] = points->array[9 * 3 + 2];
+        triangles->array[12 * 9 + 6] = points->array[8 * 3 + 0];
+        triangles->array[12 * 9 + 7] = points->array[8 * 3 + 1];
+        triangles->array[12 * 9 + 8] = points->array[8 * 3 + 2];
+
+        // Triangle 13: Points 2, 10, 9
+        triangles->array[13 * 9 + 0] = points->array[2 * 3 + 0];
+        triangles->array[13 * 9 + 1] = points->array[2 * 3 + 1];
+        triangles->array[13 * 9 + 2] = points->array[2 * 3 + 2];
+        triangles->array[13 * 9 + 3] = points->array[10 * 3 + 0];
+        triangles->array[13 * 9 + 4] = points->array[10 * 3 + 1];
+        triangles->array[13 * 9 + 5] = points->array[10 * 3 + 2];
+        triangles->array[13 * 9 + 6] = points->array[9 * 3 + 0];
+        triangles->array[13 * 9 + 7] = points->array[9 * 3 + 1];
+        triangles->array[13 * 9 + 8] = points->array[9 * 3 + 2];
+
+        // Triangle 14: Points 3, 6, 10
+        triangles->array[14 * 9 + 0] = points->array[3 * 3 + 0];
+        triangles->array[14 * 9 + 1] = points->array[3 * 3 + 1];
+        triangles->array[14 * 9 + 2] = points->array[3 * 3 + 2];
+        triangles->array[14 * 9 + 3] = points->array[6 * 3 + 0];
+        triangles->array[14 * 9 + 4] = points->array[6 * 3 + 1];
+        triangles->array[14 * 9 + 5] = points->array[6 * 3 + 2];
+        triangles->array[14 * 9 + 6] = points->array[10 * 3 + 0];
+        triangles->array[14 * 9 + 7] = points->array[10 * 3 + 1];
+        triangles->array[14 * 9 + 8] = points->array[10 * 3 + 2];
+
+        // Triangle 15: Points 11, 6, 7
+        triangles->array[15 * 9 + 0] = points->array[11 * 3 + 0];
+        triangles->array[15 * 9 + 1] = points->array[11 * 3 + 1];
+        triangles->array[15 * 9 + 2] = points->array[11 * 3 + 2];
+        triangles->array[15 * 9 + 3] = points->array[6 * 3 + 0];
+        triangles->array[15 * 9 + 4] = points->array[6 * 3 + 1];
+        triangles->array[15 * 9 + 5] = points->array[6 * 3 + 2];
+        triangles->array[15 * 9 + 6] = points->array[7 * 3 + 0];
+        triangles->array[15 * 9 + 7] = points->array[7 * 3 + 1];
+        triangles->array[15 * 9 + 8] = points->array[7 * 3 + 2];
+
+        // Triangle 16: Points 11, 7, 8
+        triangles->array[16 * 9 + 0] = points->array[11 * 3 + 0];
+        triangles->array[16 * 9 + 1] = points->array[11 * 3 + 1];
+        triangles->array[16 * 9 + 2] = points->array[11 * 3 + 2];
+        triangles->array[16 * 9 + 3] = points->array[7 * 3 + 0];
+        triangles->array[16 * 9 + 4] = points->array[7 * 3 + 1];
+        triangles->array[16 * 9 + 5] = points->array[7 * 3 + 2];
+        triangles->array[16 * 9 + 6] = points->array[8 * 3 + 0];
+        triangles->array[16 * 9 + 7] = points->array[8 * 3 + 1];
+        triangles->array[16 * 9 + 8] = points->array[8 * 3 + 2];
+        
+        // Triangle 17: Points 11, 8, 9
+        triangles->array[17 * 9 + 0] = points->array[11 * 3 + 0];
+        triangles->array[17 * 9 + 1] = points->array[11 * 3 + 1];
+        triangles->array[17 * 9 + 2] = points->array[11 * 3 + 2];
+        triangles->array[17 * 9 + 3] = points->array[8 * 3 + 0];
+        triangles->array[17 * 9 + 4] = points->array[8 * 3 + 1];
+        triangles->array[17 * 9 + 5] = points->array[8 * 3 + 2];
+        triangles->array[17 * 9 + 6] = points->array[9 * 3 + 0];
+        triangles->array[17 * 9 + 7] = points->array[9 * 3 + 1];
+        triangles->array[17 * 9 + 8] = points->array[9 * 3 + 2];
+
+        // Triangle 18: Points 11, 9, 10
+        triangles->array[18 * 9 + 0] = points->array[11 * 3 + 0];
+        triangles->array[18 * 9 + 1] = points->array[11 * 3 + 1];
+        triangles->array[18 * 9 + 2] = points->array[11 * 3 + 2];
+        triangles->array[18 * 9 + 3] = points->array[9 * 3 + 0];
+        triangles->array[18 * 9 + 4] = points->array[9 * 3 + 1];
+        triangles->array[18 * 9 + 5] = points->array[9 * 3 + 2];
+        triangles->array[18 * 9 + 6] = points->array[10 * 3 + 0];
+        triangles->array[18 * 9 + 7] = points->array[10 * 3 + 1];
+        triangles->array[18 * 9 + 8] = points->array[10 * 3 + 2];
+
+        // Triangle 19: Points 11, 10, 6
+        triangles->array[19 * 9 + 0] = points->array[11 * 3 + 0];
+        triangles->array[19 * 9 + 1] = points->array[11 * 3 + 1];
+        triangles->array[19 * 9 + 2] = points->array[11 * 3 + 2];
+        triangles->array[19 * 9 + 3] = points->array[10 * 3 + 0];
+        triangles->array[19 * 9 + 4] = points->array[10 * 3 + 1];
+        triangles->array[19 * 9 + 5] = points->array[10 * 3 + 2];
+        triangles->array[19 * 9 + 6] = points->array[6 * 3 + 0];
+        triangles->array[19 * 9 + 7] = points->array[6 * 3 + 1];
+        triangles->array[19 * 9 + 8] = points->array[6 * 3 + 2];
 
         points_destroy(points);
 
@@ -96,21 +266,95 @@
     triangles_obj * space_triangles_level_next(const triangles_obj * triangles) {
 
         triangles_obj * obj;
-        triangles_obj * divided;
-        unsigned int iSignal;
+        unsigned int iTriangle;
 
-        obj = triangles_construct_null(triangles->nSignals * 4);
+        float point1[3];
+        float point2[3];
+        float point3[3];
+        float pointA[3];
+        float pointB[3];
+        float pointC[3];
+        float norm1;
+        float norm2;
+        float norm3;
 
-        for (iSignal = 0; iSignal < triangles->nSignals; iSignal++) {
+        obj = triangles_construct_zero(triangles->nTriangles * 4);
 
-            divided = space_triangles_triangle_divide(triangles->array[iSignal]);
+        for (iTriangle = 0; iTriangle < triangles->nTriangles; iTriangle++) {
 
-            obj->array[iSignal*4+0] = triangle_construct_triangle(divided->array[0]);
-            obj->array[iSignal*4+1] = triangle_construct_triangle(divided->array[1]);
-            obj->array[iSignal*4+2] = triangle_construct_triangle(divided->array[2]);
-            obj->array[iSignal*4+3] = triangle_construct_triangle(divided->array[3]);
+            pointA[0] = triangles->array[iTriangle*9+0];
+            pointA[1] = triangles->array[iTriangle*9+1];
+            pointA[2] = triangles->array[iTriangle*9+2];
+            pointB[0] = triangles->array[iTriangle*9+3];
+            pointB[1] = triangles->array[iTriangle*9+4];
+            pointB[2] = triangles->array[iTriangle*9+5];
+            pointC[0] = triangles->array[iTriangle*9+6];
+            pointC[1] = triangles->array[iTriangle*9+7];
+            pointC[2] = triangles->array[iTriangle*9+8];
 
-            triangles_destroy(divided);
+            point1[0] = pointA[0] + pointB[0];
+            point1[1] = pointA[1] + pointB[1];
+            point1[2] = pointA[2] + pointB[2];
+            point2[0] = pointB[0] + pointC[0];
+            point2[1] = pointB[1] + pointC[1];
+            point2[2] = pointB[2] + pointC[2];
+            point3[0] = pointC[0] + pointA[0];
+            point3[1] = pointC[1] + pointA[1];
+            point3[2] = pointC[2] + pointA[2];
+
+            norm1 = sqrtf(point1[0] * point1[0] + point1[1] * point1[1] + point1[2] * point1[2]);
+            norm2 = sqrtf(point2[0] * point2[0] + point2[1] * point2[1] + point2[2] * point2[2]);
+            norm3 = sqrtf(point3[0] * point3[0] + point3[1] * point3[1] + point3[2] * point3[2]);
+
+            point1[0] /= norm1;
+            point1[1] /= norm1;
+            point1[2] /= norm1;
+            point2[0] /= norm2;
+            point2[1] /= norm2;
+            point2[2] /= norm2;
+            point3[0] /= norm3;
+            point3[1] /= norm3;
+            point3[2] /= norm3;
+
+            obj->array[(iTriangle*4+0)*9+0] = pointA[0];
+            obj->array[(iTriangle*4+0)*9+1] = pointA[1];
+            obj->array[(iTriangle*4+0)*9+2] = pointA[2];
+            obj->array[(iTriangle*4+0)*9+3] = point1[0];
+            obj->array[(iTriangle*4+0)*9+4] = point1[1];
+            obj->array[(iTriangle*4+0)*9+5] = point1[2];
+            obj->array[(iTriangle*4+0)*9+6] = point3[0];
+            obj->array[(iTriangle*4+0)*9+7] = point3[1];
+            obj->array[(iTriangle*4+0)*9+8] = point3[2];
+
+            obj->array[(iTriangle*4+1)*9+0] = point1[0];
+            obj->array[(iTriangle*4+1)*9+1] = point1[1];
+            obj->array[(iTriangle*4+1)*9+2] = point1[2];
+            obj->array[(iTriangle*4+1)*9+3] = pointB[0];
+            obj->array[(iTriangle*4+1)*9+4] = pointB[1];
+            obj->array[(iTriangle*4+1)*9+5] = pointB[2];
+            obj->array[(iTriangle*4+1)*9+6] = point2[0];
+            obj->array[(iTriangle*4+1)*9+7] = point2[1];
+            obj->array[(iTriangle*4+1)*9+8] = point2[2];
+
+            obj->array[(iTriangle*4+2)*9+0] = point1[0];
+            obj->array[(iTriangle*4+2)*9+1] = point1[1];
+            obj->array[(iTriangle*4+2)*9+2] = point1[2];
+            obj->array[(iTriangle*4+2)*9+3] = point2[0];
+            obj->array[(iTriangle*4+2)*9+4] = point2[1];
+            obj->array[(iTriangle*4+2)*9+5] = point2[2];
+            obj->array[(iTriangle*4+2)*9+6] = point3[0];
+            obj->array[(iTriangle*4+2)*9+7] = point3[1];
+            obj->array[(iTriangle*4+2)*9+8] = point3[2];      
+
+            obj->array[(iTriangle*4+3)*9+0] = point3[0];
+            obj->array[(iTriangle*4+3)*9+1] = point3[1];
+            obj->array[(iTriangle*4+3)*9+2] = point3[2];
+            obj->array[(iTriangle*4+3)*9+3] = point2[0];
+            obj->array[(iTriangle*4+3)*9+4] = point2[1];
+            obj->array[(iTriangle*4+3)*9+5] = point2[2];
+            obj->array[(iTriangle*4+3)*9+6] = pointC[0];
+            obj->array[(iTriangle*4+3)*9+7] = pointC[1];
+            obj->array[(iTriangle*4+3)*9+8] = pointC[2];                     
 
         }
 
@@ -132,51 +376,7 @@
             obj = triangles;
         }
 
-        return obj;
-
-    }
-
-    float space_point_dist(const point_obj * point1, const point_obj * point2) {
-
-        float dx, dy, dz;
-        float dist;
-
-        dx = point1->coord->x - point2->coord->x;
-        dy = point1->coord->y - point2->coord->y;
-        dz = point1->coord->z - point2->coord->z;
-
-        dist = sqrtf(dx * dx + dy * dy + dz * dz);
-
-        return dist;
-
-    }
-
-    point_obj * space_point_point(const point_obj * point1, const point_obj * point2) {
-
-        point_obj * obj;
-        float x1, y1, z1;
-        float x2, y2, z2;
-        float x12, y12, z12;
-        float norm12;       
-
-        x1 = point1->coord->x;
-        y1 = point1->coord->y;
-        z1 = point1->coord->z;
-        x2 = point2->coord->x;
-        y2 = point2->coord->y;
-        z2 = point2->coord->z;
-
-        x12 = x1 + x2;
-        y12 = y1 + y2;
-        z12 = z1 + z2;
-
-        norm12 = sqrtf(x12*x12+y12*y12+z12*z12);
-
-        x12 = x12 / norm12;
-        y12 = y12 / norm12;
-        z12 = z12 / norm12;
-
-        obj = point_construct_xyz(x12,y12,z12);
+        //triangles_printf(obj);
 
         return obj;
 
@@ -184,85 +384,84 @@
 
     points_obj * space_points_triangles(const triangles_obj * triangles) {
 
-        points_obj * obj;
-        unsigned int iSignal;
+        unsigned int iTriangle;
+        unsigned int iPointInTriangle;
+        unsigned int iPoint;
+        unsigned int nPoints;
+    
+        float diff, dist;        
+        float point[3];
 
-        obj = points_construct_null(triangles->nSignals * 3);
+        points_obj * pointsContainer;
+        points_obj * pointsUnique;
 
-        for (iSignal = 0; iSignal < triangles->nSignals; iSignal++) {
-
-            obj->array[iSignal*3+0] = point_construct_point(triangles->array[iSignal]->pointA);
-            obj->array[iSignal*3+1] = point_construct_point(triangles->array[iSignal]->pointB);
-            obj->array[iSignal*3+2] = point_construct_point(triangles->array[iSignal]->pointC);
-
-        }
-
-        return obj;
-
-    }
-
-    points_obj * space_points_points(const points_obj * points) {
-
-        points_obj * obj;
-        points_obj * tmp;
-
-        unsigned int iSignal1;
-        unsigned int iSignal2;
-        unsigned int nSignalsUnique;
         unsigned char match;
 
-        tmp = points_construct_null(points->nSignals);
-        nSignalsUnique = 0;
+        pointsContainer = points_construct_zero(triangles->nTriangles*3);
 
-        for (iSignal1 = 0; iSignal1 < points->nSignals; iSignal1++) {
+        nPoints = 0;
 
-            match = 0;
+        for (iTriangle = 0; iTriangle < triangles->nTriangles; iTriangle++) {
 
-            for (iSignal2 = 0; iSignal2 < nSignalsUnique; iSignal2++) {
+            for (iPointInTriangle = 0; iPointInTriangle < 3; iPointInTriangle++) {
 
-                if (space_point_dist(points->array[iSignal1], tmp->array[iSignal2]) < 1E-10) {
+                match = 0;
 
-                    match = 1;
-                    break;
+                point[0] = triangles->array[iTriangle * 9 + iPointInTriangle * 3 + 0];
+                point[1] = triangles->array[iTriangle * 9 + iPointInTriangle * 3 + 1];
+                point[2] = triangles->array[iTriangle * 9 + iPointInTriangle * 3 + 2];
+
+                for (iPoint = 0; iPoint < nPoints; iPoint++) {
+
+                    dist = 0.0f;
+                    
+                    diff = point[0] - pointsContainer->array[iPoint * 3 + 0];
+                    dist += diff * diff;
+                    diff = point[1] - pointsContainer->array[iPoint * 3 + 1];
+                    dist += diff * diff;
+                    diff = point[2] - pointsContainer->array[iPoint * 3 + 2];
+                    dist += diff * diff;
+
+                    if (dist < 1E-10) {
+
+                        match = 1;
+                        break;
+
+                    }
+
+                }
+
+                if (match == 0) {
+
+                    pointsContainer->array[nPoints * 3 + 0] = point[0];
+                    pointsContainer->array[nPoints * 3 + 1] = point[1];
+                    pointsContainer->array[nPoints * 3 + 2] = point[2];
+                    nPoints++;
 
                 }
 
             }
 
-            if (match == 0) {
-
-                tmp->array[nSignalsUnique] = point_construct_point(points->array[iSignal1]);
-                nSignalsUnique++;
-
-            }
-
         }
 
-        obj = points_construct_null(nSignalsUnique);
+        pointsUnique = points_construct_zero(nPoints);
+        memcpy(pointsUnique->array, pointsContainer->array, nPoints*3*sizeof(float));
 
-        for (iSignal1 = 0; iSignal1 < nSignalsUnique; iSignal1++) {
-            obj->array[iSignal1] = point_construct_point(tmp->array[iSignal1]);
-        }
+        points_destroy(pointsContainer);
 
-        points_destroy(tmp);
-
-        return obj;
+        return pointsUnique;
 
     }
 
     points_obj * space_sphere(const unsigned int level) {
 
         points_obj * obj;
-
         triangles_obj * triangles;
-        points_obj * points;
 
         triangles = space_triangles_level_level(level);
-        points = space_points_triangles(triangles);
-        obj = space_points_points(points);
+        obj = space_points_triangles(triangles);
 
         triangles_destroy(triangles);
-        points_destroy(points);
 
         return obj;
 
@@ -273,43 +472,43 @@
         points_obj * obj;
 
         triangles_obj * triangles;
-        points_obj * points;
         points_obj * pointsSphere;
-        unsigned int nSignals;
-        unsigned int iSignal;
+        unsigned int nPoints;
+        unsigned int iPoint;
 
         triangles = space_triangles_level_level(level);
-        points = space_points_triangles(triangles);
-        pointsSphere = space_points_points(points);
+        pointsSphere = space_points_triangles(triangles);
 
-        nSignals = 0;
+        nPoints = 0;
 
-        for (iSignal = 0; iSignal < pointsSphere->nSignals; iSignal++) {
+        for (iPoint = 0; iPoint < pointsSphere->nPoints; iPoint++) {
         
-            if (pointsSphere->array[iSignal]->coord->z >= 0.0f) {
+            if (pointsSphere->array[iPoint*3+2] >= 0.0f) {
             
-                nSignals++;
+                nPoints++;
 
             }
 
         }
 
-        obj = points_construct_null(nSignals);
-        nSignals = 0;
+        obj = points_construct_zero(nPoints);
+        nPoints = 0;
 
-        for (iSignal = 0; iSignal < pointsSphere->nSignals; iSignal++) {
+        for (iPoint = 0; iPoint < pointsSphere->nPoints; iPoint++) {
 
-            if (pointsSphere->array[iSignal]->coord->z >= 0.0f) {
+            if (pointsSphere->array[iPoint*3+2] >= 0.0f) {
             
-                obj->array[nSignals] = point_construct_point(pointsSphere->array[iSignal]);
-                nSignals++;
+                obj->array[nPoints*3+0] = pointsSphere->array[iPoint*3+0];
+                obj->array[nPoints*3+1] = pointsSphere->array[iPoint*3+1];
+                obj->array[nPoints*3+2] = pointsSphere->array[iPoint*3+2];
+
+                nPoints++;
 
             }
 
         }
 
-        triangles_destroy(triangles);
-        points_destroy(points);        
+        triangles_destroy(triangles);  
         points_destroy(pointsSphere);
 
         return obj;

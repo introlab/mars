@@ -8,7 +8,8 @@
         obj = (particle2coherence_obj *) malloc(sizeof(particle2coherence_obj));
 
         obj->sigmaR = sigmaR;
-        obj->gaussian = gaussian_3d_construct_weightmusigma(1.0f, 0.0f, 0.0f, 0.0f, obj->sigmaR, obj->sigmaR, obj->sigmaR);
+        obj->expScale = 1.0f / (sigmaR*sigmaR*sigmaR * powf(2*M_PI,(3.0f/2.0f)));
+        obj->expFactor = -1.0f / (2.0f * sigmaR * sigmaR);
 
         return obj;
 
@@ -16,37 +17,51 @@
 
     void particle2coherence_destroy(particle2coherence_obj * obj) {
 
+        free((void *) obj);
+
     }
 
-    void particle2coherence_process(particle2coherence_obj * obj, const particles_obj * particles, const pots_obj * pots, coherence_obj * coherence) {
+    void particle2coherence_process(particle2coherence_obj * obj, const particles_obj * particles, const pots_obj * pots, const unsigned int iTrack, coherences_obj * coherences) {
 
-        unsigned int iS;
+        unsigned int iPot;
         unsigned int iParticle;
-        float value;
+
         float total;
-        float w;
-        float x,y,z;
+        float x1, y1, z1;
+        float x2, y2, z2, w2;
+        float dx, dy, dz;
+        float scale, factor;
+        float expr;        
 
-        for (iS = 0; iS < pots->nSignals; iS++) {
+        scale = obj->expScale;
+        factor = obj->expFactor;
 
-            obj->gaussian->mu_x = pots->array[iS]->coord->x;
-            obj->gaussian->mu_y = pots->array[iS]->coord->y;
-            obj->gaussian->mu_z = pots->array[iS]->coord->z;
+        for (iPot = 0; iPot < pots->nPots; iPot++) {
+
+            x1 = pots->array[iPot * 4 + 0];
+            y1 = pots->array[iPot * 4 + 1];
+            z1 = pots->array[iPot * 4 + 2];
 
             total = 0.0f;
 
-            for (iParticle = 0; iParticle < particles->nSignals; iParticle++) {
+            for (iParticle = 0; iParticle < particles->nParticles; iParticle++) {
                  
-                x = particles->array[iParticle]->x->x;
-                y = particles->array[iParticle]->x->y;
-                z = particles->array[iParticle]->x->z;
-                w = particles->array[iParticle]->w;
+                x2 = particles->array[iParticle * 7 + 0];
+                y2 = particles->array[iParticle * 7 + 1];
+                z2 = particles->array[iParticle * 7 + 2];
+                w2 = particles->array[iParticle * 7 + 6];
 
-                total += w * gaussian_3d_eval(obj->gaussian, x, y, z);
+                dx = x1 - x2;
+                dy = y1 - y2;
+                dz = z1 - z2;
+
+                total += w2 * expf(factor * (dx*dx + dy*dy + dz*dz));
 
             }
 
-            coherence->probs[iS] = total;
+            total *= scale;
+
+            coherences->array[iTrack * coherences->nPots + iPot] = total;
 
         }
 

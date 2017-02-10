@@ -27,27 +27,35 @@
         if (objs->src_raw_file != NULL) {
             src_raw_file_destroy(objs->src_raw_file);
         }
+
         if (objs->msg_hops != NULL) {
             msg_hops_destroy(objs->msg_hops);
         }
+
         if (objs->mod_stft != NULL) {
             mod_stft_destroy(objs->mod_stft);
         }
+
         if (objs->msg_spectra != NULL) {
             msg_spectra_destroy(objs->msg_spectra);
         }
+
         if (objs->mod_ssl != NULL) {
             mod_ssl_destroy(objs->mod_ssl);
         }
+
         if (objs->snk_pots_file != NULL) {
             snk_pots_file_destroy(objs->snk_pots_file);
         }
+
         if (objs->mod_sst != NULL) {
-            mod_sst_destroy(objs->mod_sst);
+            //mod_sst_destroy(objs->mod_sst);
         }
+        
         if (objs->msg_tracks != NULL) {
             msg_tracks_destroy(objs->msg_tracks);
         }
+        
         if (objs->snk_tracks_file != NULL) {
             snk_tracks_file_destroy(objs->snk_tracks_file);
         }

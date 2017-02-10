@@ -27,8 +27,8 @@
 
     void mod_stft_process(mod_stft_obj * obj, const msg_hops_obj * msg_hops, msg_spectra_obj * msg_spectra) {
 
-        hop2frame_process_many(obj->hop2frame, msg_hops->hops, obj->frames);
-        frame2freq_process_many(obj->frame2freq, obj->frames, msg_spectra->freqs);
+        hop2frame_process(obj->hop2frame, msg_hops->hops, obj->frames);
+        frame2freq_process(obj->frame2freq, obj->frames, msg_spectra->freqs);
 
     }
 
