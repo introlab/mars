@@ -8,7 +8,6 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(PC_FFTW3 REQUIRED fftw3f)
 pkg_check_modules(PC_ALSA REQUIRED alsa)
 pkg_check_modules(PC_LIBCONFIG REQUIRED libconfig)
-pkg_check_modules(PC_NCURSES REQUIRED ncurses)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
@@ -112,5 +111,4 @@ add_executable(demo
 )
 target_link_libraries(demo
     mars
-    ${PC_NCURSES}
 )

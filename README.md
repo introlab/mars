@@ -24,11 +24,9 @@ Installation
 ```sudo apt-get install libasound2-dev```
 4. Install the Libconfig library:
 ```sudo apt-get install libconfig++-dev```
-5. Install the NCurses library:
-```sudo apt-get install libncurses-dev```
-6. Run cmake: 
+5. Run cmake: 
 ```cmake CMakeLists.txt```
-7. Compile code with make.
+6. Compile code with make.
 
 Run
 ---
