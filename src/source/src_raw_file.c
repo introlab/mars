@@ -23,7 +23,7 @@
             exit(EXIT_FAILURE);
         }
 
-        if (!((cfg->nBits == 8) | (cfg->nBits == 16) | (cfg->nBits == 32))) {
+        if (!((cfg->nBits == 16) | (cfg->nBits == 32))) {
             printf("Invalid number of bits.\n");
             exit(EXIT_FAILURE);        	
         }
@@ -60,13 +60,6 @@
                 if (!feof(obj->fp)) {
 
                     switch (obj->nBits) {
-                        
-                        case 8:
-                        
-                            tmp = fread(&sampleChar, sizeof(signed char), 1, obj->fp);
-                            sample = pcm_signed08bits2normalized(sampleChar);
-                        
-                        break;
                         
                         case 16:
                         

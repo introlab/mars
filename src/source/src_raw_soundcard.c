@@ -15,18 +15,12 @@
         obj->nBits = cfg->nBits;
         obj->fS = cfg->fS;
 
-        if (!((cfg->nBits == 8) | (cfg->nBits == 16) | (cfg->nBits == 32))) {
+        if (!((cfg->nBits == 16) | (cfg->nBits == 32))) {
             printf("Invalid number of bits.\n");
             exit(EXIT_FAILURE);         
         }
 
         switch(cfg->nBits) {
-
-            case 8:
-
-                format = SND_PCM_FORMAT_S8_LE;
-
-            break;
 
             case 16:
 
@@ -41,8 +35,6 @@
             break;
 
         }
-
-        
 
         obj->cardName = (char *) malloc(sizeof(char) * (strlen(cfg->cardName) + 1));
         strcpy(obj->cardName, cfg->cardName);
@@ -100,22 +92,22 @@
 
     }
 
-    void src_raw_8soundusb_destroy(src_raw_8soundusb_obj * obj) {
+    void src_raw_soundcard_destroy(src_raw_soundcard_obj * obj) {
 
         free((void *) obj->cardName);
         free((void *) obj);
 
     }
 
-    int src_raw_8soundusb_process(src_raw_8soundusb_obj * obj, msg_hops_obj * msg_hops) {
+    int src_raw_soundcard_process(src_raw_soundcard_obj * obj, msg_hops_obj * msg_hops) {
 
     }
 
-    src_raw_8soundusb_cfg * src_raw_8soundusb_cfg_construct(void) {
+    src_raw_soundcard_cfg * src_raw_soundcard_cfg_construct(void) {
 
-        src_raw_8soundusb_cfg * cfg;
+        src_raw_soundcard_cfg * cfg;
 
-        cfg = (src_raw_8soundusb_cfg *) malloc(sizeof(src_raw_8soundusb_cfg));
+        cfg = (src_raw_soundcard_cfg *) malloc(sizeof(src_raw_soundcard_cfg));
 
         cfg->hopSize = 0;
         cfg->nMics = 0;
@@ -127,7 +119,7 @@
 
     }
 
-    void src_raw_8soundusb_cfg_destroy(src_raw_8soundusb_cfg * cfg) {
+    void src_raw_8soundusb_cfg_destroy(src_raw_soundcard_cfg * cfg) {
 
         if (cfg->cardName != NULL) {
             free((void *) cfg->cardName);

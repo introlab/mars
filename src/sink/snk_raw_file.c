@@ -23,7 +23,7 @@
             exit(EXIT_FAILURE);
         }
 
-        if (!((cfg->nBits == 8) | (cfg->nBits == 16) | (cfg->nBits == 32))) {
+        if (!((cfg->nBits == 16) | (cfg->nBits == 32))) {
             printf("Invalid number of bits.\n");
             exit(EXIT_FAILURE);         
         }
@@ -60,13 +60,6 @@
                 sample = msg_hops->hops->array[iMic * msg_hops->hops->hopSize + iSample];
 
                 switch (obj->nBits) {
-
-                    case 8:
-                    
-                        sampleChar = pcm_normalized2signed08bits(sample);
-                        tmp = fwrite(&sampleChar, sizeof(signed char), 1, obj->fp);
-                    
-                    break;
                     
                     case 16:
 

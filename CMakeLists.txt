@@ -73,7 +73,7 @@ set(SRC
     src/sink/snk_raw_file.c
     src/sink/snk_tracks_file.c
 
-    #src/source/src_raw_8soundusb.c
+    src/source/src_raw_soundcard.c
     src/source/src_raw_file.c
 
     src/system/frame2freq.c
