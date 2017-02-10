@@ -19,7 +19,8 @@
 
     typedef struct parameters_raw_obj {
 
-        unsigned int nBits;
+        unsigned int nBitsIn;
+        unsigned int nBitsOut;
 
     } parameters_raw_obj;
 

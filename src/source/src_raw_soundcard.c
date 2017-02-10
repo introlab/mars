@@ -15,7 +15,34 @@
         obj->nBits = cfg->nBits;
         obj->fS = cfg->fS;
 
-        format = SND_PCM_FORMAT_S32_LE;
+        if (!((cfg->nBits == 8) | (cfg->nBits == 16) | (cfg->nBits == 32))) {
+            printf("Invalid number of bits.\n");
+            exit(EXIT_FAILURE);         
+        }
+
+        switch(cfg->nBits) {
+
+            case 8:
+
+                format = SND_PCM_FORMAT_S8_LE;
+
+            break;
+
+            case 16:
+
+                format = SND_PCM_FORMAT_S16_LE;
+
+            break;
+
+            case 32:
+
+                format = SND_PCM_FORMAT_S32_LE;
+
+            break;
+
+        }
+
+        
 
         obj->cardName = (char *) malloc(sizeof(char) * (strlen(cfg->cardName) + 1));
         strcpy(obj->cardName, cfg->cardName);

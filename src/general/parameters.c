@@ -93,7 +93,8 @@
 
         printf("raw:\n");
 
-        printf(" - nBits: %u\n",params->raw->nBits);
+        printf(" - nBitsIn: %u\n",params->raw->nBitsIn);
+        printf(" - nBitsOut: %u\n",params->raw->nBitsOut);
 
         // SSL
 

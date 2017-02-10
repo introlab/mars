@@ -96,12 +96,21 @@
 
         // Raw
 
-            // nBits
-            if (config_lookup_int(&cfg, "raw.nBits", &valueInt)) { 
-                params->raw->nBits = valueInt;
+            // nBitsIn
+            if (config_lookup_int(&cfg, "raw.nBitsIn", &valueInt)) { 
+                params->raw->nBitsIn = valueInt;
             } 
             else { 
-                printf("Missing: raw.nBits\n"); 
+                printf("Missing: raw.nBitsIn\n"); 
+                exit(EXIT_FAILURE);
+            }
+            
+            // nBitsOut
+            if (config_lookup_int(&cfg, "raw.nBitsOut", &valueInt)) { 
+                params->raw->nBitsOut = valueInt;
+            } 
+            else { 
+                printf("Missing: raw.nBitsOut\n"); 
                 exit(EXIT_FAILURE);
             }
 

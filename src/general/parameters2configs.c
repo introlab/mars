@@ -25,7 +25,7 @@
 
         cfg->hopSize = params->general->hopSize;
         cfg->nMics = params->general->mics->nMics;
-        cfg->nBits = params->raw->nBits;
+        cfg->nBits = params->raw->nBitsIn;
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
 
@@ -54,7 +54,7 @@
 
         cfg->hopSize = params->general->hopSize;
         cfg->nMics = params->general->mics->nMics;
-        cfg->nBits = params->raw->nBits;
+        cfg->nBits = params->raw->nBitsOut;
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
 

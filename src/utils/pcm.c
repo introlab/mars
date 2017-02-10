@@ -68,6 +68,6 @@
         	sampleCrop = sample;
         }
 
-        return ((signed short) (sampleCrop*fabs(INT_MIN)));
+        return ((signed int) (sampleCrop*fabs(INT_MIN)));
     	
     }
