@@ -1,23 +1,14 @@
     
-    #include "src_raw_8soundusb.h"
+    #include "src_raw_soundcard.h"
 
-    src_raw_8soundusb_obj * src_raw_8soundusb_construct(const src_raw_8soundusb_cfg * cfg) {
+    src_raw_soundcard_obj * src_raw_soundcard_construct(const src_raw_soundcard_cfg * cfg) {
 
-        src_raw_8soundusb_obj * obj;
+        src_raw_soundcard_obj * obj;
         snd_pcm_hw_params_t * hw_params;
         snd_pcm_format_t format;
         int err;
 
-        obj = (src_raw_8soundusb_obj *) malloc(sizeof(src_raw_8soundusb_obj));
-
-        if (cfg->nMics != 8) {
-            printf("Number of channels should be set to 8 with this sound card.\n");
-            exit(EXIT_FAILURE);
-        }
-        if (cfg->nBits != 16) {
-            printf("Number of bits should be set to 16 with this sound card.\n");
-            exit(EXIT_FAILURE);
-        }
+        obj = (src_raw_soundcard_obj *) malloc(sizeof(src_raw_soundcard_obj));
 
         obj->hopSize = cfg->hopSize;
         obj->nMics = cfg->nMics;

@@ -12,8 +12,10 @@
         obj->hopSize = cfg->hopSize;
         obj->nMics = cfg->nMics;
         obj->nBits = cfg->nBits;
+        
         obj->fileName = (char *) malloc(sizeof(char) * (strlen(cfg->fileName)+1));
         strcpy(obj->fileName, cfg->fileName);
+        
         obj->fp = fopen(obj->fileName,"rb");
 
         if (obj->fp == NULL) {
@@ -58,17 +60,26 @@
                 if (!feof(obj->fp)) {
 
                     switch (obj->nBits) {
+                        
                         case 8:
+                        
                             tmp = fread(&sampleChar, sizeof(signed char), 1, obj->fp);
                             sample = pcm_signed08bits2normalized(sampleChar);
+                        
                         break;
+                        
                         case 16:
+                        
                             tmp = fread(&sampleShort, sizeof(signed short), 1, obj->fp);
                             sample = pcm_signed16bits2normalized(sampleShort);
+                        
                         break;
+                        
                         case 32:
+                        
                             tmp = fread(&sampleInt, sizeof(signed int), 1, obj->fp);
                             sample = pcm_signed32bits2normalized(sampleInt);
+                        
                         break;
                     }
 

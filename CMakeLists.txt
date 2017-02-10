@@ -70,6 +70,7 @@ set(SRC
     src/signal/xcorr.c
 
     src/sink/snk_pots_file.c
+    src/sink/snk_raw_file.c
     src/sink/snk_tracks_file.c
 
     #src/source/src_raw_8soundusb.c

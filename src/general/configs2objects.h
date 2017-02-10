@@ -3,6 +3,7 @@
 
     #include "../source/src_raw_file.h"
     #include "../message/msg_hops.h"
+    #include "../sink/snk_raw_file.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"
     #include "../module/mod_ssl.h"

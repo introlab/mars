@@ -9,6 +9,7 @@
 
         cfgs->src_raw_file = (src_raw_file_cfg *) NULL;
         cfgs->msg_hops = (msg_hops_cfg *) NULL;
+        cfgs->snk_raw_file = (snk_raw_file_cfg *) NULL;
         cfgs->mod_stft = (mod_stft_cfg *) NULL;
         cfgs->msg_spectra = (msg_spectra_cfg *) NULL;
         cfgs->mod_ssl = (mod_ssl_cfg *) NULL;
@@ -29,6 +30,9 @@
         }
         if (cfgs->msg_hops != NULL) {
             msg_hops_cfg_destroy(cfgs->msg_hops);
+        }
+        if (cfgs->snk_raw_file != NULL) {
+            snk_raw_file_cfg_destroy(cfgs->snk_raw_file);
         }
         if (cfgs->mod_stft != NULL) {
             mod_stft_cfg_destroy(cfgs->mod_stft);

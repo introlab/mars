@@ -34,27 +34,16 @@
         obj->idsRemoved = (unsigned long long *) malloc(sizeof(unsigned long long) * obj->nTracksMax);
                 
         obj->type = (char *) malloc(sizeof(char) * obj->nTracksMax);
-
-        if (strcmp(obj->mode, "kalman") == 0) {
         
-            obj->kalmans = (kalman_obj **) malloc(sizeof(kalman_obj *) * obj->nTracksMax);    
-
-        }
-        else {
-
-            obj->particles = (particles_obj **) malloc(sizeof(particles_obj *) * obj->nTracksMax);
-
-        }
-
+        obj->kalmans = (kalman_obj **) malloc(sizeof(kalman_obj *) * obj->nTracksMax); 
+        memset(obj->kalmans, 0x00, sizeof(kalman_obj *) * obj->nTracksMax);
+        obj->particles = (particles_obj **) malloc(sizeof(particles_obj *) * obj->nTracksMax);
+        memset(obj->particles, 0x00, sizeof(particles_obj *) * obj->nTracksMax);
         
         obj->theta_new = cfg->theta_new;
         obj->N_prob = cfg->N_prob;
         obj->theta_prob = cfg->theta_prob;
         obj->N_inactive = (unsigned int *) malloc(sizeof(unsigned int) * obj->nTracksMax);
-        
-        for (iTrackMax = 0; iTrackMax < obj->nTracksMax; iTrackMax++) {
-            obj->N_inactive[iTrackMax] = cfg->N_inactive[iTrackMax];
-        }
 
         obj->theta_inactive = cfg->theta_inactive;
 
@@ -77,6 +66,8 @@
                 obj->particles[iTrackMax] =  particles_construct_zero(cfg->nParticles);       
             }
             
+            obj->N_inactive[iTrackMax] = cfg->N_inactive[iTrackMax];
+
             obj->n_prob[iTrackMax] = 0;
             obj->mean_prob[iTrackMax] = 0.0f;
             obj->n_inactive[iTrackMax] = 0;
@@ -185,6 +176,10 @@
             mixture_destroy(obj->mixtures[iTrackMax]);
             coherences_destroy(obj->coherences[iTrackMax]);
             postprobs_destroy(obj->postprobs[iTrackMax]);
+
+        }
+
+        for (iTrackMax = 0; iTrackMax < obj->nTracksMax; iTrackMax++) {
 
             if (obj->kalmans[iTrackMax] != NULL) {
 

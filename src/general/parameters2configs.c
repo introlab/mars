@@ -5,6 +5,7 @@
 
         cfgs->src_raw_file = parameters2configs_src_raw_file(params);
         cfgs->msg_hops = parameters2configs_msg_hops(params);
+        cfgs->snk_raw_file = parameters2configs_snk_raw_file(params);
         cfgs->mod_stft = parameters2configs_mod_stft(params);
         cfgs->msg_spectra = parameters2configs_msg_spectra(params);
         cfgs->mod_ssl = parameters2configs_mod_ssl(params);
@@ -42,6 +43,22 @@
         cfg->nMics = params->general->mics->nMics;
 
         return cfg;        
+
+    }
+
+    snk_raw_file_cfg * parameters2configs_snk_raw_file(const parameters * params) {
+
+        snk_raw_file_cfg * cfg;
+
+        cfg = snk_raw_file_cfg_construct();
+
+        cfg->hopSize = params->general->hopSize;
+        cfg->nMics = params->general->mics->nMics;
+        cfg->nBits = params->raw->nBits;
+        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
+        strcpy(cfg->fileName, "");
+
+        return cfg;
 
     }
 

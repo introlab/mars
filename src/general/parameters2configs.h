@@ -10,6 +10,8 @@
 
     msg_hops_cfg * parameters2configs_msg_hops(const parameters * params);
 
+    snk_raw_file_cfg * parameters2configs_snk_raw_file(const parameters * params);
+
     mod_stft_cfg * parameters2configs_mod_stft(const parameters * params);
 
     msg_spectra_cfg * parameters2configs_msg_spectra(const parameters * params);

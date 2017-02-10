@@ -5,6 +5,7 @@
 
     #include "../source/src_raw_file.h"
     #include "../message/msg_hops.h"
+    #include "../sink/snk_raw_file.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"
     #include "../module/mod_ssl.h"
@@ -18,6 +19,7 @@
 
         src_raw_file_cfg * src_raw_file;
         msg_hops_cfg * msg_hops;
+        snk_raw_file_cfg * snk_raw_file;
         mod_stft_cfg * mod_stft;
         msg_spectra_cfg * msg_spectra;
         mod_ssl_cfg * mod_ssl;

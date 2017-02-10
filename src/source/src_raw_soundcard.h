@@ -1,5 +1,5 @@
-#ifndef __MARS_SOURCE_RAW_8SOUNDUSB
-#define __MARS_SOURCE_RAW_8SOUNDUSB
+#ifndef __MARS_SOURCE_RAW_SOUNDCARD
+#define __MARS_SOURCE_RAW_SOUNDCARD
 
     #include <stdlib.h>
     #include <stdio.h>
@@ -8,7 +8,7 @@
 
     #include "../message/msg_hops.h"
 
-    typedef struct src_raw_8soundusb_obj {
+    typedef struct src_raw_soundcard_obj {
 
         unsigned long long timeStamp;   
 
@@ -20,9 +20,9 @@
 
         snd_pcm_t * captureHandle;       
 
-    } src_raw_8soundusb_obj;
+    } src_raw_soundcard_obj;
 
-    typedef struct src_raw_8soundusb_cfg {
+    typedef struct src_raw_soundcard_cfg {
 
         unsigned int hopSize;
         unsigned int nMics;
@@ -30,16 +30,16 @@
         unsigned int fS;
         char * cardName;
 
-    } src_raw_8soundusb_cfg;
+    } src_raw_soundcard_cfg;
 
-    src_raw_8soundusb_obj * src_raw_8soundusb_construct(const src_raw_8soundusb_cfg * cfg);
+    src_raw_soundcard_obj * src_raw_soundcard_construct(const src_raw_soundcard_cfg * cfg);
 
-    void src_raw_8soundusb_destroy(src_raw_8soundusb_obj * obj);
+    void src_raw_soundcard_destroy(src_raw_soundcard_obj * obj);
 
-    int src_raw_8soundusb_process(src_raw_8soundusb_obj * obj, msg_hops_obj * msg_hops);
+    int src_raw_soundcard_process(src_raw_soundcard_obj * obj, msg_hops_obj * msg_hops);
 
-    src_raw_8soundusb_cfg * src_raw_8soundusb_cfg_construct(void);
+    src_raw_soundcard_cfg * src_raw_soundcard_cfg_construct(void);
 
-    void src_raw_8soundusb_cfg_destroy(src_raw_8soundusb_cfg * cfg);
+    void src_raw_soundcard_cfg_destroy(src_raw_soundcard_cfg * cfg);
 
 #endif

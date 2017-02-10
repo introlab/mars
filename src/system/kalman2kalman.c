@@ -85,6 +85,20 @@
         matrix_destroy(obj->Ht);
         matrix_destroy(obj->R);
 
+        matrix_destroy(obj->K);
+        matrix_destroy(obj->PHt);
+        matrix_destroy(obj->HP);
+        matrix_destroy(obj->HPHt);
+        matrix_destroy(obj->HPHt_R);
+        matrix_destroy(obj->HPHt_Rinv);
+        matrix_destroy(obj->Hx);
+        matrix_destroy(obj->z);
+        matrix_destroy(obj->z_Hx);
+        matrix_destroy(obj->Kz_Hx);
+        matrix_destroy(obj->pKz_Hx);
+        matrix_destroy(obj->KHP);
+        matrix_destroy(obj->pKHP);
+
         free((void *) obj);
 
     }

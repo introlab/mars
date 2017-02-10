@@ -36,8 +36,10 @@
 
         if (args->output_raw_file != NULL) {
 
-            printf("Not implemented yet.\n");
-            exit(EXIT_FAILURE);
+            cfgs->snk_raw_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_raw_file)+1));
+            strcpy(cfgs->snk_raw_file->fileName, args->output_raw_file);
+
+            objs->snk_raw_file = snk_raw_file_construct(cfgs->snk_raw_file);
 
         }
 

@@ -41,6 +41,8 @@
 
     void mixture_destroy(mixture_obj * obj) {
 
+        assignations_destroy(obj->assignations);
+
         free((void *) obj->p_Ez_AICD);
         free((void *) obj->p_Eszs_phics);
         free((void *) obj->p_phics);

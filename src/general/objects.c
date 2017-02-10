@@ -9,6 +9,7 @@
 
         objs->src_raw_file = (src_raw_file_obj *) NULL;
         objs->msg_hops = (msg_hops_obj *) NULL;
+        objs->snk_raw_file = (snk_raw_file_obj *) NULL;
         objs->mod_stft = (mod_stft_obj *) NULL;
         objs->msg_spectra = (msg_spectra_obj *) NULL;
         objs->mod_ssl = (mod_ssl_obj *) NULL;
@@ -32,6 +33,10 @@
             msg_hops_destroy(objs->msg_hops);
         }
 
+        if (objs->snk_raw_file != NULL) {
+            snk_raw_file_destroy(objs->snk_raw_file);
+        }
+
         if (objs->mod_stft != NULL) {
             mod_stft_destroy(objs->mod_stft);
         }
@@ -49,7 +54,7 @@
         }
 
         if (objs->mod_sst != NULL) {
-            //mod_sst_destroy(objs->mod_sst);
+            mod_sst_destroy(objs->mod_sst);
         }
         
         if (objs->msg_tracks != NULL) {
