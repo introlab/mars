@@ -33,7 +33,7 @@
 
                     tau = (((float) fS) / c) * dist;
 
-                    obj->array[iPoint][iPair] = (unsigned short) (roundf(tau)+(float) (frameSize/2));
+                    obj->array[iPoint*nPairs+iPair] = (unsigned int) (roundf(tau)+(float) (frameSize/2));
 
                     iPair++;
 
@@ -45,17 +45,17 @@
 
         for (iPair = 0; iPair < nPairs; iPair++) {
 
-            obj->arrayMin[iPair] = obj->array[0][iPair];
-            obj->arrayMax[iPair] = obj->array[0][iPair];
+            obj->arrayMin[iPair] = obj->array[iPair];
+            obj->arrayMax[iPair] = obj->array[iPair];
 
             for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
 
-                if (obj->array[iPoint][iPair] < obj->arrayMin[iPair]) {
-                    obj->arrayMin[iPair] = obj->array[iPoint][iPair];
+                if (obj->array[iPoint*nPairs+iPair] < obj->arrayMin[iPair]) {
+                    obj->arrayMin[iPair] = obj->array[iPoint*nPairs+iPair];
                 }
 
-                if (obj->array[iPoint][iPair] > obj->arrayMax[iPair]) {
-                    obj->arrayMax[iPair] = obj->array[iPoint][iPair];
+                if (obj->array[iPoint*nPairs+iPair] > obj->arrayMax[iPair]) {
+                    obj->arrayMax[iPair] = obj->array[iPoint*nPairs+iPair];
                 }
 
             }
