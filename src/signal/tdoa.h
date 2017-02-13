@@ -9,9 +9,9 @@
 
         unsigned int nPoints;
         unsigned int nPairs;
-        unsigned int * array;
-        unsigned int * arrayMin;
-        unsigned int * arrayMax;
+        unsigned short ** array;
+        unsigned short * arrayMin;
+        unsigned short * arrayMax;
 
     } tdoas_obj;
 

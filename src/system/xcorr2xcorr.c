@@ -53,8 +53,8 @@
     void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const unsigned int delta, const unsigned int iPoint, xcorrs_obj * xcorrsReset) {
 
         unsigned int iSignal;
-        unsigned int iSample;
-        unsigned int nSamples;
+        unsigned short iSample;
+        unsigned short nSamples;
 
         for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
@@ -63,7 +63,7 @@
 
             memcpy(&(xcorrsReset->array[iSignal][iSample]), &(xcorrs->array[iSignal][iSample]), sizeof(float) * nSamples);
 
-            iSample = tdoas->array[iPoint * tdoas->nPairs + iSignal] - delta;
+            iSample = tdoas->array[iPoint][iSignal] - delta;
             nSamples = 2 * delta + 1;
 
             memset(&(xcorrsReset->array[iSignal][iSample]), 0x00, sizeof(float) * nSamples);

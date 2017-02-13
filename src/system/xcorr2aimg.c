@@ -24,7 +24,7 @@
         unsigned int iPair;
         unsigned int iFine;
         unsigned int iPoint;
-        unsigned int tau;
+        unsigned short tau;
 
         memset(aimg->array, 0x00, sizeof(float) * aimg->aimgSize);
 
@@ -34,7 +34,7 @@
 
             for (iPair = 0; iPair < xcorrs->nSignals; iPair++) {               
 
-                tau = tdoas->array[iPoint * tdoas->nPairs + iPair];
+                tau = tdoas->array[iPoint][iPair];
 
                 aimg->array[iPoint] += xcorrs->array[iPair][tau];
 

@@ -32,8 +32,8 @@
 
                     for (iPair = 0; iPair < tdoasFine->nPairs; iPair++) {
 
-                        tauCoarse = (float) (tdoasCoarse->array[iCoarse * tdoasCoarse->nPairs + iPair]);
-                        tauFine = (float) (tdoasFine->array[iFine * tdoasFine->nPairs + iPair]);
+                        tauCoarse = (float) (tdoasCoarse->array[iCoarse][iPair]);
+                        tauFine = (float) (tdoasFine->array[iFine][iPair]);
                         tauDiff = tauCoarse - tauFine;
 
                         scores[iCoarse] += exp(-1.0f * tauDiff * tauDiff / (2.0f * sigma));
