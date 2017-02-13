@@ -36,7 +36,7 @@
 
                 tau = tdoas->array[iPoint * tdoas->nPairs + iPair];
 
-                aimg->array[iPoint] += xcorrs->array[iPair * xcorrs->frameSize + tau];
+                aimg->array[iPoint] += xcorrs->array[iPair][tau];
 
             }
 

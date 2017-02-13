@@ -9,7 +9,7 @@
 
         unsigned int nSignals;
         unsigned int frameSize;
-        float * array;
+        float ** array;
 
     } frames_obj;
 

@@ -30,19 +30,19 @@
 
             for (iSampleMax = tdoas->arrayMin[iSignal]; iSampleMax <= tdoas->arrayMax[iSignal]; iSampleMax++) {
 
-                maxValue = xcorrs->array[iSignal * obj->frameSize + iSampleMax];
+                maxValue = xcorrs->array[iSignal][iSampleMax];
 
                 for (iSample = (iSampleMax-delta); iSample <= (iSampleMax+delta); iSample++) {
 
-                    if (xcorrs->array[iSignal * obj->frameSize + iSample] > maxValue) {
+                    if (xcorrs->array[iSignal][iSample] > maxValue) {
 
-                        maxValue = xcorrs->array[iSignal * obj->frameSize + iSample];
+                        maxValue = xcorrs->array[iSignal][iSample];
 
                     }
 
                 }
 
-                xcorrsMax->array[iSignal * obj->frameSize + iSampleMax] = maxValue;
+                xcorrsMax->array[iSignal][iSampleMax] = maxValue;
 
             }
 
@@ -58,15 +58,15 @@
 
         for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
-            iSample = iSignal * obj->frameSize + tdoas->arrayMin[iSignal];
+            iSample = tdoas->arrayMin[iSignal];
             nSamples = (tdoas->arrayMax[iSignal] - tdoas->arrayMin[iSignal] + 1);
 
-            memcpy(&(xcorrsReset->array[iSample]), &(xcorrs->array[iSample]), sizeof(float) * nSamples);
+            memcpy(&(xcorrsReset->array[iSignal][iSample]), &(xcorrs->array[iSignal][iSample]), sizeof(float) * nSamples);
 
-            iSample = iSignal * obj->frameSize + tdoas->array[iPoint * tdoas->nPairs + iSignal] - delta;
+            iSample = tdoas->array[iPoint * tdoas->nPairs + iSignal] - delta;
             nSamples = 2 * delta + 1;
 
-            memset(&(xcorrsReset->array[iSample]), 0x00, sizeof(float) * nSamples);
+            memset(&(xcorrsReset->array[iSignal][iSample]), 0x00, sizeof(float) * nSamples);
 
         }
 

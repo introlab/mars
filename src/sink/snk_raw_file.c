@@ -57,7 +57,7 @@
             
             for (iMic = 0; iMic < obj->nMics; iMic++) {
 
-                sample = msg_hops->hops->array[iMic * msg_hops->hops->hopSize + iSample];
+                sample = msg_hops->hops->array[iMic][iSample];
 
                 switch (obj->nBits) {
                     

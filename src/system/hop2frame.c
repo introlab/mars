@@ -27,12 +27,12 @@
 
         for (iSignal = 0; iSignal < hops->nSignals; iSignal++) {
 
-            memmove(&(frames->array[iSignal * obj->frameSize]),
-                    &(frames->array[iSignal * obj->frameSize + obj->hopSize]),
+            memmove(&(frames->array[iSignal][0]),
+                    &(frames->array[iSignal][obj->hopSize]),
                     sizeof(float) * (obj->frameSize-obj->hopSize));
 
-            memcpy(&(frames->array[iSignal * obj->frameSize + (obj->frameSize-obj->hopSize)]),
-                   &(hops->array[iSignal * obj->hopSize]),
+            memcpy(&(frames->array[iSignal][(obj->frameSize-obj->hopSize)]),
+                   &(hops->array[iSignal][0]),
                    sizeof(float) * obj->hopSize);
 
         }        

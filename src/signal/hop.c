@@ -10,8 +10,12 @@
 
         obj->nSignals = nSignals;
         obj->hopSize = hopSize;
-        obj->array = (float *) malloc(sizeof(float) * nSignals * hopSize);
-        memset(obj->array, 0x00, nSignals * hopSize * sizeof(float));
+        
+        obj->array = (float **) malloc(sizeof(float *) * nSignals);
+        for (iSignal = 0; iSignal < nSignals; iSignal++) {
+            obj->array[iSignal] = (float *) malloc(sizeof(float) * hopSize);
+            memset(obj->array[iSignal], 0x00, hopSize * sizeof(float));
+        }
 
         return obj;
 
@@ -19,7 +23,13 @@
 
     void hops_destroy(hops_obj * obj) {
 
+        unsigned int iSignal;
+
+        for (iSignal = 0; iSignal < obj->nSignals; iSignal++) {
+            free((void *) obj->array[iSignal]);    
+        }
         free((void *) obj->array);
+        
         free((void *) obj);
 
     }
@@ -35,7 +45,7 @@
 
             for (iSample = 0; iSample < obj->hopSize; iSample++) {
 
-                printf("%+1.5f ",obj->array[iSignal*obj->hopSize + iSample]);
+                printf("%+1.5f ",obj->array[iSignal][iSample]);
 
                 if ((((iSample+1) % 16) == 0) && ((iSample+1)!=obj->hopSize)) {
                     printf("\n        ");

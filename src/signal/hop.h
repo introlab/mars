@@ -9,7 +9,7 @@
 
         unsigned int nSignals; 
         unsigned int hopSize;
-        float * array;
+        float ** array;
 
     } hops_obj;
 

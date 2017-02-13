@@ -31,12 +31,12 @@
 
             for (iSample = 0; iSample < freqs->halfFrameSize; iSample++) {
 
-                real = freqs->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 0];
-                imag = freqs->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 1];
+                real = freqs->array[iSignal][iSample * 2 + 0];
+                imag = freqs->array[iSignal][iSample * 2 + 1];
                 magnitude = sqrtf(real*real+imag*imag) + obj->epsilon;
 
-                phasors->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 0] = real / magnitude;
-                phasors->array[iSignal * obj->halfFrameSize * 2 + iSample * 2 + 1] = imag / magnitude;
+                phasors->array[iSignal][iSample * 2 + 0] = real / magnitude;
+                phasors->array[iSignal][iSample * 2 + 1] = imag / magnitude;
 
             }
 
@@ -58,13 +58,13 @@
 
                 for (iSample = 0; iSample < obj->halfFrameSize; iSample++) {
 
-                    real1 = phasors1->array[iSignal1 * obj->halfFrameSize * 2 + iSample * 2 + 0];
-                    imag1 = phasors1->array[iSignal1 * obj->halfFrameSize * 2 + iSample * 2 + 1];
-                    real2 = phasors2->array[iSignal2 * obj->halfFrameSize * 2 + iSample * 2 + 0];
-                    imag2 = phasors2->array[iSignal2 * obj->halfFrameSize * 2 + iSample * 2 + 1];
+                    real1 = phasors1->array[iSignal1][iSample * 2 + 0];
+                    imag1 = phasors1->array[iSignal1][iSample * 2 + 1];
+                    real2 = phasors2->array[iSignal2][iSample * 2 + 0];
+                    imag2 = phasors2->array[iSignal2][iSample * 2 + 1];
 
-                    phasors12->array[iSignal12 * obj->halfFrameSize * 2 + iSample * 2 + 0] = real1 * real2 + imag1 * imag2;
-                    phasors12->array[iSignal12 * obj->halfFrameSize * 2 + iSample * 2 + 1] = imag1 * real2 - imag2 * real1;                    
+                    phasors12->array[iSignal12][iSample * 2 + 0] = real1 * real2 + imag1 * imag2;
+                    phasors12->array[iSignal12][iSample * 2 + 1] = imag1 * real2 - imag2 * real1;                    
 
                 }
 
@@ -87,12 +87,12 @@
 
             for (iSample = 0; iSample < obj->halfFrameSize * 2; iSample++) {
 
-                smooth = smooths->array[iSignal * obj->halfFrameSize * 2 + iSample];
-                phasor = phasors->array[iSignal * obj->halfFrameSize * 2 + iSample];
+                smooth = smooths->array[iSignal][iSample];
+                phasor = phasors->array[iSignal][iSample];
 
                 smooth = (1-obj->alpha) * smooth + obj->alpha * phasor;
 
-                smooths->array[iSignal * obj->halfFrameSize * 2 + iSample] = smooth;
+                smooths->array[iSignal][iSample] = smooth;
 
             }
 

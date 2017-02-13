@@ -84,7 +84,7 @@
 
                 }
 
-                msg_hops->hops->array[iMic * msg_hops->hops->hopSize + iSample] = sample;
+                msg_hops->hops->array[iMic][iSample] = sample;
 
             }
 

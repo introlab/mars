@@ -38,12 +38,12 @@
         for (iSignal = 0; iSignal < freqs->nSignals; iSignal++) {
 
         	fft_c2r(obj->fft, 
-                    &(freqs->array[iSignal * obj->halfFrameSize * 2]),
+                    freqs->array[iSignal],
                     obj->frame);
 
             for (iSample = tdoas->arrayMin[iSignal]; iSample <= tdoas->arrayMax[iSignal]; iSample++) {
 
-                iSampleDest = iSignal * obj->frameSize + iSample;
+                iSampleDest = iSample;
 
                 if (iSample < obj->frameSize/2) {
                     
@@ -56,7 +56,7 @@
 
                 }
 
-                xcorrs->array[iSampleDest] = obj->frame[iSampleSrc] / ((float) obj->frameSize);
+                xcorrs->array[iSignal][iSampleDest] = obj->frame[iSampleSrc] / ((float) obj->frameSize);
 
             }
 

@@ -9,7 +9,7 @@
 
         unsigned int nSignals;
         unsigned int halfFrameSize;
-        float * array;
+        float ** array;
 
     } freqs_obj;
 

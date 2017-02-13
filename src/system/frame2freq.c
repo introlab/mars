@@ -38,13 +38,13 @@
 
             for (iSample = 0; iSample < obj->frameSize; iSample++) {
 
-                obj->frame[iSample] = obj->win->array[iSample] * frames->array[iSignal * obj->frameSize + iSample];
+                obj->frame[iSample] = obj->win->array[iSample] * frames->array[iSignal][iSample];
 
             }
 
             fft_r2c(obj->fft, 
-                    &(frames->array[iSignal * obj->frameSize]),
-                    &(freqs->array[iSignal * (obj->halfFrameSize * 2)]));
+                    obj->frame,
+                    freqs->array[iSignal]);
 
         }
 
