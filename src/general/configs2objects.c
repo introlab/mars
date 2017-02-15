@@ -16,8 +16,10 @@
 
         if (args->input_raw_soundcard != NULL) {
 
-            printf("Not implemented yet.\n");
-            exit(EXIT_FAILURE);
+            cfgs->src_raw_soundcard->cardName = (char *) malloc(sizeof(char) * (strlen(args->input_raw_soundcard) + 1));
+            strcpy(cfgs->src_raw_soundcard->cardName, args->input_raw_soundcard);
+
+            objs->src_raw_soundcard = src_raw_soundcard_construct(cfgs->src_raw_soundcard);
 
         }
 
@@ -30,7 +32,9 @@
 
         // Hops
 
-        objs->msg_hops = msg_hops_construct(cfgs->msg_hops);
+        objs->msg_hops_raw_in = msg_hops_construct(cfgs->msg_hops_raw_in); 
+        objs->mod_resample_raw_in = mod_resample_construct(cfgs->mod_resample_raw_in);
+        objs->msg_hops_raw = msg_hops_construct(cfgs->msg_hops_raw);
 
         // Raw: output
 
@@ -40,6 +44,9 @@
             strcpy(cfgs->snk_raw_file->fileName, args->output_raw_file);
 
             objs->snk_raw_file = snk_raw_file_construct(cfgs->snk_raw_file);
+
+            objs->mod_resample_raw_out = mod_resample_construct(cfgs->mod_resample_raw_out);
+            objs->msg_hops_raw_out = msg_hops_construct(cfgs->msg_hops_raw_out);
 
         }
 

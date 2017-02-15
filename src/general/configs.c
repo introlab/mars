@@ -8,7 +8,12 @@
         cfgs = (configs *) malloc(sizeof(configs));
 
         cfgs->src_raw_file = (src_raw_file_cfg *) NULL;
-        cfgs->msg_hops = (msg_hops_cfg *) NULL;
+        cfgs->src_raw_soundcard = (src_raw_soundcard_cfg *) NULL;
+        cfgs->msg_hops_raw_in = (msg_hops_cfg *) NULL;
+        cfgs->mod_resample_raw_in = (mod_resample_cfg *) NULL;
+        cfgs->msg_hops_raw = (msg_hops_cfg *) NULL;
+        cfgs->mod_resample_raw_out = (mod_resample_cfg *) NULL;
+        cfgs->msg_hops_raw_out = (msg_hops_cfg *) NULL;
         cfgs->snk_raw_file = (snk_raw_file_cfg *) NULL;
         cfgs->mod_stft = (mod_stft_cfg *) NULL;
         cfgs->msg_spectra = (msg_spectra_cfg *) NULL;
@@ -28,8 +33,23 @@
         if (cfgs->src_raw_file != NULL) {
             src_raw_file_cfg_destroy(cfgs->src_raw_file);
         }
-        if (cfgs->msg_hops != NULL) {
-            msg_hops_cfg_destroy(cfgs->msg_hops);
+        if (cfgs->src_raw_soundcard != NULL) {
+            src_raw_soundcard_cfg_destroy(cfgs->src_raw_soundcard);
+        }
+        if (cfgs->msg_hops_raw_in != NULL) {
+            msg_hops_cfg_destroy(cfgs->msg_hops_raw_in);
+        }
+        if (cfgs->mod_resample_raw_in != NULL) {
+            mod_resample_cfg_destroy(cfgs->mod_resample_raw_in);
+        }
+        if (cfgs->msg_hops_raw != NULL) {
+            msg_hops_cfg_destroy(cfgs->msg_hops_raw);
+        }
+        if (cfgs->mod_resample_raw_out != NULL) {
+            mod_resample_cfg_destroy(cfgs->mod_resample_raw_out);
+        }
+        if (cfgs->msg_hops_raw_out != NULL) {
+            msg_hops_cfg_destroy(cfgs->msg_hops_raw_out);
         }
         if (cfgs->snk_raw_file != NULL) {
             snk_raw_file_cfg_destroy(cfgs->snk_raw_file);

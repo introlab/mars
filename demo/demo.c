@@ -1,5 +1,12 @@
 
     #include <mars/mars.h>
+    #include <signal.h>
+
+    static unsigned char quit;
+
+    void sighandler(int signum) {
+        quit = 0x01;
+    }
 
     int main(int argc, char* argv[])
     {
@@ -40,8 +47,12 @@
         printf("[OK]\n");
 
         // Process
+
+        signal(SIGINT, sighandler);
+        quit = 0x00;
+
         printf("Processing............... "); fflush(stdout);
-        while(objects2objects_process(objs, &timeProcessing, &timeSignal, params->general->fS) == 0) {
+        while((objects2objects_process(objs, &timeProcessing, &timeSignal, params->general->fS) == 0) && (quit==0x00)) {
 
             if (args->verbose == 0x01) {
 
@@ -54,7 +65,13 @@
             }
 
         }
-        printf("[OK]\n");
+
+        if (quit == 0x00) {
+            printf("[OK]\n");    
+        }
+        else {
+            printf("[Stopped]\n");
+        }
 
         // Free objects
         printf("Free memory.............. "); fflush(stdout);

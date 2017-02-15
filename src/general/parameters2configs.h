@@ -8,7 +8,17 @@
 
     src_raw_file_cfg * parameters2configs_src_raw_file(const parameters * params);
 
-    msg_hops_cfg * parameters2configs_msg_hops(const parameters * params);
+    src_raw_soundcard_cfg * parameters2configs_src_raw_soundcard(const parameters * params);
+
+    msg_hops_cfg * parameters2configs_msg_hops_raw_in(const parameters * params);
+
+    mod_resample_cfg * parameters2configs_mod_resample_raw_in(const parameters * params);
+
+    msg_hops_cfg * parameters2configs_msg_hops_raw(const parameters * params);
+
+    mod_resample_cfg * parameters2configs_mod_resample_raw_out(const parameters * params);
+
+    msg_hops_cfg * parameters2configs_msg_hops_raw_out(const parameters * params);
 
     snk_raw_file_cfg * parameters2configs_snk_raw_file(const parameters * params);
 

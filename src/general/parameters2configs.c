@@ -4,7 +4,12 @@
     void parameters2configs(configs * cfgs, const parameters * params) {
 
         cfgs->src_raw_file = parameters2configs_src_raw_file(params);
-        cfgs->msg_hops = parameters2configs_msg_hops(params);
+        cfgs->src_raw_soundcard = parameters2configs_src_raw_soundcard(params);
+        cfgs->msg_hops_raw_in = parameters2configs_msg_hops_raw_in(params);
+        cfgs->mod_resample_raw_in = parameters2configs_mod_resample_raw_in(params);
+        cfgs->msg_hops_raw = parameters2configs_msg_hops_raw(params);
+        cfgs->mod_resample_raw_out = parameters2configs_mod_resample_raw_out(params);
+        cfgs->msg_hops_raw_out = parameters2configs_msg_hops_raw_out(params);
         cfgs->snk_raw_file = parameters2configs_snk_raw_file(params);
         cfgs->mod_stft = parameters2configs_mod_stft(params);
         cfgs->msg_spectra = parameters2configs_msg_spectra(params);
@@ -23,17 +28,57 @@
 
         cfg = src_raw_file_cfg_construct();
 
-        cfg->hopSize = params->general->hopSize;
+        cfg->hopSize = params->raw->hopSizeIn;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsIn;
-        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
-        strcpy(cfg->fileName, "");
 
         return cfg;
 
     }
 
-    msg_hops_cfg * parameters2configs_msg_hops(const parameters * params) {
+    src_raw_soundcard_cfg * parameters2configs_src_raw_soundcard(const parameters * params) {
+
+        src_raw_soundcard_cfg * cfg;
+
+        cfg = src_raw_soundcard_cfg_construct();
+
+        cfg->hopSize = params->raw->hopSizeIn;
+        cfg->nMics = params->general->mics->nMics;
+        cfg->nBits = params->raw->nBitsIn;
+        cfg->fS = params->general->fS * (params->raw->hopSizeIn/params->raw->hopSizeOut);
+
+        return cfg;
+
+    }
+
+    msg_hops_cfg * parameters2configs_msg_hops_raw_in(const parameters * params) {
+
+        msg_hops_cfg * cfg;
+
+        cfg = msg_hops_cfg_construct();
+
+        cfg->hopSize = params->raw->hopSizeIn;
+        cfg->nMics = params->general->mics->nMics;
+
+        return cfg;
+
+    }
+
+    mod_resample_cfg * parameters2configs_mod_resample_raw_in(const parameters * params) {
+
+        mod_resample_cfg * cfg;
+
+        cfg = mod_resample_cfg_construct();
+
+        cfg->nHops = params->general->mics->nMics;
+        cfg->hopSizeIn = params->raw->hopSizeIn;
+        cfg->hopSizeOut = params->general->hopSize;
+
+        return cfg;
+
+    }
+
+    msg_hops_cfg * parameters2configs_msg_hops_raw(const parameters * params) {
 
         msg_hops_cfg * cfg;
 
@@ -45,6 +90,33 @@
         return cfg;        
 
     }
+
+    msg_hops_cfg * parameters2configs_msg_hops_raw_out(const parameters * params) {
+
+        msg_hops_cfg * cfg;
+
+        cfg = msg_hops_cfg_construct();
+
+        cfg->hopSize = params->raw->hopSizeOut;
+        cfg->nMics = params->general->mics->nMics;
+
+        return cfg;
+
+    }
+
+    mod_resample_cfg * parameters2configs_mod_resample_raw_out(const parameters * params) {
+
+        mod_resample_cfg * cfg;
+
+        cfg = mod_resample_cfg_construct();
+
+        cfg->nHops = params->general->mics->nMics;
+        cfg->hopSizeIn = params->general->hopSize;
+        cfg->hopSizeOut = params->raw->hopSizeOut;
+
+        return cfg;
+        
+    }    
 
     snk_raw_file_cfg * parameters2configs_snk_raw_file(const parameters * params) {
 

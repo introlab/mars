@@ -8,7 +8,11 @@
         objs = (objects *) malloc(sizeof(objects));
 
         objs->src_raw_file = (src_raw_file_obj *) NULL;
-        objs->msg_hops = (msg_hops_obj *) NULL;
+        objs->msg_hops_raw_in = (msg_hops_obj *) NULL;
+        objs->mod_resample_raw_in = (mod_resample_obj *) NULL;
+        objs->msg_hops_raw = (msg_hops_obj *) NULL;
+        objs->mod_resample_raw_out = (mod_resample_obj *) NULL;
+        objs->msg_hops_raw_out = (msg_hops_obj *) NULL;
         objs->snk_raw_file = (snk_raw_file_obj *) NULL;
         objs->mod_stft = (mod_stft_obj *) NULL;
         objs->msg_spectra = (msg_spectra_obj *) NULL;
@@ -29,8 +33,24 @@
             src_raw_file_destroy(objs->src_raw_file);
         }
 
-        if (objs->msg_hops != NULL) {
-            msg_hops_destroy(objs->msg_hops);
+        if (objs->msg_hops_raw_in != NULL) {
+            msg_hops_destroy(objs->msg_hops_raw_in);
+        }
+
+        if (objs->mod_resample_raw_in != NULL) {
+            mod_resample_destroy(objs->mod_resample_raw_in);
+        }
+
+        if (objs->msg_hops_raw != NULL) {
+            msg_hops_destroy(objs->msg_hops_raw);
+        }
+
+        if (objs->mod_resample_raw_out != NULL) {
+            mod_resample_destroy(objs->mod_resample_raw_out);
+        }
+
+        if (objs->msg_hops_raw_out != NULL) {
+            msg_hops_destroy(objs->msg_hops_raw_out);
         }
 
         if (objs->snk_raw_file != NULL) {

@@ -19,7 +19,9 @@
 
     typedef struct parameters_raw_obj {
 
+        unsigned int hopSizeIn;
         unsigned int nBitsIn;
+        unsigned int hopSizeOut;
         unsigned int nBitsOut;
 
     } parameters_raw_obj;

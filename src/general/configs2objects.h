@@ -2,7 +2,9 @@
 #define __MARS_GENERAL_CONFIGS2OBJECTS
 
     #include "../source/src_raw_file.h"
+    #include "../source/src_raw_soundcard.h"
     #include "../message/msg_hops.h"
+    #include "../module/mod_resample.h"
     #include "../sink/snk_raw_file.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"

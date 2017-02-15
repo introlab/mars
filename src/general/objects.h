@@ -4,7 +4,9 @@
     #include <stdlib.h>
 
     #include "../source/src_raw_file.h"
+    #include "../source/src_raw_soundcard.h"
     #include "../message/msg_hops.h"
+    #include "../module/mod_resample.h"
     #include "../sink/snk_raw_file.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"
@@ -18,7 +20,12 @@
     typedef struct objects {
 
         src_raw_file_obj * src_raw_file;
-        msg_hops_obj * msg_hops;
+        src_raw_soundcard_obj * src_raw_soundcard;
+        msg_hops_obj * msg_hops_raw_in;
+        mod_resample_obj * mod_resample_raw_in;
+        msg_hops_obj * msg_hops_raw;
+        mod_resample_obj * mod_resample_raw_out;
+        msg_hops_obj * msg_hops_raw_out;
         snk_raw_file_obj * snk_raw_file;
         mod_stft_obj * mod_stft;
         msg_spectra_obj * msg_spectra;

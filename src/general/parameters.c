@@ -93,7 +93,9 @@
 
         printf("raw:\n");
 
+        printf(" - hopSizeIn: %u\n",params->raw->hopSizeIn);
         printf(" - nBitsIn: %u\n",params->raw->nBitsIn);
+        printf(" - hopSizeOut: %u\n",params->raw->hopSizeOut);
         printf(" - nBitsOut: %u\n",params->raw->nBitsOut);
 
         // SSL

@@ -97,22 +97,40 @@
         // Raw
 
             // nBitsIn
-            if (config_lookup_int(&cfg, "raw.nBitsIn", &valueInt)) { 
+            if (config_lookup_int(&cfg, "raw.in.nBits", &valueInt)) { 
                 params->raw->nBitsIn = valueInt;
             } 
             else { 
-                printf("Missing: raw.nBitsIn\n"); 
+                printf("Missing: raw.in.nBits\n"); 
                 exit(EXIT_FAILURE);
             }
+
+            // hopSizeIn
+            if (config_lookup_int(&cfg, "raw.in.hopSize", &valueInt)) { 
+                params->raw->hopSizeIn = valueInt;
+            } 
+            else { 
+                printf("Missing: raw.in.hopSize\n"); 
+                exit(EXIT_FAILURE);
+            }            
             
             // nBitsOut
-            if (config_lookup_int(&cfg, "raw.nBitsOut", &valueInt)) { 
+            if (config_lookup_int(&cfg, "raw.out.nBits", &valueInt)) { 
                 params->raw->nBitsOut = valueInt;
             } 
             else { 
-                printf("Missing: raw.nBitsOut\n"); 
+                printf("Missing: raw.out.nBits\n"); 
                 exit(EXIT_FAILURE);
             }
+
+            // hopSizeOut
+            if (config_lookup_int(&cfg, "raw.out.hopSize", &valueInt)) { 
+                params->raw->hopSizeOut = valueInt;
+            } 
+            else { 
+                printf("Missing: raw.out.hopSize\n"); 
+                exit(EXIT_FAILURE);
+            }   
 
         // SSL
 

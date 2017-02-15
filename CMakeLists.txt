@@ -33,6 +33,7 @@ set(SRC
     src/init/combining.c
     src/init/delay.c
     src/init/linking.c
+    src/init/lowpass.c
     src/init/scanning.c
     src/init/space.c
     src/init/windowing.c
@@ -42,6 +43,7 @@ set(SRC
     src/message/msg_tracks.c
     src/message/msg_spectra.c
 
+    src/module/mod_resample.c
     src/module/mod_stft.c
     src/module/mod_ssl.c
     src/module/mod_sst.c
@@ -49,9 +51,11 @@ set(SRC
     src/signal/aimg.c
     src/signal/assignation.c
     src/signal/coherence.c
+    src/signal/fir.c
     src/signal/frame.c
     src/signal/freq.c
     src/signal/hop.c
+    src/signal/impulse.c
     src/signal/index.c
     src/signal/kalman.c
     src/signal/map.c
@@ -79,6 +83,7 @@ set(SRC
     src/system/freq2freq.c
     src/system/freq2xcorr.c
     src/system/hop2frame.c
+    src/system/hop2hop.c
     src/system/kalman2coherence.c
     src/system/kalman2kalman.c
     src/system/mixture2mixture.c

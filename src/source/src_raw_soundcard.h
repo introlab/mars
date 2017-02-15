@@ -7,6 +7,7 @@
     #include <alsa/asoundlib.h>
 
     #include "../message/msg_hops.h"
+    #include "../utils/pcm.h"
 
     typedef struct src_raw_soundcard_obj {
 
@@ -18,7 +19,10 @@
         unsigned int fS;
         char * cardName;  
 
-        snd_pcm_t * captureHandle;       
+        snd_pcm_t * captureHandle;     
+
+        void * buffer;  
+        unsigned int nBytes;
 
     } src_raw_soundcard_obj;
 
