@@ -23,6 +23,7 @@ set(SRC
     src/general/name.c
     src/general/objects.c
     src/general/parameters.c
+    src/general/profiler.c
 
     src/general/args2arguments.c
     src/general/configs2objects.c

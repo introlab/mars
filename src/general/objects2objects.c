@@ -1,7 +1,7 @@
 
     #include "objects2objects.h"
 
-    int objects2objects_process(objects * objs, float * processingTime, float * signalTime, unsigned int sampleRate) {
+    int objects2objects_process(objects * objs, profiler_obj * profiler) {
 
         time_t start, end;
         int rtnValue;
@@ -28,9 +28,15 @@
 
         // Convert hops to good sample rate
 
+        start = clock();
+
         mod_resample_process(objs->mod_resample_raw_in, 
                              objs->msg_hops_raw_in, 
                              objs->msg_hops_raw);
+
+        end = clock();
+
+        profiler->resampling += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
 
         // Write raw to file
 
@@ -47,25 +53,42 @@
 
         // Perform processing       
 
-        start = clock();
-
         if (objs->mod_ssl != NULL) {
+
+            start = clock();
             
             mod_stft_process(objs->mod_stft, 
                              objs->msg_hops_raw, 
                              objs->msg_spectra);
 
+            end = clock();
+
+            profiler->stft += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
+
+            start = clock();
+
             mod_ssl_process(objs->mod_ssl, 
                             objs->msg_spectra, 
                             objs->msg_pots);    
+
+            end = clock();
+
+            profiler->ssl += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
 
         }
         
         if (objs->mod_sst != NULL) {
             
+            start = clock();
+
             mod_sst_process(objs->mod_sst, 
                             objs->msg_pots,
                             objs->msg_tracks);    
+
+            end = clock();
+
+            profiler->sst += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
+
 
         }
 
@@ -89,8 +112,7 @@
 
         // Update times
 
-        *processingTime += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
-        *signalTime += ((float) (objs->msg_hops_raw->hops->hopSize)) / ((float) sampleRate);
+        profiler->duration += ((float) (objs->msg_hops_raw->hops->hopSize)) / profiler->fS;
 
         return 0;
 

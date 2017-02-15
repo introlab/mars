@@ -2,6 +2,8 @@
     #include <mars/mars.h>
     #include <signal.h>
 
+    #include "../src/general/profiler.h"
+
     static unsigned char quit;
 
     void sighandler(int signum) {
@@ -16,6 +18,7 @@
         configs * cfgs;
         objects * objs;
 
+        profiler_obj * profiler;
         float timeProcessing, timeSignal;
 
         // Generate objects
@@ -46,18 +49,24 @@
         configs2objects(objs, cfgs, args);
         printf("[OK]\n");
 
-        // Process
+        // Initialize profiler
+        printf("Initialize profiler...... "); fflush(stdout);
+        profiler = profiler_construct_zero(params->general->fS);
+        printf("[OK]\n");
 
+        // Process
+       
         signal(SIGINT, sighandler);
         quit = 0x00;
 
         printf("Processing............... "); fflush(stdout);
-        while((objects2objects_process(objs, &timeProcessing, &timeSignal, params->general->fS) == 0) && (quit==0x00)) {
+        while((objects2objects_process(objs, profiler) == 0) && (quit==0x00)) {
 
             if (args->verbose == 0x01) {
 
                 if (objs->msg_tracks != NULL) {
 
+                    printf("\n");
                     tracks_printf(objs->msg_tracks->tracks);
 
                 }
@@ -81,6 +90,9 @@
         objects_destroy(objs);
         printf("[OK]\n");
 
+        timeSignal = profiler->duration;
+        timeProcessing = profiler->resampling + profiler->stft + profiler->ssl + profiler->sst;
+
         // Print performances
         printf("\n");
         printf("----------------------------------------\n");
@@ -88,8 +100,14 @@
         printf("----------------------------------------\n");
         printf("Total signal duration: %1.3f secs\n",timeSignal);
         printf("Total processing duration: %1.3f secs\n",timeProcessing);
+        printf(" + Resampling: %1.5f secs\n",profiler->resampling);
+        printf(" + STFT: %1.5f secs\n",profiler->stft);
+        printf(" + SSL: %1.5f secs\n",profiler->ssl);
+        printf(" + SST: %1.5f secs\n",profiler->sst);
         printf("Average CPU usage: %3.2f%%\n",100.0f*timeProcessing/timeSignal);
         printf("----------------------------------------\n");
+
+        profiler_destroy(profiler);
 
         return 0;
 
