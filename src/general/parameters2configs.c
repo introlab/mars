@@ -45,7 +45,7 @@
         cfg->hopSize = params->raw->hopSizeIn;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsIn;
-        cfg->fS = params->general->fS * (params->raw->hopSizeIn/params->raw->hopSizeOut);
+        cfg->fS = params->general->fS * (params->raw->hopSizeIn/params->general->hopSize);
 
         return cfg;
 
@@ -124,7 +124,7 @@
 
         cfg = snk_raw_file_cfg_construct();
 
-        cfg->hopSize = params->general->hopSize;
+        cfg->hopSize = params->raw->hopSizeOut;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsOut;
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);

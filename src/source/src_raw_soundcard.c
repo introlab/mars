@@ -120,8 +120,7 @@
 
         if ((err = snd_pcm_readi(obj->captureHandle, obj->buffer, obj->hopSize)) != obj->hopSize) {
 
-            printf("Read from audio interface failed: %s\n",snd_strerror(err));
-            exit(EXIT_FAILURE);
+            return 1;
 
         }
 
