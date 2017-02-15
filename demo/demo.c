@@ -95,17 +95,17 @@
 
         // Print performances
         printf("\n");
-        printf("----------------------------------------\n");
+        printf("==========================================\n");
         printf("Summary\n");
-        printf("----------------------------------------\n");
-        printf("Total signal duration: %1.3f secs\n",timeSignal);
-        printf("Total processing duration: %1.3f secs\n",timeProcessing);
-        printf(" + Resampling: %1.5f secs\n",profiler->resampling);
-        printf(" + STFT: %1.5f secs\n",profiler->stft);
-        printf(" + SSL: %1.5f secs\n",profiler->ssl);
-        printf(" + SST: %1.5f secs\n",profiler->sst);
-        printf("Average CPU usage: %3.2f%%\n",100.0f*timeProcessing/timeSignal);
-        printf("----------------------------------------\n");
+        printf("==========================================\n");
+        printf("Total signal duration....... %1.5f secs\n",timeSignal);
+        printf("Total processing duration... %1.5f secs\n",timeProcessing);
+        printf(" + Resampling............... %1.5f secs\n",profiler->resampling);
+        printf(" + STFT..................... %1.5f secs\n",profiler->stft);
+        printf(" + SSL...................... %1.5f secs\n",profiler->ssl);
+        printf(" + SST...................... %1.5f secs\n",profiler->sst);
+        printf("Average CPU usage........... %3.2f%%\n",100.0f*timeProcessing/timeSignal);
+        printf("==========================================\n");
 
         profiler_destroy(profiler);
 
