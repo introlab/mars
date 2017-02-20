@@ -66,10 +66,10 @@
         for (iPot = 0; iPot < msg_pots->pots->nPots; iPot++) {
             
             fprintf(obj->fp, "    <src q = %u>\n",iPot);
-            fprintf(obj->fp, "        <x>%+1.3f</x>\n",msg_pots->pots->array[iPot * 3 + 0]);
-            fprintf(obj->fp, "        <y>%+1.3f</y>\n",msg_pots->pots->array[iPot * 3 + 1]);
-            fprintf(obj->fp, "        <z>%+1.3f</z>\n",msg_pots->pots->array[iPot * 3 + 2]);
-            fprintf(obj->fp, "        <E>%+1.3f</E>\n",msg_pots->pots->array[iPot * 3 + 3]);
+            fprintf(obj->fp, "        <x>%+1.3f</x>\n",msg_pots->pots->array[iPot * 4 + 0]);
+            fprintf(obj->fp, "        <y>%+1.3f</y>\n",msg_pots->pots->array[iPot * 4 + 1]);
+            fprintf(obj->fp, "        <z>%+1.3f</z>\n",msg_pots->pots->array[iPot * 4 + 2]);
+            fprintf(obj->fp, "        <E>%+1.3f</E>\n",msg_pots->pots->array[iPot * 4 + 3]);
             fprintf(obj->fp, "    </src>\n");
 
         }

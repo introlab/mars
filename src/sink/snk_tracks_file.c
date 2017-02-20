@@ -59,8 +59,25 @@
 
     void snk_tracks_file_process_xml(snk_tracks_file_obj * obj, msg_tracks_obj * msg_tracks) {
 
-        printf("Not available yet\n");
-        exit(EXIT_FAILURE);
+        unsigned int iTrack;
+
+        fprintf(obj->fp, "<frame timestamp = \"%llu\">\n",msg_tracks->timeStamp);
+        
+        for (iTrack = 0; iTrack < msg_tracks->tracks->nTracks; iTrack++) {
+            
+            if (msg_tracks->tracks->ids[iTrack] != 0) {
+
+                fprintf(obj->fp, "    <src id = %llu>\n",msg_tracks->tracks->ids[iTrack]);
+                fprintf(obj->fp, "        <x>%+1.3f</x>\n",msg_tracks->tracks->array[iTrack * 3 + 0]);
+                fprintf(obj->fp, "        <y>%+1.3f</y>\n",msg_tracks->tracks->array[iTrack * 3 + 1]);
+                fprintf(obj->fp, "        <z>%+1.3f</z>\n",msg_tracks->tracks->array[iTrack * 3 + 2]);
+                fprintf(obj->fp, "    </src>\n");
+
+            }
+
+        }
+
+        fprintf(obj->fp, "</frame>\n");
 
     }
 

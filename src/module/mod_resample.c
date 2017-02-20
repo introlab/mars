@@ -76,7 +76,7 @@
 
     }
 
-    void mod_resample_process(mod_resample_obj * obj, const msg_hops_obj * msg_hopsIn, const msg_hops_obj * msg_hopsOut) {
+    void mod_resample_process(mod_resample_obj * obj, const msg_hops_obj * msg_hopsIn, msg_hops_obj * msg_hopsOut) {
 
         unsigned int iHop;
 
@@ -117,6 +117,8 @@
             }
 
         }
+
+        msg_hopsOut->timeStamp = msg_hopsIn->timeStamp;
 
     }
 

@@ -30,6 +30,8 @@
         hop2frame_process(obj->hop2frame, msg_hops->hops, obj->frames);
         frame2freq_process(obj->frame2freq, obj->frames, msg_spectra->freqs);
 
+        msg_spectra->timeStamp = msg_hops->timeStamp;
+
     }
 
     mod_stft_cfg * mod_stft_cfg_construct(void) {

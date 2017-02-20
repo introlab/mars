@@ -39,7 +39,7 @@
 
     void mod_resample_destroy(mod_resample_obj * obj);
 
-    void mod_resample_process(mod_resample_obj * obj, const msg_hops_obj * msg_hopsIn, const msg_hops_obj * msg_hopsOut);
+    void mod_resample_process(mod_resample_obj * obj, const msg_hops_obj * msg_hopsIn, msg_hops_obj * msg_hopsOut);
 
     mod_resample_cfg * mod_resample_cfg_construct(void);
 

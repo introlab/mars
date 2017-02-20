@@ -737,7 +737,7 @@
 
         }
 
-        //printf("\n\n");
+        msg_tracks->timeStamp = msg_pots->timeStamp;
 
     }
 
