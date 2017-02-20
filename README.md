@@ -11,7 +11,7 @@
 * Sound Source Tracking
 * Optimized for real-time processing on low-cost hardware
 
-## Articles
+## Cite this work
 
 Please cite us if you like this framework and use it for your own research:
 
