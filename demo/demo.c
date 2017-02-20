@@ -18,6 +18,8 @@
         configs * cfgs;
         objects * objs;
 
+        unsigned int nHops;
+
         profiler_obj * profiler;
         float timeProcessing, timeSignal;
 
@@ -58,9 +60,12 @@
        
         signal(SIGINT, sighandler);
         quit = 0x00;
+        nHops = 0;
 
         printf("Processing............... "); fflush(stdout);
         while((objects2objects_process(objs, profiler) == 0) && (quit==0x00)) {
+
+            nHops++;
 
             if (args->verbose == 0x01) {
 

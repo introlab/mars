@@ -54,7 +54,16 @@
 
                         nInputs++;
 
-                    }                                      
+                    }       
+
+                    if (name_check_file_wav(optarg) == 0) {
+
+                        args->input_wav_file = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->input_wav_file, optarg);
+
+                        nInputs++;
+
+                    }                               
 
                 break;
 

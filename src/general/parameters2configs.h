@@ -10,6 +10,8 @@
 
     src_raw_soundcard_cfg * parameters2configs_src_raw_soundcard(const parameters * params);
 
+    src_wav_file_cfg * parameters2configs_src_wav_file(const parameters * params);
+
     msg_hops_cfg * parameters2configs_msg_hops_raw_in(const parameters * params);
 
     mod_resample_cfg * parameters2configs_mod_resample_raw_in(const parameters * params);

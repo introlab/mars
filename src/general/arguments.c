@@ -11,6 +11,7 @@
         args->input_raw_file = (char *) NULL;
         args->input_raw_soundcard = (char *) NULL;
         args->input_raw_socket = (char *) NULL;
+        args->input_wav_file = (char *) NULL;
         args->output_raw_file = (char *) NULL;
         args->output_raw_soundcard = (char *) NULL;
         args->output_raw_socket = (char *) NULL;
@@ -41,6 +42,10 @@
          
         if (args->input_raw_socket != NULL) {
             free((void *) args->input_raw_socket);
+        }
+
+        if (args->input_wav_file != NULL) {
+            free((void *) args->input_wav_file);
         }
 
         if (args->output_raw_file != NULL) {
@@ -81,6 +86,7 @@
         printf("input_raw_file: %s\n",args->input_raw_file);
         printf("input_raw_soundcard: %s\n",args->input_raw_soundcard);
         printf("input_raw_socket: %s\n",args->input_raw_socket);
+        printf("input_wav_file: %s\n",args->input_wav_file);
         printf("output_raw_file: %s\n",args->output_raw_file);
         printf("output_raw_soundcard: %s\n",args->output_raw_soundcard);
         printf("output_raw_socket: %s\n",args->output_raw_socket);

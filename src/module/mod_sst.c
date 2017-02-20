@@ -74,7 +74,10 @@
 
         }       
 
-        if (strcmp(cfg->shape,"halfsphere") == 0) {
+        if (strcmp(cfg->shape,"arc") == 0) {
+            diffuse_cst = 1.0f / (M_PI);
+        }
+        else if (strcmp(cfg->shape,"halfsphere") == 0) {
             diffuse_cst = 1.0f / (2*M_PI);
         }
         else {
@@ -274,14 +277,14 @@
                         case 'P':                    
 
                             kalman2kalman_predict(obj->kalman2kalman_prob,
-                                                  obj->kalmans[iTrackMax]);                
+                                                  obj->kalmans[iTrackMax]);         
 
                         break;
 
                         case 'A':
 
                             kalman2kalman_predict(obj->kalman2kalman_active,
-                                                  obj->kalmans[iTrackMax]);   
+                                                  obj->kalmans[iTrackMax]);  
 
                         break;
 
@@ -348,6 +351,7 @@
                                                      msg_pots->pots,
                                                      iTrack,
                                                      obj->coherences[obj->nTracks]);
+
                         break;
 
                         case 'A':
@@ -368,7 +372,6 @@
                         break;
 
                     }
-
 
                 }
                 else {
@@ -734,6 +737,7 @@
 
         }
 
+        //printf("\n\n");
 
     }
 

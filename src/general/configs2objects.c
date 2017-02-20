@@ -23,6 +23,15 @@
 
         }
 
+        if (args->input_wav_file != NULL) {
+
+            cfgs->src_wav_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->input_wav_file)+1));
+            strcpy(cfgs->src_wav_file->fileName, args->input_wav_file);
+
+            objs->src_wav_file = src_wav_file_construct(cfgs->src_wav_file);
+
+        }
+
         if (args->input_raw_socket != NULL) {
 
             printf("Not implemented yet.\n");

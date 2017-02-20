@@ -80,9 +80,9 @@
 
         for (iParticle = 0; iParticle < obj->nParticles; iParticle++) {
 
-            particles->array[iParticle * 7 + 0] = pots->array[iPot * 3 + 0];
-            particles->array[iParticle * 7 + 1] = pots->array[iPot * 3 + 1];
-            particles->array[iParticle * 7 + 2] = pots->array[iPot * 3 + 2];
+            particles->array[iParticle * 7 + 0] = pots->array[iPot * 4 + 0];
+            particles->array[iParticle * 7 + 1] = pots->array[iPot * 4 + 1];
+            particles->array[iParticle * 7 + 2] = pots->array[iPot * 4 + 2];
             particles->array[iParticle * 7 + 6] = (1.0f / ((float) obj->nParticles));
 
             particles->state[iParticle] = (unsigned char) (obj->indexes_ratio[iParticle]);
@@ -143,9 +143,9 @@
 
         for (iPot = 0; iPot < pots->nPots; iPot++) {
 
-            x1 = pots->array[iPot * 3 + 0];
-            y1 = pots->array[iPot * 3 + 1];
-            z1 = pots->array[iPot * 3 + 2];
+            x1 = pots->array[iPot * 4 + 0];
+            y1 = pots->array[iPot * 4 + 1];
+            z1 = pots->array[iPot * 4 + 2];
 
             postprob = postprobs->arrayTrack[iTrack * pots->nPots + iPot];
 

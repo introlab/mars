@@ -9,6 +9,7 @@
 
         cfgs->src_raw_file = (src_raw_file_cfg *) NULL;
         cfgs->src_raw_soundcard = (src_raw_soundcard_cfg *) NULL;
+        cfgs->src_wav_file = (src_wav_file_cfg *) NULL;
         cfgs->msg_hops_raw_in = (msg_hops_cfg *) NULL;
         cfgs->mod_resample_raw_in = (mod_resample_cfg *) NULL;
         cfgs->msg_hops_raw = (msg_hops_cfg *) NULL;
@@ -35,6 +36,9 @@
         }
         if (cfgs->src_raw_soundcard != NULL) {
             src_raw_soundcard_cfg_destroy(cfgs->src_raw_soundcard);
+        }
+        if (cfgs->src_wav_file != NULL) {
+            src_wav_file_cfg_destroy(cfgs->src_wav_file);
         }
         if (cfgs->msg_hops_raw_in != NULL) {
             msg_hops_cfg_destroy(cfgs->msg_hops_raw_in);

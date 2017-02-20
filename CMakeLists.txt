@@ -79,6 +79,7 @@ set(SRC
 
     src/source/src_raw_soundcard.c
     src/source/src_raw_file.c
+    src/source/src_wav_file.c
 
     src/system/frame2freq.c
     src/system/freq2freq.c

@@ -117,9 +117,9 @@
         kalman->P_lm1lm1->array[4][4] = obj->sigmaQ * obj->sigmaQ;
         kalman->P_lm1lm1->array[5][5] = obj->sigmaQ * obj->sigmaQ;
 
-        kalman->x_lm1lm1->array[0][0] = pots->array[iPot * 3 + 0];
-        kalman->x_lm1lm1->array[1][0] = pots->array[iPot * 3 + 1];
-        kalman->x_lm1lm1->array[2][0] = pots->array[iPot * 3 + 2];
+        kalman->x_lm1lm1->array[0][0] = pots->array[iPot * 4 + 0];
+        kalman->x_lm1lm1->array[1][0] = pots->array[iPot * 4 + 1];
+        kalman->x_lm1lm1->array[2][0] = pots->array[iPot * 4 + 2];
 
     }
 
@@ -175,9 +175,9 @@
 
         }
 
-        obj->z->array[0][0] = pots->array[maxIndex * 3 + 0];
-        obj->z->array[1][0] = pots->array[maxIndex * 3 + 1];
-        obj->z->array[2][0] = pots->array[maxIndex * 3 + 2];
+        obj->z->array[0][0] = pots->array[maxIndex * 4 + 0];
+        obj->z->array[1][0] = pots->array[maxIndex * 4 + 1];
+        obj->z->array[2][0] = pots->array[maxIndex * 4 + 2];
 
         // Compute K
         matrix_mul(obj->HP, obj->H, kalman->P_llm1);

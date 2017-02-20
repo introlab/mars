@@ -22,6 +22,13 @@
 
         }
 
+        if (objs->src_wav_file != NULL) {
+
+            rtnValue = src_wav_file_process(objs->src_wav_file, 
+                                            objs->msg_hops_raw_in);
+
+        }
+
         if (rtnValue != 0) {
             return rtnValue;
         }

@@ -11,6 +11,16 @@
 
     }
 
+    int name_check_file_wav(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+
+        regcomp(&reg, ".wav$", REG_EXTENDED);
+        return regexec(&reg, str, 1, &match, 0);
+
+    }
+
     int name_check_file_cfg(const char * str) {
 
         regex_t reg;

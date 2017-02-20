@@ -128,9 +128,9 @@
         for (iPot = 0; iPot < pots->nPots; iPot++) {
 
             // Compute mu_s
-            obj->mu_s->array[0][0] = pots->array[iPot*3+0];
-            obj->mu_s->array[1][0] = pots->array[iPot*3+1];
-            obj->mu_s->array[2][0] = pots->array[iPot*3+2];
+            obj->mu_s->array[0][0] = pots->array[iPot*4+0];
+            obj->mu_s->array[1][0] = pots->array[iPot*4+1];
+            obj->mu_s->array[2][0] = pots->array[iPot*4+2];
             matrix_transpose(obj->mu_s_t, obj->mu_s);    
            
             // Compute sigma_st^-1

@@ -3,6 +3,7 @@
 
     #include "../source/src_raw_file.h"
     #include "../source/src_raw_soundcard.h"
+    #include "../source/src_wav_file.h"
     #include "../message/msg_hops.h"
     #include "../module/mod_resample.h"
     #include "../sink/snk_raw_file.h"

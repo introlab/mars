@@ -11,6 +11,12 @@
 * Sound Source Tracking
 * Optimized for real-time processing on low-cost hardware
 
+## Articles
+
+Please cite us if you like this framework and use it for your own research:
+
+* Grondin, F., Létourneau, D., Ferland, F., Rousseau, V., & Michaud, F. (2013). The ManyEars open framework. Autonomous Robots, 34(3), 217-232.
+
 ## Installation
 
 1. Install CMake if not already installed:

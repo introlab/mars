@@ -5,6 +5,7 @@
 
         cfgs->src_raw_file = parameters2configs_src_raw_file(params);
         cfgs->src_raw_soundcard = parameters2configs_src_raw_soundcard(params);
+        cfgs->src_wav_file = parameters2configs_src_wav_file(params);
         cfgs->msg_hops_raw_in = parameters2configs_msg_hops_raw_in(params);
         cfgs->mod_resample_raw_in = parameters2configs_mod_resample_raw_in(params);
         cfgs->msg_hops_raw = parameters2configs_msg_hops_raw(params);
@@ -46,6 +47,20 @@
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsIn;
         cfg->fS = params->general->fS * (params->raw->hopSizeIn/params->general->hopSize);
+
+        return cfg;
+
+    }
+
+    src_wav_file_cfg * parameters2configs_src_wav_file(const parameters * params) {
+
+        src_wav_file_cfg * cfg;
+
+        cfg = src_wav_file_cfg_construct();
+
+        cfg->hopSize = params->raw->hopSizeIn;
+        cfg->nMics = params->general->mics->nMics;
+        cfg->nBits = params->raw->nBitsIn;
 
         return cfg;
 

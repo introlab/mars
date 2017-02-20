@@ -5,6 +5,8 @@
 
     int name_check_file_raw(const char * str);
 
+    int name_check_file_wav(const char * str);
+
     int name_check_file_cfg(const char * str);
 
     int name_check_file_potbin(const char * str);

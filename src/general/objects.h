@@ -5,6 +5,7 @@
 
     #include "../source/src_raw_file.h"
     #include "../source/src_raw_soundcard.h"
+    #include "../source/src_wav_file.h"
     #include "../message/msg_hops.h"
     #include "../module/mod_resample.h"
     #include "../sink/snk_raw_file.h"
@@ -21,6 +22,7 @@
 
         src_raw_file_obj * src_raw_file;
         src_raw_soundcard_obj * src_raw_soundcard;
+        src_wav_file_obj * src_wav_file;
         msg_hops_obj * msg_hops_raw_in;
         mod_resample_obj * mod_resample_raw_in;
         msg_hops_obj * msg_hops_raw;
