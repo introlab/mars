@@ -15,7 +15,11 @@
 
 Please cite us if you like this framework and use it for your own research:
 
-* Grondin, F., Létourneau, D., Ferland, F., Rousseau, V., & Michaud, F. (2013). The ManyEars open framework. Autonomous Robots, 34(3), 217-232.
+* Grondin, F. and Michaud, F., "Robust Speech/Non-Speech Discrimination Based on Pitch Estimation for Mobile Robots," Proceedings of the IEEE International Conference Robotics and Automation, 2016
+* Grondin, F. and Michaud, F., "Noise Mask for TDOA Sound Source Localization of Speech on Mobile Robots in Noisy Environments," Proceedings of the IEEE International Conference Robotics and Automation, 2016
+* Grondin, F. and Michaud, F., "Time Difference of Arrival Estimation based on Binary Frequency Mask for Sound Source Localization on Mobile Robots," Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems, 2015
+* Grondin, F., Létourneau, D., Ferland, F. and Michaud, F., "An Open Hardware and Software Microphone Array System for Robotic Applications," Demonstration session of the IEEE International Conference on Human-Robot Interaction, 2013
+* Grondin, F., Létourneau, D., Ferland, F., Rousseau, V. and Michaud, F., "The ManyEars Open Framework - Microphone Array Open Software and Open Hardware System for Robotic Applications," Autonomous Robots, pp. 1 - 16, 2013
 
 ## Installation
 
