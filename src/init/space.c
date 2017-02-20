@@ -514,3 +514,35 @@
         return obj;
 
     }
+
+    points_obj * space_arc(const unsigned int level) {
+
+        points_obj * obj;
+        unsigned int nPoints;
+        unsigned int iPoint;
+        unsigned int iLevel;
+        float theta;
+
+        nPoints = 1;
+        for (iLevel = 0; iLevel < level; iLevel++) {
+            nPoints *= 2;
+        }
+
+        nPoints *= 3;
+        nPoints++;
+
+        obj = points_construct_zero(nPoints);
+
+        for (iPoint = 0; iPoint < nPoints; iPoint++) {
+
+            theta = (((float) iPoint) / ((float) nPoints - 1)) * M_PI;
+
+            obj->array[iPoint * 3 + 0] = cosf(theta);
+            obj->array[iPoint * 3 + 1] = sinf(theta);
+            obj->array[iPoint * 3 + 2] = 0.0f;
+
+        }
+
+        return obj;
+
+    }

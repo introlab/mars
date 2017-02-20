@@ -16,7 +16,12 @@
         obj->nPots = cfg->nPots;
         obj->nScans = cfg->nLevels;
 
-        if (strcmp(cfg->shape,"halfsphere") == 0) {
+        if (strcmp(cfg->shape,"arc") == 0) {
+
+            obj->scans = scanning_init_arc(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);
+
+        }
+        else if (strcmp(cfg->shape,"halfsphere") == 0) {
 
             obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);
 

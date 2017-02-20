@@ -18,4 +18,6 @@
 
     points_obj * space_halfsphere(const unsigned int level);
 
+    points_obj * space_arc(const unsigned int level);
+
 #endif
