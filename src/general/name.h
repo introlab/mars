@@ -21,4 +21,6 @@
 
     int name_check_hw(const char * str);
 
+    int name_check_plughw(const char * str);
+
 #endif

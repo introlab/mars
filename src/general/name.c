@@ -90,3 +90,13 @@
         return regexec(&reg, str, 1, &match, 0);
 
     }
+
+    int name_check_plughw(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+
+        regcomp(&reg, "^plughw:[0-9]{1},[0-9]{1}$", REG_EXTENDED);
+        return regexec(&reg, str, 1, &match, 0);
+
+    }

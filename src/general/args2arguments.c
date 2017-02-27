@@ -38,7 +38,7 @@
 
                     }
 
-                    if (name_check_hw(optarg) == 0) {
+                    if ((name_check_hw(optarg) == 0) || (name_check_plughw(optarg) == 0)) {
 
                         args->input_raw_soundcard = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
                         strcpy(args->input_raw_soundcard, optarg);
