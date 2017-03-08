@@ -119,3 +119,10 @@ add_executable(demo
 target_link_libraries(demo
     mars
 )
+
+add_executable(twtm
+    demo/twtm.c
+)
+target_link_libraries(twtm
+    mars
+)
