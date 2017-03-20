@@ -94,11 +94,12 @@ set(SRC
     src/system/xcorr2aimg.c
     src/system/xcorr2xcorr.c
 
-    src/utils/fft.c
+    src/utils/fft.c    
     src/utils/gaussian.c   
     src/utils/matrix.c
     src/utils/pcm.c
     src/utils/random.c    
+    src/utils/sort.c
 
 )
 
@@ -124,5 +125,12 @@ add_executable(twtm
     demo/twtm.c
 )
 target_link_libraries(twtm
+    mars
+)
+
+add_executable(dummy
+    demo/test.c
+)
+target_link_libraries(dummy
     mars
 )

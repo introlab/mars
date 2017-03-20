@@ -5,6 +5,7 @@
     #include <stdlib.h>
     #include "../signal/triangle.h"
     #include "../signal/point.h"
+    #include "../utils/sort.h"
 
     triangles_obj * space_triangles_level_zero(void);
 
@@ -19,5 +20,9 @@
     points_obj * space_halfsphere(const unsigned int level);
 
     points_obj * space_arc(const unsigned int level);
+
+    float * space_points_hash(const points_obj * points);
+
+    float space_triangles_shortestDistance(const triangles_obj * triangles);
 
 #endif
