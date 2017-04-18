@@ -6,6 +6,7 @@
 
     #include "point.h"
     #include "tdoa.h"
+    #include "delta.h"
     #include "index.h"
 
     //! Scan setup
@@ -14,6 +15,9 @@
         unsigned int nScans;
         points_obj ** points;
         tdoas_obj ** tdoas;
+        tdoas_obj ** minmax;
+        tdoas_obj * allminmax;
+        deltas_obj ** deltas;
         indexes_obj ** indexes;
 
     } scans_obj;

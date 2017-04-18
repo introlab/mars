@@ -1,53 +1,67 @@
 
     #include "linking.h"
 
-    maps_obj * linking_maps(const tdoas_obj * tdoasCoarse, const tdoas_obj * tdoasFine, const float sigma, const unsigned int nMatches) {
+    maps_obj * linking_maps(const tdoas_obj * tdoasCoarse, const tdoas_obj * tdoasFine, const deltas_obj * deltasCoarse, const deltas_obj * deltasFine, const float ratioMatch) {
 
         maps_obj * obj;
         float * scores;
         
+        unsigned int lambdaCoarseLeft;
+        unsigned int lambdaCoarseRight;
+        unsigned int lambdaFineLeft;
+        unsigned int lambdaFineRight;
+
         float score;
-        float tauCoarse;
-        float tauFine;
-        float tauDiff;
 
         unsigned int iFine;
         unsigned int iCoarse;
         unsigned int iPair;
         unsigned int iMatch;
 
+        unsigned int nFines;
+        unsigned int nCoarses;
+        unsigned int nPairs;
+        unsigned int nMatches;
+
         float maxValue;
         unsigned int maxIndex;
 
         if (tdoasCoarse != NULL) {
 
-            obj = maps_construct_zero(tdoasCoarse->nPoints, tdoasFine->nPoints);
-            scores = (float *) malloc(sizeof(float) * tdoasCoarse->nPoints);
+            nFines = tdoasFine->nPoints;
+            nCoarses = tdoasCoarse->nPoints;
+            nPairs = tdoasFine->nPairs;
 
-            for (iFine = 0; iFine < tdoasFine->nPoints; iFine++) {
+            nMatches = (unsigned int) (roundf(((float) nCoarses) * ratioMatch));
 
-                for (iCoarse = 0; iCoarse < tdoasCoarse->nPoints; iCoarse++) {
+            obj = maps_construct_zero(nCoarses, nFines);
+            scores = (float *) malloc(sizeof(float) * nCoarses);
+
+            for (iFine = 0; iFine < nFines; iFine++) {
+
+                for (iCoarse = 0; iCoarse < nCoarses; iCoarse++) {
 
                     scores[iCoarse] = 0.0f;
 
-                    for (iPair = 0; iPair < tdoasFine->nPairs; iPair++) {
+                    for (iPair = 0; iPair < nPairs; iPair++) {
 
-                        tauCoarse = (float) (tdoasCoarse->array[iCoarse * tdoasCoarse->nPairs + iPair]);
-                        tauFine = (float) (tdoasFine->array[iFine * tdoasFine->nPairs + iPair]);
-                        tauDiff = tauCoarse - tauFine;
+                        lambdaCoarseLeft = tdoasCoarse->array[iCoarse * nPairs + iPair] - deltasCoarse->array[iPair];
+                        lambdaCoarseRight = tdoasCoarse->array[iCoarse * nPairs + iPair] + deltasCoarse->array[iPair];
+                        lambdaFineLeft = tdoasFine->array[iFine * nPairs + iPair] - deltasFine->array[iPair];
+                        lambdaFineRight = tdoasFine->array[iFine * nPairs + iPair] + deltasFine->array[iPair];
 
-                        scores[iCoarse] += exp(-1.0f * tauDiff * tauDiff / (2.0f * sigma));
+                        scores[iCoarse] += linking_overlap(lambdaCoarseLeft,lambdaCoarseRight,lambdaFineLeft,lambdaFineRight);
 
                     }
 
                 }
 
-                for (iMatch = 0; iMatch <  nMatches; iMatch++) {
+                for (iMatch = 0; iMatch < nMatches; iMatch++) {
 
+                    maxValue = 0.0f;
                     maxIndex = 0;
-                    maxValue = scores[maxIndex];
 
-                    for (iCoarse = 1; iCoarse < tdoasCoarse->nPoints; iCoarse++) {
+                    for (iCoarse = 0; iCoarse < nCoarses; iCoarse++) {
 
                         if (scores[iCoarse] > maxValue) {
 
@@ -59,7 +73,7 @@
                     }
 
                     obj->array[iFine * obj->nCoarses + maxIndex] = 0x01;
-                    scores[maxIndex] = -INFINITY;
+                    scores[maxIndex] = 0.0f;
 
                 }
 
@@ -132,5 +146,48 @@
         }        
 
         return obj;
+
+    }
+
+    float linking_overlap(const float lambdaCoarseLeft, const float lambdaCoarseRight, const float lambdaFineLeft, const float lambdaFineRight) {
+
+        float overlap;
+        float lambdaMaxLeft;
+        float lambdaMinRight;
+
+        if ((lambdaCoarseRight >= lambdaFineLeft) && (lambdaCoarseLeft <= lambdaFineRight)) {
+
+            if (lambdaCoarseLeft > lambdaFineLeft) {
+
+                lambdaMaxLeft = lambdaCoarseLeft;
+
+            }
+            else {
+
+                lambdaMaxLeft = lambdaFineLeft;
+
+            }
+
+            if (lambdaCoarseRight < lambdaFineRight) {
+
+                lambdaMinRight = lambdaCoarseRight;
+
+            }
+            else {
+
+                lambdaMinRight = lambdaFineRight;
+
+            }
+            
+            overlap = lambdaMinRight - lambdaMaxLeft + 1.0f;
+
+        }
+        else {
+            
+            overlap = 0.0f;
+
+        }
+
+        return overlap;
 
     }

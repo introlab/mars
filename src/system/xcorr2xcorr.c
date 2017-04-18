@@ -19,16 +19,23 @@
 
     }
 
-    void xcorr2xcorr_process_max(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const unsigned int delta, xcorrs_obj * xcorrsMax) {
+    void xcorr2xcorr_process_max(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const deltas_obj * deltas, xcorrs_obj * xcorrsMax) {
 
         unsigned int iSignal;
         unsigned int iSampleMax;
+        unsigned int iSampleMaxLeft;
+        unsigned int iSampleMaxRight;
         unsigned int iSample;
+        unsigned int delta;
         float maxValue;
 
         for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
-            for (iSampleMax = tdoas->arrayMin[iSignal]; iSampleMax <= tdoas->arrayMax[iSignal]; iSampleMax++) {
+            delta = deltas->array[iSignal];
+            iSampleMaxLeft = tdoas->array[0*xcorrs->nSignals + iSignal] + delta;
+            iSampleMaxRight = tdoas->array[1*xcorrs->nSignals + iSignal] + delta;
+
+            for (iSampleMax = iSampleMaxLeft; iSampleMax <= iSampleMaxRight; iSampleMax++) {
 
                 maxValue = xcorrs->array[iSignal][iSampleMax];
 
@@ -50,16 +57,19 @@
 
     }
 
-    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const unsigned int delta, const unsigned int iPoint, xcorrs_obj * xcorrsReset) {
+    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const deltas_obj * deltas, const unsigned int iPoint, xcorrs_obj * xcorrsReset) {
 
         unsigned int iSignal;
         unsigned int iSample;
         unsigned int nSamples;
+        unsigned int delta;
 
         for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
-            iSample = tdoas->arrayMin[iSignal];
-            nSamples = (tdoas->arrayMax[iSignal] - tdoas->arrayMin[iSignal] + 1);
+            delta = deltas->array[iSignal];
+
+            iSample = tdoas->array[0 * xcorrs->nSignals + iSignal];
+            nSamples = (tdoas->array[1 * xcorrs->nSignals + iSignal] - tdoas->array[0 * xcorrs->nSignals + iSignal] + 1);
 
             memcpy(&(xcorrsReset->array[iSignal][iSample]), &(xcorrs->array[iSignal][iSample]), sizeof(float) * nSamples);
 

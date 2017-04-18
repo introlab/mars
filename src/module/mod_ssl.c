@@ -16,26 +16,17 @@
         obj->nPots = cfg->nPots;
         obj->nScans = cfg->nLevels;
 
-        if (strcmp(cfg->shape,"arc") == 0) {
+        if (strcmp(cfg->shape,"sphere") == 0) {
 
-            obj->scans = scanning_init_arc(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);
-
-        }
-        else if (strcmp(cfg->shape,"halfsphere") == 0) {
-
-            obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);
+            obj->scans = scanning_init_sphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->soundspeed, cfg->ratioMatch, cfg->frameSize, cfg->deltas, cfg->probMin, cfg->nRefinedLevels);
 
         }
         else {
 
-            obj->scans = scanning_init_sphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->c, cfg->sigma, cfg->nMatches, cfg->frameSize, cfg->deltasMax[0]);	
+            obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->soundspeed, cfg->ratioMatch, cfg->frameSize, cfg->deltas, cfg->probMin, cfg->nRefinedLevels);
 
         }
 
-        obj->deltasMax = (unsigned int *) malloc(sizeof(unsigned int) * cfg->nLevels);
-        memcpy(obj->deltasMax, cfg->deltasMax, sizeof(unsigned int) * cfg->nLevels);
-
-        obj->deltaReset = cfg->deltaReset;
         obj->r = 0;
         obj->R = cfg->R;
 
@@ -84,8 +75,6 @@
         unsigned int iPot;
 
         scans_destroy(obj->scans);
-
-        free((void *) obj->deltasMax);
 
         freqs_destroy(obj->phasors);
         freqs_destroy(obj->products);
@@ -150,10 +139,8 @@
 
                     freq2xcorr_process(obj->freq2xcorr, 
                     	               obj->smooths, 
-                                       obj->scans->tdoas[obj->nScans-1],
+                                       obj->scans->allminmax,
                     	               obj->xcorrsReset[0]);
-
-
 
                 }
                 else {
@@ -161,7 +148,7 @@
                     xcorr2xcorr_process_reset(obj->xcorr2xcorr, 
                 	                          obj->xcorrsReset[iPot-1],
                 	                          obj->scans->tdoas[obj->nScans-1],
-                                              obj->deltaReset,
+                                              obj->scans->deltas[obj->nScans-1],
                                               maxIndex,
                                               obj->xcorrsReset[iPot]);
 
@@ -173,8 +160,8 @@
 
                     xcorr2xcorr_process_max(obj->xcorr2xcorr, 
             	                            obj->xcorrsReset[iPot], 
-            	                            obj->scans->tdoas[obj->nScans-1],
-         	                                obj->deltasMax[iScan],
+            	                            obj->scans->minmax[iScan],
+         	                                obj->scans->deltas[iScan],
             	                            obj->xcorrsMax[iPot][iScan]);
 
                     xcorr2aimg_process(obj->xcorr2aimg[iScan],
@@ -222,18 +209,19 @@
         cfg->mics = (mics_obj *) NULL;
         cfg->nPots = 0;
         cfg->fS = 0;
-        cfg->c = 0;
+        cfg->soundspeed = (soundspeed_obj *) NULL;
         cfg->frameSize = 0;
-        cfg->nMatches = 0;
-        cfg->sigma = 0.0f;
         cfg->epsilon = 0.0f;
         cfg->alpha = 0.0f;
+        cfg->R = 0;
         cfg->shape = (char *) NULL;
+        
         cfg->nLevels = 0;;
         cfg->levels = (unsigned int *) NULL;
-        cfg->deltasMax = (unsigned int *) NULL;
-        cfg->deltaReset = 0;
-        cfg->R = 0;
+        cfg->deltas = (unsigned int *) NULL;
+        cfg->ratioMatch = 0.0f;
+        cfg->probMin = 0.0f;
+        cfg->nRefinedLevels = 0;
 
         return cfg;
 

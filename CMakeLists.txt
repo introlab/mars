@@ -33,6 +33,7 @@ set(SRC
 
     src/init/combining.c
     src/init/delay.c
+    src/init/hit.c
     src/init/linking.c
     src/init/lowpass.c
     src/init/scanning.c
@@ -50,8 +51,10 @@ set(SRC
     src/module/mod_sst.c
 
     src/signal/aimg.c
+    src/signal/area.c
     src/signal/assignation.c
     src/signal/coherence.c
+    src/signal/delta.c
     src/signal/fir.c
     src/signal/frame.c
     src/signal/freq.c
@@ -67,7 +70,9 @@ set(SRC
     src/signal/postprob.c
     src/signal/pot.c
     src/signal/scan.c
+    src/signal/soundspeed.c
     src/signal/tdoa.c
+    src/signal/tau.c
     src/signal/track.c
     src/signal/triangle.c
     src/signal/window.c

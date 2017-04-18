@@ -380,32 +380,162 @@
 
     }
 
+    triangles_obj * space_triangles_points(const points_obj * points, const unsigned int index) {
+
+        unsigned int iPoint;
+        float x1, y1, z1;
+        float x2, y2, z2;
+        float dx, dy, dz;
+        float dist, minDist;
+        unsigned int iPointMin;
+        float ux, uy, uz;
+        float tx, ty, tz;
+        float x0, y0, z0;
+        float xR, yR, zR;
+        unsigned int iAngle;
+        unsigned int nAngles;
+        float theta;
+        float R11, R12, R13, R21, R22, R23, R31, R32, R33;
+        float dot;
+        float norm;
+
+        triangles_obj * triangles_octo;
+        points_obj * points_octo;
+
+        x1 = points->array[index*3+0];
+        y1 = points->array[index*3+1];
+        z1 = points->array[index*3+2];
+
+        minDist = +INFINITY;
+
+        for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
+
+            if (iPoint != index) {
+
+                x2 = points->array[iPoint*3+0];
+                y2 = points->array[iPoint*3+1];
+                z2 = points->array[iPoint*3+2];
+
+                dx = x1 - x2;
+                dy = y1 - y2;
+                dz = z1 - z2;
+
+                dist = dx*dx + dy*dy + dz*dz;
+
+                if (dist < minDist) {
+
+                    minDist = dist;
+                    iPointMin = iPoint;
+
+                }
+
+            }
+
+        }
+
+        ux = points->array[index*3+0];
+        uy = points->array[index*3+1];
+        uz = points->array[index*3+2];
+
+        x1 = points->array[iPointMin*3+0];
+        y1 = points->array[iPointMin*3+1];
+        z1 = points->array[iPointMin*3+2];
+
+        dot = (ux*x1) + (uy*y1) + (uz*z1);
+
+        x0 = ux + x1 - dot * ux;
+        y0 = uy + y1 - dot * uy;
+        z0 = uz + z1 - dot * uz;
+
+        tx = ux - x0;
+        ty = uy - y0;
+        tz = uz - z0;
+
+        tx *= 0.75f;
+        ty *= 0.75f;
+        tz *= 0.75f;
+
+        x0 = ux - tx;
+        y0 = uy - ty;
+        z0 = uz - tz;
+
+        nAngles = 8;
+
+        points_octo = points_construct_zero(nAngles);
+
+        for (iAngle = 0; iAngle < nAngles; iAngle++) {
+
+            theta = 2*M_PI * ((float) iAngle) / ((float) nAngles);
+
+            R11 = cosf(theta) + (ux*ux) * (1.0f - cosf(theta));
+            R12 = (ux*uy) * (1.0f - cosf(theta)) - uz * sinf(theta);
+            R13 = (ux*uz) * (1.0f - cosf(theta)) + uy * sinf(theta);
+            R21 = (uy*ux) * (1.0f - cosf(theta)) + uz * sinf(theta);
+            R22 = cosf(theta) + (uy*uy) * (1.0f - cosf(theta));
+            R23 = (uy*uz) * (1.0f - cosf(theta)) - ux * sinf(theta);
+            R31 = (uz*ux) * (1.0f - cosf(theta)) - uy * sinf(theta);
+            R32 = (uz*uy) * (1.0f - cosf(theta)) + ux * sinf(theta);
+            R33 = cosf(theta) + (uz*uz) * (1.0f - cosf(theta));
+
+            xR = R11 * x0 + R12 * y0 + R13 * z0;
+            yR = R21 * x0 + R22 * y0 + R23 * z0;
+            zR = R31 * x0 + R32 * y0 + R33 * z0;
+
+            norm = sqrtf(xR*xR + yR*yR + zR*zR);
+
+            xR /= norm;
+            yR /= norm;
+            zR /= norm;
+
+            points_octo->array[iAngle*3+0] = xR;
+            points_octo->array[iAngle*3+1] = yR;
+            points_octo->array[iAngle*3+2] = zR;
+
+        }
+
+        triangles_octo = triangles_construct_zero(nAngles);
+
+        for (iAngle = 0; iAngle < (nAngles-1); iAngle++) {
+
+            triangles_octo->array[iAngle*9+0] = points_octo->array[iAngle*3+0];
+            triangles_octo->array[iAngle*9+1] = points_octo->array[iAngle*3+1];
+            triangles_octo->array[iAngle*9+2] = points_octo->array[iAngle*3+2];
+            triangles_octo->array[iAngle*9+3] = ux;
+            triangles_octo->array[iAngle*9+4] = uy;
+            triangles_octo->array[iAngle*9+5] = uz;
+            triangles_octo->array[iAngle*9+6] = points_octo->array[(iAngle+1)*3+0];
+            triangles_octo->array[iAngle*9+7] = points_octo->array[(iAngle+1)*3+1];
+            triangles_octo->array[iAngle*9+8] = points_octo->array[(iAngle+1)*3+2];            
+
+        }
+
+        triangles_octo->array[iAngle*9+0] = points_octo->array[(nAngles-1)*3+0];
+        triangles_octo->array[iAngle*9+1] = points_octo->array[(nAngles-1)*3+1];
+        triangles_octo->array[iAngle*9+2] = points_octo->array[(nAngles-1)*3+2];
+        triangles_octo->array[iAngle*9+3] = ux;
+        triangles_octo->array[iAngle*9+4] = uy;
+        triangles_octo->array[iAngle*9+5] = uz;
+        triangles_octo->array[iAngle*9+6] = points_octo->array[0];
+        triangles_octo->array[iAngle*9+7] = points_octo->array[1];
+        triangles_octo->array[iAngle*9+8] = points_octo->array[2];         
+
+        return triangles_octo;
+
+    }
+
     points_obj * space_points_triangles(const triangles_obj * triangles) {
 
         unsigned int iTriangle;
         unsigned int iPointInTriangle;
         unsigned int iPoint;
+        unsigned int iPoint2;
         unsigned int nPoints;
     
         float diff, dist;        
         float point[3];
-    
-        unsigned int * indexUnsorted;
-        unsigned int * indexSorted;
-        unsigned int * indexWork;
-        float * hashUnsorted;
-        float * hashSorted;
-        float * hashWork;
 
         float shortestDistance;
         float limitDistance;
-        float limitHash;
-
-        float hash;
-        float hashMin;
-        float hashMax;
-        unsigned int hashIndex;
-        unsigned int iHash;
 
         char * added;
         unsigned int iPointCompare;
@@ -415,8 +545,6 @@
         points_obj * pointsAll;
         points_obj * pointsContainer;
         points_obj * pointsUnique;
-
-        unsigned char match;
 
         // Copy all points from triangles in an array of points
 
@@ -441,37 +569,10 @@
 
         }
 
-        // Generate a hash array
-
-        hashUnsorted = space_points_hash((const points_obj *) pointsAll);
-
-        // Generate indexes
-
-        indexUnsorted = (unsigned int *) malloc(sizeof(unsigned int) * pointsAll->nPoints);
-        for (iPoint = 0; iPoint < pointsAll->nPoints; iPoint++) {
-            indexUnsorted[iPoint] = iPoint;
-        }
-
-        // Sort
-
-        hashSorted = (float *) malloc(sizeof(float) * pointsAll->nPoints);
-        indexSorted = (unsigned int *) malloc(sizeof(unsigned int) * pointsAll->nPoints);
-        hashWork = (float *) malloc(sizeof(float) * pointsAll->nPoints);
-        indexWork = (unsigned int *) malloc(sizeof(unsigned int) * pointsAll->nPoints);
-
-        sort_merge((const float *) hashUnsorted, 
-                   hashSorted,
-                   hashWork, 
-                   (const unsigned int *) indexUnsorted,
-                   indexSorted, 
-                   indexWork, 
-                   pointsAll->nPoints);
-
         // Shortest distance
 
-        shortestDistance = space_triangles_shortestDistance(triangles);
-        limitDistance = shortestDistance / 2.0f;
-        limitHash = limitDistance * sqrtf(3);
+        shortestDistance = space_distances_shortest_triangles(triangles);
+        limitDistance = 0.5 * shortestDistance;
 
         // Remove duplicate
 
@@ -486,28 +587,19 @@
 
             if (added[iPoint] == 0x00) {
 
-                hash = hashUnsorted[iPoint];
-                hashMin = hash - limitHash;
-                hashMax = hash + limitHash;
-                hashIndex = sort_find(hashSorted, pointsAll->nPoints, hashMin);
+                for (iPoint2 = 0; iPoint2 < pointsAll->nPoints; iPoint2++) {
 
-                while ((hashIndex < pointsAll->nPoints) && (hashSorted[hashIndex] <= hashMax)) {
-
-                    iPointCompare = indexSorted[hashIndex];
-
-                    dx = pointsAll->array[iPoint*3+0] - pointsAll->array[iPointCompare*3+0];
-                    dy = pointsAll->array[iPoint*3+1] - pointsAll->array[iPointCompare*3+1];
-                    dz = pointsAll->array[iPoint*3+2] - pointsAll->array[iPointCompare*3+2];
+                    dx = pointsAll->array[iPoint*3+0] - pointsAll->array[iPoint2*3+0];
+                    dy = pointsAll->array[iPoint*3+1] - pointsAll->array[iPoint2*3+1];
+                    dz = pointsAll->array[iPoint*3+2] - pointsAll->array[iPoint2*3+2];
 
                     distance = dx * dx + dy * dy + dz * dz;
 
                     if (distance < (limitDistance*limitDistance)) {
                         
-                        added[iPointCompare] = 0x01;
+                        added[iPoint2] = 0x01;
 
                     }
-
-                    hashIndex++;
 
                 }
 
@@ -540,18 +632,65 @@
         points_destroy(pointsAll);
         points_destroy(pointsContainer);
 
-        free((void *) hashUnsorted);
-        free((void *) hashSorted);
-        free((void *) hashWork);
-        free((void *) indexUnsorted);
-        free((void *) indexSorted);
-        free((void *) indexWork);
         free((void *) added);
 
-        //exit(EXIT_SUCCESS);        
-
-
         return pointsUnique;
+
+    }
+
+    points_obj * space_points_fine(const points_obj * points, const unsigned int level) {
+
+        points_obj * obj;
+        
+        unsigned int nPointsCoarse;
+        unsigned int nPointsFine;
+        unsigned int nFinesPerCoarse;
+        unsigned int pow2, pow4;
+        unsigned int iLevel;
+
+        unsigned int iCoarse;
+        triangles_obj * triangles1;
+        triangles_obj * triangles2;
+        points_obj * pointsFine;
+
+        pow2 = 1;
+        pow4 = 1;
+
+        for (iLevel = 0; iLevel < level; iLevel++) {
+
+            pow2 *= 2;
+            pow4 *= 4;
+
+        }
+
+        nFinesPerCoarse = (4 * (pow2 + pow4) + 1);
+
+        nPointsCoarse = points->nPoints;
+        nPointsFine = nPointsCoarse * nFinesPerCoarse;
+
+        obj = points_construct_zero(nPointsFine);
+
+        for (iCoarse = 0; iCoarse < nPointsCoarse; iCoarse++) {
+
+            triangles1 = space_triangles_points(points, iCoarse);
+
+            for (iLevel = 0; iLevel < level; iLevel++) {
+
+                triangles2 = space_triangles_level_next(triangles1);
+                triangles_destroy(triangles1);
+                triangles1 = triangles2;
+
+            }
+
+            pointsFine = space_points_triangles(triangles1);
+            triangles_destroy(triangles1);
+
+            memcpy(&(obj->array[iCoarse*nFinesPerCoarse*3]), pointsFine->array, nFinesPerCoarse * 3 * sizeof(float));
+            points_destroy(pointsFine);
+
+        }
+
+        return obj;
 
     }
 
@@ -616,56 +755,7 @@
 
     }
 
-    points_obj * space_arc(const unsigned int level) {
-
-        points_obj * obj;
-        unsigned int nPoints;
-        unsigned int iPoint;
-        unsigned int iLevel;
-        float theta;
-
-        nPoints = 1;
-        for (iLevel = 0; iLevel < level; iLevel++) {
-            nPoints *= 2;
-        }
-
-        nPoints *= 3;
-        nPoints++;
-
-        obj = points_construct_zero(nPoints);
-
-        for (iPoint = 0; iPoint < nPoints; iPoint++) {
-
-            theta = (((float) iPoint) / ((float) nPoints - 1)) * M_PI;
-
-            obj->array[iPoint * 3 + 0] = cosf(theta);
-            obj->array[iPoint * 3 + 1] = sinf(theta);
-            obj->array[iPoint * 3 + 2] = 0.0f;
-
-        }
-
-        return obj;
-
-    }
-
-    float * space_points_hash(const points_obj * points) {
-
-        unsigned int iPoint;
-        float * hash;
-
-        hash = (float *) malloc(sizeof(float) * points->nPoints);
-
-        for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
-
-            hash[iPoint] = points->array[iPoint*3+0] + points->array[iPoint*3+1] + points->array[iPoint*3+2];
-
-        }
-
-        return hash;
-
-    }
-
-    float space_triangles_shortestDistance(const triangles_obj * triangles) {
+    float space_distances_shortest_triangles(const triangles_obj * triangles) {
 
         float shortestDistance;
         float x1, y1, z1;
@@ -700,6 +790,51 @@
             }
             if (dist31 < shortestDistance) {
                 shortestDistance = dist31;
+            }
+
+        }
+
+        shortestDistance = sqrtf(shortestDistance);
+
+        return shortestDistance;        
+
+    }
+
+    float space_distances_shortest_points(const points_obj * points) {
+
+        float shortestDistance;
+        float x1, y1, z1;
+        float x2, y2, z2;
+        float dist;
+        unsigned int iPoint;
+        unsigned int iPoint2;
+
+        shortestDistance = +INFINITY;       
+
+        for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
+
+            x1 = points->array[iPoint*3+0];
+            y1 = points->array[iPoint*3+1];
+            z1 = points->array[iPoint*3+2];
+
+            for (iPoint2 = 0; iPoint2 < points->nPoints; iPoint2++) {
+
+                if (iPoint != iPoint2) {
+
+                    x2 = points->array[iPoint2*3+0];
+                    y2 = points->array[iPoint2*3+1];
+                    z2 = points->array[iPoint2*3+2];                
+
+                    dist = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2);
+
+                    if (dist < shortestDistance) {
+
+                        shortestDistance = dist;
+
+                    }
+
+                }
+
             }
 
         }

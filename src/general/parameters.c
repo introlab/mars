@@ -21,6 +21,7 @@
         if (params->general != NULL) {
 
             mics_destroy(params->general->mics);
+            soundspeed_destroy(params->general->soundspeed);
             
             free((void *) params->general);
 
@@ -35,7 +36,7 @@
         if (params->ssl != NULL) {
 
             free((void *) params->ssl->levels);
-            free((void *) params->ssl->deltasMax);
+            free((void *) params->ssl->deltas);
             free((void *) params->ssl->shape);
             
             free((void *) params->ssl);
@@ -76,18 +77,27 @@
 
         for (iMic = 0; iMic < params->general->mics->nMics; iMic++) {
             
-            printf("    - (%02u): (%+1.3f, %+1.3f, %+1.3f)\n",
+            printf("    - (%02u): mu = (%+1.3f, %+1.3f, %+1.3f), Sigma = [%+1.3f %+1.3f %+1.3f; %+1.3f %+1.3f %+1.3f; %+1.3f %+1.3f %+1.3f]\n",
                    iMic,
-                   params->general->mics->array[iMic * 3 + 0],
-                   params->general->mics->array[iMic * 3 + 1],
-                   params->general->mics->array[iMic * 3 + 2]);    
+                   params->general->mics->mu[iMic * 3 + 0],
+                   params->general->mics->mu[iMic * 3 + 1],
+                   params->general->mics->mu[iMic * 3 + 2],
+                   params->general->mics->sigma[iMic * 9 + 0],
+                   params->general->mics->sigma[iMic * 9 + 1],
+                   params->general->mics->sigma[iMic * 9 + 2],
+                   params->general->mics->sigma[iMic * 9 + 3],
+                   params->general->mics->sigma[iMic * 9 + 4],
+                   params->general->mics->sigma[iMic * 9 + 5],
+                   params->general->mics->sigma[iMic * 9 + 6],
+                   params->general->mics->sigma[iMic * 9 + 7],
+                   params->general->mics->sigma[iMic * 9 + 8]);    
 
         }
 
         printf(" - hopSize: %u\n",params->general->hopSize);
         printf(" - frameSize: %u\n",params->general->frameSize);
         printf(" - fS: %u\n",params->general->fS);
-        printf(" - c: %1.1f\n",params->general->c);
+        printf(" - c: mu = %+1.3f, sigma = %+1.3f\n",params->general->soundspeed->mu, params->general->soundspeed->sigma);
 
         // Raw
 
@@ -108,16 +118,16 @@
 
         for (iLevel = 0; iLevel < params->ssl->nLevels; iLevel++) {
 
-            printf("    - (%01u): level = %u, deltaMax = %u\n",
+            printf("    - (%01u): level = %u, delta = %d\n",
                    iLevel,
                    params->ssl->levels[iLevel],
-                   params->ssl->deltasMax[iLevel]);
+                   params->ssl->deltas[iLevel]);
 
         }
 
-        printf(" - deltaReset: %u\n",params->ssl->deltaReset);
-        printf(" - sigma: %1.3f\n",params->ssl->sigma);
-        printf(" - nMatches: %u\n",params->ssl->nMatches);
+        printf(" - ratioMatch: %+1.3f\n",params->ssl->ratioMatch);
+        printf(" - probMin: %+1.3f\n",params->ssl->probMin);
+        printf(" - nRefinedLevels: %u\n",params->ssl->nRefinedLevels);
         printf(" - epsilon: %1.3e\n",params->ssl->epsilon);
         printf(" - alpha: %1.3f\n",params->ssl->alpha);
         printf(" - R: %u\n",params->ssl->R);

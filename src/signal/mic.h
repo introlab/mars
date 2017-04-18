@@ -7,7 +7,8 @@
     typedef struct mics_obj {
 
         unsigned int nMics;
-        float * array;
+        float * mu;
+        float * sigma;
 
     } mics_obj;
 

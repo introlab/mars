@@ -58,12 +58,22 @@
                 exit(EXIT_FAILURE); 
             }
 
-            // c
-            if (config_lookup_float(&cfg, "general.c", &valueDouble)) { 
-                params->general->c = (float) valueDouble; 
+            // speed of sound
+
+            params->general->soundspeed = soundspeed_construct_zero();
+
+            if (config_lookup_float(&cfg, "general.c.mu", &valueDouble)) { 
+                params->general->soundspeed->mu = (float) valueDouble; 
             } 
             else { 
-                printf("Missing: general.c\n"); 
+                printf("Missing: general.c.mu\n"); 
+                exit(EXIT_FAILURE); 
+            }
+            if (config_lookup_float(&cfg, "general.c.sigma", &valueDouble)) { 
+                params->general->soundspeed->sigma = (float) valueDouble; 
+            } 
+            else { 
+                printf("Missing: general.c.sigma\n"); 
                 exit(EXIT_FAILURE); 
             }
 
@@ -78,12 +88,101 @@
 
                 for (i = 0; i < N; i++) {
 
-                    config_setting_lookup_float(config_setting_get_elem(setting, i),"x",&valueDouble);
-                    params->general->mics->array[i * 3 + 0] = (float) valueDouble;
-                    config_setting_lookup_float(config_setting_get_elem(setting, i),"y",&valueDouble);
-                    params->general->mics->array[i * 3 + 1] = (float) valueDouble;
-                    config_setting_lookup_float(config_setting_get_elem(setting, i),"z",&valueDouble);
-                    params->general->mics->array[i * 3 + 2] = (float) valueDouble;
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"x",&valueDouble)) {
+                        params->general->mics->mu[i * 3 + 0] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].x\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"y",&valueDouble)) {
+                        params->general->mics->mu[i * 3 + 1] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].y\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                    
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"z",&valueDouble)) {
+                        params->general->mics->mu[i * 3 + 2] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].z\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                    
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"xx",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 0] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].xx\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                       
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"xy",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 1] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].xy\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                          
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"xz",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 2] = (float) valueDouble;                        
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].xz\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                             
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"yx",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 3] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].yx\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                                                
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"yy",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 4] = (float) valueDouble;
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].yy\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                                                
+
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"yz",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 5] = (float) valueDouble;
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].yz\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                                                                   
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"zx",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 6] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].zx\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                                                                                       
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"zy",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 7] = (float) valueDouble;    
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].zy\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                                                                                       
+                    
+                    if (config_setting_lookup_float(config_setting_get_elem(setting, i),"zz",&valueDouble)) {
+                        params->general->mics->sigma[i * 9 + 8] = (float) valueDouble;
+                    }
+                    else {
+                        printf("Missing: general.mics[%u].zz\n",i); 
+                        exit(EXIT_FAILURE);                         
+                    }                                                                                                                                       
 
                 }
 
@@ -152,21 +251,30 @@
                 exit(EXIT_FAILURE); 
             }    
 
-            // sigma
-            if (config_lookup_float(&cfg, "ssl.sigma", &valueDouble)) { 
-                params->ssl->sigma = (float) valueDouble; 
+            // ratioMatch
+            if (config_lookup_float(&cfg, "ssl.ratioMatch", &valueDouble)) { 
+                params->ssl->ratioMatch = (float) valueDouble;
             } 
             else { 
-                printf("Missing: ssl.sigma\n"); 
+                printf("Missing: ssl.ratioMatch\n"); 
                 exit(EXIT_FAILURE); 
             }    
 
-            // nMatches
-            if (config_lookup_int(&cfg, "ssl.nMatches", &valueInt)) { 
-                params->ssl->nMatches = (unsigned int) valueInt;
+            // probMin
+            if (config_lookup_float(&cfg, "ssl.probMin", &valueDouble)) { 
+                params->ssl->probMin = (float) valueDouble;
             } 
             else { 
-                printf("Missing: ssl.nMatches\n"); 
+                printf("Missing: ssl.probMin\n"); 
+                exit(EXIT_FAILURE); 
+            }    
+
+            // nRefinedLevels
+            if (config_lookup_int(&cfg, "ssl.nRefinedLevels", &valueInt)) { 
+                params->ssl->nRefinedLevels = (unsigned int) valueInt;
+            } 
+            else { 
+                printf("Missing: ssl.probMin\n"); 
                 exit(EXIT_FAILURE); 
             }    
 
@@ -177,15 +285,6 @@
             else { 
                 printf("Missing: ssl.epsilon\n"); 
                 exit(EXIT_FAILURE);
-            }    
-
-            // deltaReset
-            if (config_lookup_int(&cfg, "ssl.deltaReset", &valueInt)) { 
-                params->ssl->deltaReset = (unsigned int) valueInt;
-            } 
-            else { 
-                printf("Missing: ssl.nMatches\n"); 
-                exit(EXIT_FAILURE); 
             }    
         
             // nPots
@@ -206,21 +305,32 @@
 
                 params->ssl->nLevels = N;
                 params->ssl->levels = (unsigned int *) malloc(sizeof(unsigned int) * N);
-                params->ssl->deltasMax = (unsigned int *) malloc(sizeof(unsigned int) * N);
+                params->ssl->deltas = (signed int *) malloc(sizeof(signed int) * N);
 
                 for (i = 0; i < N; i++) {
 
-                    config_setting_lookup_int(config_setting_get_elem(setting, i),"level",&valueInt);
-                    params->ssl->levels[i] = valueInt;
-                    config_setting_lookup_int(config_setting_get_elem(setting, i),"deltaMax",&valueInt);
-                    params->ssl->deltasMax[i] = valueInt;
+                    if (config_setting_lookup_int(config_setting_get_elem(setting, i),"level",&valueInt)) {
+                        params->ssl->levels[i] = valueInt;
+                    }
+                    else {
+                        printf("Missing: ssl.scans[%u].level\n",i);
+                        exit(EXIT_FAILURE);
+                    }
+                    
+                    if (config_setting_lookup_int(config_setting_get_elem(setting, i),"delta",&valueInt)) {
+                        params->ssl->deltas[i] = valueInt;    
+                    }
+                    else {
+                        printf("Missing: ssl.scans[%u].delta\n",i);
+                        exit(EXIT_FAILURE);
+                    }
 
                 }
 
             }
             else {
                 
-                printf("Missing: ssl.levels\n"); exit(EXIT_FAILURE);
+                printf("Missing: ssl.scans\n"); exit(EXIT_FAILURE);
 
             }
 

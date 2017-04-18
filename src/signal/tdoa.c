@@ -13,12 +13,6 @@
         obj->array = (unsigned int *) malloc(sizeof(unsigned int) * nPoints * nPairs);
         memset(obj->array, 0x00, sizeof(unsigned int) * nPoints * nPairs);
 
-        obj->arrayMin = (unsigned int *) malloc(sizeof(unsigned int) * nPairs);
-        memset(obj->arrayMin, 0x00, sizeof(unsigned int) * nPairs);
-
-        obj->arrayMax = (unsigned int *) malloc(sizeof(unsigned int) * nPairs);
-        memset(obj->arrayMax, 0x00, sizeof(unsigned int) * nPairs);
-
         return obj;
 
     }
@@ -26,8 +20,6 @@
     void tdoas_destroy(tdoas_obj * obj) {
 
         free((void *) obj->array);
-        free((void *) obj->arrayMin);
-        free((void *) obj->arrayMax);
         free((void *) obj);
 
     }

@@ -183,14 +183,20 @@
         cfg = mod_ssl_cfg_construct();
 
         cfg->mics = mics_construct_zero(params->general->mics->nMics);
-        memcpy(cfg->mics->array, params->general->mics->array, sizeof(float) * 3 * params->general->mics->nMics);
+        memcpy(cfg->mics->mu, params->general->mics->mu, sizeof(float) * 3 * params->general->mics->nMics);
+        memcpy(cfg->mics->sigma, params->general->mics->sigma, sizeof(float) * 9 * params->general->mics->nMics);
 
         cfg->nPots = params->ssl->nPots;
         cfg->fS = params->general->fS;
-        cfg->c = params->general->c;
+        
+        cfg->soundspeed = soundspeed_construct_zero();
+        cfg->soundspeed->mu = params->general->soundspeed->mu;
+        cfg->soundspeed->sigma = params->general->soundspeed->sigma;
+
         cfg->frameSize = params->general->frameSize;
-        cfg->nMatches = params->ssl->nMatches;
-        cfg->sigma = params->ssl->sigma;
+        cfg->ratioMatch = params->ssl->ratioMatch;
+        cfg->probMin = params->ssl->probMin;
+        cfg->nRefinedLevels = params->ssl->nRefinedLevels;
         cfg->epsilon = params->ssl->epsilon;
         cfg->alpha = params->ssl->alpha;
         cfg->shape = (char *) malloc(sizeof(char) * (strlen(params->ssl->shape)+1));
@@ -198,9 +204,8 @@
         cfg->nLevels = params->ssl->nLevels;
         cfg->levels = (unsigned int *) malloc(sizeof(unsigned int) * params->ssl->nLevels);
         memcpy(cfg->levels, params->ssl->levels, sizeof(unsigned int) * params->ssl->nLevels);
-        cfg->deltasMax = (unsigned int *) malloc(sizeof(unsigned int) * params->ssl->nLevels);
-        memcpy(cfg->deltasMax, params->ssl->deltasMax, sizeof(unsigned int) * params->ssl->nLevels);
-        cfg->deltaReset = params->ssl->deltaReset;
+        cfg->deltas = (signed int *) malloc(sizeof(signed int) * params->ssl->nLevels);
+        memcpy(cfg->deltas, params->ssl->deltas, sizeof(signed int) * params->ssl->nLevels);
         cfg->R = params->ssl->R;
 
         return cfg;

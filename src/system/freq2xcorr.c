@@ -41,7 +41,7 @@
                     freqs->array[iSignal],
                     obj->frame);
 
-            for (iSample = tdoas->arrayMin[iSignal]; iSample <= tdoas->arrayMax[iSignal]; iSample++) {
+            for (iSample = tdoas->array[0 * freqs->nSignals + iSignal]; iSample <= tdoas->array[1 * freqs->nSignals + iSignal]; iSample++) {
 
                 iSampleDest = iSample;
 
@@ -58,7 +58,7 @@
 
                 xcorrs->array[iSignal][iSampleDest] = obj->frame[iSampleSrc] / ((float) obj->frameSize);
 
-            }
+            }        
 
         }
 

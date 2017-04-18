@@ -7,6 +7,7 @@
     #include "../signal/aimg.h"
     #include "../signal/mic.h"
     #include "../signal/freq.h"
+    #include "../signal/soundspeed.h"
     #include "../signal/xcorr.h"
     
     #include "../system/freq2freq.h"
@@ -29,8 +30,6 @@
 
         scans_obj * scans;
 
-        unsigned int * deltasMax;
-        unsigned int deltaReset;
         unsigned int r;
         unsigned int R;
 
@@ -55,18 +54,19 @@
         mics_obj * mics;
         unsigned int nPots;
         unsigned int fS;
-        float c;
+        soundspeed_obj * soundspeed;
         unsigned int frameSize;
-        unsigned int nMatches;
-        float sigma;
         float epsilon;
         float alpha;
+        unsigned int R;
         char * shape;
+        
         unsigned int nLevels;
         unsigned int * levels;
-        unsigned int * deltasMax;
-        unsigned int deltaReset;
-        unsigned int R;
+        signed int * deltas;
+        float ratioMatch;
+        float probMin;
+        unsigned int nRefinedLevels;
 
     } mod_ssl_cfg;
 

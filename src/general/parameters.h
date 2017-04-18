@@ -6,6 +6,7 @@
     #include <stdio.h>
 
     #include "../signal/mic.h"
+    #include "../signal/soundspeed.h"
 
     typedef struct parameters_general_obj {
 
@@ -13,7 +14,7 @@
         unsigned int hopSize;
         unsigned int frameSize;
         unsigned int fS;
-        float c;
+        soundspeed_obj * soundspeed;
 
     } parameters_general_obj;
 
@@ -31,10 +32,10 @@
         unsigned int nPots;
         unsigned int nLevels;
         unsigned int * levels;
-        unsigned int * deltasMax;
-        unsigned int deltaReset;
-        float sigma;
-        unsigned int nMatches;
+        signed int * deltas;
+        float ratioMatch;
+        float probMin;
+        unsigned int nRefinedLevels;
         float epsilon;
         float alpha;
         unsigned int R;
