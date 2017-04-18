@@ -148,6 +148,7 @@
                     xcorr2xcorr_process_reset(obj->xcorr2xcorr, 
                 	                          obj->xcorrsReset[iPot-1],
                 	                          obj->scans->tdoas[obj->nScans-1],
+                                              obj->scans->allminmax,
                                               obj->scans->deltas[obj->nScans-1],
                                               maxIndex,
                                               obj->xcorrsReset[iPot]);

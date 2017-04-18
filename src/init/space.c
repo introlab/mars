@@ -447,6 +447,7 @@
         y0 = uy + y1 - dot * uy;
         z0 = uz + z1 - dot * uz;
 
+        /*
         tx = ux - x0;
         ty = uy - y0;
         tz = uz - z0;
@@ -458,6 +459,7 @@
         x0 = ux - tx;
         y0 = uy - ty;
         z0 = uz - tz;
+        */
 
         nAngles = 8;
 

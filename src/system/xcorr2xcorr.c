@@ -57,7 +57,7 @@
 
     }
 
-    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const deltas_obj * deltas, const unsigned int iPoint, xcorrs_obj * xcorrsReset) {
+    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const tdoas_obj * minmax, const deltas_obj * deltas, const unsigned int iPoint, xcorrs_obj * xcorrsReset) {
 
         unsigned int iSignal;
         unsigned int iSample;
@@ -66,13 +66,12 @@
 
         for (iSignal = 0; iSignal < xcorrs->nSignals; iSignal++) {
 
-            delta = deltas->array[iSignal];
-
-            iSample = tdoas->array[0 * xcorrs->nSignals + iSignal];
-            nSamples = (tdoas->array[1 * xcorrs->nSignals + iSignal] - tdoas->array[0 * xcorrs->nSignals + iSignal] + 1);
+            iSample = minmax->array[0 * xcorrs->nSignals + iSignal];
+            nSamples = (minmax->array[1 * xcorrs->nSignals + iSignal] - minmax->array[0 * xcorrs->nSignals + iSignal] + 1);
 
             memcpy(&(xcorrsReset->array[iSignal][iSample]), &(xcorrs->array[iSignal][iSample]), sizeof(float) * nSamples);
 
+            delta = deltas->array[iSignal];
             iSample = tdoas->array[iPoint * tdoas->nPairs + iSignal] - delta;
             nSamples = 2 * delta + 1;
 

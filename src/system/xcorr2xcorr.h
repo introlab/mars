@@ -20,6 +20,6 @@
 
     void xcorr2xcorr_process_max(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const deltas_obj * deltas, xcorrs_obj * xcorrsMax);
 
-    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const deltas_obj * deltas, const unsigned int iPoint, xcorrs_obj * xcorrsReset);
+    void xcorr2xcorr_process_reset(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const tdoas_obj * minmax, const deltas_obj * deltas, const unsigned int iPoint, xcorrs_obj * xcorrsReset);
 
 #endif
