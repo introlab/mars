@@ -10,7 +10,7 @@
     #include "../signal/map.h"
     #include "../signal/tdoa.h"
 
-    maps_obj * linking_maps(const tdoas_obj * tdoasCoarse, const tdoas_obj * tdoasFine, const deltas_obj * deltasCoarse, const deltas_obj * deltasFine, const float ratioMatch);
+    maps_obj * linking_maps(const tdoas_obj * tdoasCoarse, const tdoas_obj * tdoasFine, const deltas_obj * deltasCoarse, const deltas_obj * deltasFine, const unsigned int nMatches);
 
     indexes_obj * linking_indexes(const maps_obj * maps);
 

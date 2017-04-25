@@ -1,7 +1,7 @@
 
     #include "linking.h"
 
-    maps_obj * linking_maps(const tdoas_obj * tdoasCoarse, const tdoas_obj * tdoasFine, const deltas_obj * deltasCoarse, const deltas_obj * deltasFine, const float ratioMatch) {
+    maps_obj * linking_maps(const tdoas_obj * tdoasCoarse, const tdoas_obj * tdoasFine, const deltas_obj * deltasCoarse, const deltas_obj * deltasFine, const unsigned int nMatches) {
 
         maps_obj * obj;
         float * scores;
@@ -21,7 +21,6 @@
         unsigned int nFines;
         unsigned int nCoarses;
         unsigned int nPairs;
-        unsigned int nMatches;
 
         float maxValue;
         unsigned int maxIndex;
@@ -31,8 +30,6 @@
             nFines = tdoasFine->nPoints;
             nCoarses = tdoasCoarse->nPoints;
             nPairs = tdoasFine->nPairs;
-
-            nMatches = (unsigned int) (roundf(((float) nCoarses) * ratioMatch));
 
             obj = maps_construct_zero(nCoarses, nFines);
             scores = (float *) malloc(sizeof(float) * nCoarses);

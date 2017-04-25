@@ -64,7 +64,7 @@
         unsigned int nLevels;
         unsigned int * levels;
         signed int * deltas;
-        float ratioMatch;
+        unsigned int nMatches;
         float probMin;
         unsigned int nRefinedLevels;
 

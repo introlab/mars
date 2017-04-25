@@ -18,12 +18,12 @@
 
         if (strcmp(cfg->shape,"sphere") == 0) {
 
-            obj->scans = scanning_init_sphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->soundspeed, cfg->ratioMatch, cfg->frameSize, cfg->deltas, cfg->probMin, cfg->nRefinedLevels);
+            obj->scans = scanning_init_sphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->soundspeed, cfg->nMatches, cfg->frameSize, cfg->deltas, cfg->probMin, cfg->nRefinedLevels);
 
         }
         else {
 
-            obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->soundspeed, cfg->ratioMatch, cfg->frameSize, cfg->deltas, cfg->probMin, cfg->nRefinedLevels);
+            obj->scans = scanning_init_halfsphere(cfg->mics, cfg->nLevels, cfg->levels, cfg->fS, cfg->soundspeed, cfg->nMatches, cfg->frameSize, cfg->deltas, cfg->probMin, cfg->nRefinedLevels);
 
         }
 
@@ -220,7 +220,7 @@
         cfg->nLevels = 0;;
         cfg->levels = (unsigned int *) NULL;
         cfg->deltas = (unsigned int *) NULL;
-        cfg->ratioMatch = 0.0f;
+        cfg->nMatches = 0;
         cfg->probMin = 0.0f;
         cfg->nRefinedLevels = 0;
 

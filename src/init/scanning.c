@@ -1,7 +1,7 @@
 
     #include "scanning.h"
 
-    scans_obj * scanning_init_sphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const soundspeed_obj * soundspeed, const float ratioMatch, const unsigned int frameSize, const signed int * deltas, const float probMin, const unsigned int nRefineLevels) {
+    scans_obj * scanning_init_sphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const soundspeed_obj * soundspeed, const unsigned int nMatches, const unsigned int frameSize, const signed int * deltas, const float probMin, const unsigned int nRefineLevels) {
 
         scans_obj * obj;
         
@@ -40,13 +40,13 @@
 
         scanning_init_minmax(obj);
 
-        scanning_init_link(obj, ratioMatch);
+        scanning_init_link(obj, nMatches);
 
         return obj;
 
     }
 
-    scans_obj * scanning_init_halfsphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const soundspeed_obj * soundspeed, const float ratioMatch, const unsigned int frameSize, const signed int * deltas, const float probMin, const unsigned int nRefineLevels) {
+    scans_obj * scanning_init_halfsphere(const mics_obj * mics, const unsigned int nLevels, const unsigned int * levels, const unsigned int fS, const soundspeed_obj * soundspeed, const unsigned int nMatches, const unsigned int frameSize, const signed int * deltas, const float probMin, const unsigned int nRefineLevels) {
 
         scans_obj * obj;
 
@@ -82,7 +82,7 @@
 
         }
 
-        scanning_init_link(obj, ratioMatch);
+        scanning_init_link(obj, nMatches);
 
         scanning_init_minmax(obj);
 
@@ -90,7 +90,7 @@
 
     }
 
-    void scanning_init_link(scans_obj * scans, const float ratioMatch) {
+    void scanning_init_link(scans_obj * scans, const unsigned int nMatches) {
 
         unsigned int iLevel;
         maps_obj * maps;
@@ -99,12 +99,12 @@
 
             if (iLevel == 0) {
 
-                maps = linking_maps(NULL, scans->tdoas[0], NULL, scans->deltas[0], ratioMatch);                
+                maps = linking_maps(NULL, scans->tdoas[0], NULL, scans->deltas[0], nMatches);                
 
             }
             else {
 
-                maps = linking_maps(scans->tdoas[iLevel-1], scans->tdoas[iLevel], scans->deltas[iLevel-1], scans->deltas[iLevel], ratioMatch);    
+                maps = linking_maps(scans->tdoas[iLevel-1], scans->tdoas[iLevel], scans->deltas[iLevel-1], scans->deltas[iLevel], nMatches);    
 
             }
 

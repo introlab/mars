@@ -194,7 +194,7 @@
         cfg->soundspeed->sigma = params->general->soundspeed->sigma;
 
         cfg->frameSize = params->general->frameSize;
-        cfg->ratioMatch = params->ssl->ratioMatch;
+        cfg->nMatches = params->ssl->nMatches;
         cfg->probMin = params->ssl->probMin;
         cfg->nRefinedLevels = params->ssl->nRefinedLevels;
         cfg->epsilon = params->ssl->epsilon;

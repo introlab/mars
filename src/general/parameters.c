@@ -125,7 +125,7 @@
 
         }
 
-        printf(" - ratioMatch: %+1.3f\n",params->ssl->ratioMatch);
+        printf(" - nMatches: %u\n",params->ssl->nMatches);
         printf(" - probMin: %+1.3f\n",params->ssl->probMin);
         printf(" - nRefinedLevels: %u\n",params->ssl->nRefinedLevels);
         printf(" - epsilon: %1.3e\n",params->ssl->epsilon);

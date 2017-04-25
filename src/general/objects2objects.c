@@ -88,9 +88,9 @@
             
             start = clock();
 
-            mod_sst_process(objs->mod_sst, 
-                            objs->msg_pots,
-                            objs->msg_tracks);    
+            //mod_sst_process(objs->mod_sst, 
+            //                objs->msg_pots,
+            //                objs->msg_tracks);    
 
             end = clock();
 

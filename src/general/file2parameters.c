@@ -251,12 +251,12 @@
                 exit(EXIT_FAILURE); 
             }    
 
-            // ratioMatch
-            if (config_lookup_float(&cfg, "ssl.ratioMatch", &valueDouble)) { 
-                params->ssl->ratioMatch = (float) valueDouble;
+            // nMatches
+            if (config_lookup_int(&cfg, "ssl.nMatches", &valueInt)) { 
+                params->ssl->nMatches = (float) valueInt;
             } 
             else { 
-                printf("Missing: ssl.ratioMatch\n"); 
+                printf("Missing: ssl.nMatches\n"); 
                 exit(EXIT_FAILURE); 
             }    
 
