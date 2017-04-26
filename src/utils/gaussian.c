@@ -389,6 +389,10 @@
 
         }
 
+        free((void *) obj->array);
+
+        free((void *) obj);
+
     }
 
     void gaussians_2d_destroy(gaussians_2d_obj * obj) {
@@ -403,6 +407,10 @@
 
         }
 
+        free((void *) obj->array);
+
+        free((void *) obj);
+
     }
 
     void gaussians_3d_destroy(gaussians_3d_obj * obj) {
@@ -416,6 +424,10 @@
             }
 
         }
+
+        free((void *) obj->array);
+
+        free((void *) obj);
 
     }
 

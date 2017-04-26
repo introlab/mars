@@ -8,6 +8,8 @@
 
         // Get next hops to process
 
+        rtnValue = 0;
+
         if (objs->src_raw_file != NULL) {
 
             rtnValue = src_raw_file_process(objs->src_raw_file, 

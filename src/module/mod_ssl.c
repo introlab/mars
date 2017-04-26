@@ -112,6 +112,8 @@
 
         pots_destroy(obj->pots);
 
+        free((void *) obj);
+
     }
 
     void mod_ssl_process(mod_ssl_obj * obj, msg_spectra_obj * msg_spectra, msg_pots_obj * msg_pots) {

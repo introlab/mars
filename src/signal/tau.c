@@ -25,6 +25,8 @@
         free((void *) obj->mu);
         free((void *) obj->sigma);
 
+        free((void *) obj);
+
     }
 
     void taus_printf(const taus_obj * obj) {

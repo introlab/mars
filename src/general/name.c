@@ -5,9 +5,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".raw$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -15,9 +19,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".wav$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -25,9 +33,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".cfg$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -35,9 +47,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".pot.bin$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -45,9 +61,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".pot.xml$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -55,9 +75,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".track.bin$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -65,9 +89,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, ".track.xml$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -75,9 +103,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -85,9 +117,13 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, "^hw:[0-9]{1},[0-9]{1}$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }
 
@@ -95,8 +131,12 @@
 
         regex_t reg;
         regmatch_t match;
+        int rtnValue;
 
         regcomp(&reg, "^plughw:[0-9]{1},[0-9]{1}$", REG_EXTENDED);
-        return regexec(&reg, str, 1, &match, 0);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
 
     }

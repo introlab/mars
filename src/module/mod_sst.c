@@ -240,6 +240,10 @@
             particle2coherence_destroy(obj->particle2coherence_active);
         }
 
+        mixture2mixture_destroy(obj->mixture2mixture);
+
+        free((void *) obj);
+
     }
 
     void mod_sst_process(mod_sst_obj * obj, const msg_pots_obj * msg_pots, msg_tracks_obj * msg_tracks) {

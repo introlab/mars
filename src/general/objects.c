@@ -8,6 +8,8 @@
         objs = (objects *) malloc(sizeof(objects));
 
         objs->src_raw_file = (src_raw_file_obj *) NULL;
+        objs->src_raw_soundcard = (src_raw_soundcard_obj *) NULL;
+        objs->src_wav_file = (src_wav_file_obj *) NULL;
         objs->msg_hops_raw_in = (msg_hops_obj *) NULL;
         objs->mod_resample_raw_in = (mod_resample_obj *) NULL;
         objs->msg_hops_raw = (msg_hops_obj *) NULL;
@@ -67,6 +69,10 @@
 
         if (objs->mod_ssl != NULL) {
             mod_ssl_destroy(objs->mod_ssl);
+        }
+
+        if (objs->msg_pots != NULL) {
+            msg_pots_destroy(objs->msg_pots);
         }
 
         if (objs->snk_pots_file != NULL) {

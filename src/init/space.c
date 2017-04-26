@@ -521,6 +521,8 @@
         triangles_octo->array[iAngle*9+7] = points_octo->array[1];
         triangles_octo->array[iAngle*9+8] = points_octo->array[2];         
 
+        points_destroy(points_octo);
+
         return triangles_octo;
 
     }

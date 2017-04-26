@@ -68,6 +68,8 @@
         free((void *) obj->sum_P_p_x_O);
         particles_destroy(obj->particles);
 
+        free((void *) obj);
+
     }
 
     void particle2particle_init(particle2particle_obj * obj, const pots_obj * pots, const unsigned int iPot, particles_obj * particles) {

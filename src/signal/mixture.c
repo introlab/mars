@@ -50,6 +50,8 @@
         free((void *) obj->p_phic);
         free((void *) obj->p_phic_Ez);
 
+        free((void *) obj);
+
     }
 
     void mixture_printf(const mixture_obj * obj) {

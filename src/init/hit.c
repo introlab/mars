@@ -213,6 +213,9 @@
             
         }
 
+        areas_destroy(areas);
+        area_destroy(area);
+
         return deltas;
 
     }
