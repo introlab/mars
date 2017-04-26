@@ -231,11 +231,23 @@
     void mod_ssl_cfg_destroy(mod_ssl_cfg * cfg) {
 
         if (cfg->mics != NULL) {
-            free((void *) cfg->mics);
+            mics_destroy(cfg->mics);
+        }
+
+        if (cfg->soundspeed != NULL) {
+            soundspeed_destroy(cfg->soundspeed);
         }
 
         if (cfg->shape != NULL) {
             free((void *) cfg->shape);            
+        }
+
+        if (cfg->levels != NULL) {
+            free((void *) cfg->levels);
+        }
+
+        if (cfg->deltas != NULL) {
+            free((void *) cfg->deltas);
         }
 
         free((void *) cfg);
