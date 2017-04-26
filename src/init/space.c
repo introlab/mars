@@ -660,7 +660,7 @@
         pow2 = 1;
         pow4 = 1;
 
-        for (iLevel = 0; iLevel < level; iLevel++) {
+        for (iLevel = 1; iLevel <= level; iLevel++) {
 
             pow2 *= 2;
             pow4 *= 4;
