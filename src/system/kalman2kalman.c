@@ -85,6 +85,9 @@
         matrix_destroy(obj->Ht);
         matrix_destroy(obj->R);
 
+        matrix_destroy(obj->FP);
+        matrix_destroy(obj->FPFt);
+
         matrix_destroy(obj->K);
         matrix_destroy(obj->PHt);
         matrix_destroy(obj->HP);

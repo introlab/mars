@@ -23,4 +23,6 @@
         matrix_destroy(obj->P_lm1lm1);
         matrix_destroy(obj->P_llm1);
 
+        free((void *) obj);
+
     }

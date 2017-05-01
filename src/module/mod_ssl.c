@@ -90,6 +90,8 @@
         free((void *) obj->aimgs);
         free((void *) obj->xcorrsReset);
 
+        xcorr2xcorr_destroy(obj->xcorr2xcorr);
+
         for (iLevel = 0; iLevel < obj->nScans; iLevel++) {
             xcorr2aimg_destroy(obj->xcorr2aimg[iLevel]);
         }
