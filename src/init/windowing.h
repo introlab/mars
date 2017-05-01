@@ -7,6 +7,8 @@
     
     window_obj * windowing_hann(const unsigned int frameSize);
 
+    window_obj * windowing_roothann(const unsigned int frameSize);
+
 #endif
 
     
