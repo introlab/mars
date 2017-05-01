@@ -28,6 +28,14 @@
 
     msg_spectra_cfg * parameters2configs_msg_spectra(const parameters * params);
 
+    snk_spectra_file_cfg * parameters2configs_snk_spectra_file(const parameters * params);
+
+    mod_gcc_cfg * parameters2configs_mod_gcc(const parameters * params);
+
+    msg_xcs_cfg * parameters2configs_msg_xcs(const parameters * params);
+
+    snk_xcs_file_cfg * parameters2configs_snk_xcs_file(const parameters * params);
+
     mod_ssl_cfg * parameters2configs_mod_ssl(const parameters * params);
 
     msg_pots_cfg * parameters2configs_msg_pots(const parameters * params);

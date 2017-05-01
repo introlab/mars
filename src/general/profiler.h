@@ -7,6 +7,7 @@
     
         float resampling;
         float stft;
+        float gcc;
         float ssl;
         float sst;
 

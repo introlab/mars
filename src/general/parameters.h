@@ -27,6 +27,13 @@
 
     } parameters_raw_obj;
 
+    typedef struct parameters_gcc_obj {
+
+        float epsilon;
+        float alpha;
+
+    } parameters_gcc_obj;
+
     typedef struct parameters_ssl_obj {
 
         unsigned int nPots;
@@ -36,8 +43,6 @@
         unsigned int nMatches;
         float probMin;
         unsigned int nRefinedLevels;
-        float epsilon;
-        float alpha;
         unsigned int R;
         char * shape;
 
@@ -85,6 +90,7 @@
 
         parameters_general_obj * general;
         parameters_raw_obj * raw;
+        parameters_gcc_obj * gcc;
         parameters_ssl_obj * ssl;
         parameters_sst_obj * sst;    
 

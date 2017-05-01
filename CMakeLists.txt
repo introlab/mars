@@ -41,12 +41,14 @@ set(SRC
     src/init/windowing.c
 
     src/message/msg_hops.c
+    src/message/msg_xcs.c
     src/message/msg_pots.c
     src/message/msg_tracks.c
     src/message/msg_spectra.c
 
     src/module/mod_resample.c
     src/module/mod_stft.c
+    src/module/mod_gcc.c
     src/module/mod_ssl.c
     src/module/mod_sst.c
 
@@ -80,7 +82,9 @@ set(SRC
 
     src/sink/snk_pots_file.c
     src/sink/snk_raw_file.c
+    src/sink/snk_spectra_file.c
     src/sink/snk_tracks_file.c
+    src/sink/snk_xcs_file.c
 
     src/source/src_raw_soundcard.c
     src/source/src_raw_file.c

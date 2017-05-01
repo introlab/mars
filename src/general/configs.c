@@ -18,6 +18,10 @@
         cfgs->snk_raw_file = (snk_raw_file_cfg *) NULL;
         cfgs->mod_stft = (mod_stft_cfg *) NULL;
         cfgs->msg_spectra = (msg_spectra_cfg *) NULL;
+        cfgs->snk_spectra_file = (snk_spectra_file_cfg *) NULL;
+        cfgs->mod_gcc = (mod_gcc_cfg *) NULL;
+        cfgs->msg_xcs = (msg_xcs_cfg *) NULL;
+        cfgs->snk_xcs_file = (snk_xcs_file_cfg *) NULL;
         cfgs->mod_ssl = (mod_ssl_cfg *) NULL;
         cfgs->msg_pots = (msg_pots_cfg *) NULL;
         cfgs->snk_pots_file = (snk_pots_file_cfg *) NULL;
@@ -64,6 +68,18 @@
         if (cfgs->msg_spectra != NULL) {
             msg_spectra_cfg_destroy(cfgs->msg_spectra);
         }
+        if (cfgs->snk_spectra_file != NULL) {
+            snk_spectra_file_cfg_destroy(cfgs->snk_spectra_file);
+        }
+        if (cfgs->mod_gcc != NULL) {
+            mod_gcc_cfg_destroy(cfgs->mod_gcc);
+        }
+        if (cfgs->msg_xcs != NULL) {
+            msg_xcs_cfg_destroy(cfgs->msg_xcs);
+        }
+        if (cfgs->snk_xcs_file != NULL) {
+            snk_xcs_file_cfg_destroy(cfgs->snk_xcs_file);
+        }        
         if (cfgs->mod_ssl != NULL) {
             mod_ssl_cfg_destroy(cfgs->mod_ssl);
         }

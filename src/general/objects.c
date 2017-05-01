@@ -18,6 +18,10 @@
         objs->snk_raw_file = (snk_raw_file_obj *) NULL;
         objs->mod_stft = (mod_stft_obj *) NULL;
         objs->msg_spectra = (msg_spectra_obj *) NULL;
+        objs->snk_spectra_file = (snk_spectra_file_obj *) NULL;
+        objs->mod_gcc = (mod_gcc_obj *) NULL;
+        objs->msg_xcs = (msg_xcs_obj *) NULL;
+        objs->snk_xcs_file = (snk_xcs_file_obj *) NULL;
         objs->mod_ssl = (mod_ssl_obj *) NULL;
         objs->msg_pots = (msg_pots_obj *) NULL;
         objs->snk_pots_file = (snk_pots_file_obj *) NULL;
@@ -65,6 +69,22 @@
 
         if (objs->msg_spectra != NULL) {
             msg_spectra_destroy(objs->msg_spectra);
+        }
+
+        if (objs->snk_spectra_file != NULL) {
+            snk_spectra_file_destroy(objs->snk_spectra_file);
+        }
+
+        if (objs->mod_gcc != NULL) {
+            mod_gcc_destroy(objs->mod_gcc);
+        }
+
+        if (objs->msg_xcs != NULL) {
+            msg_xcs_destroy(objs->msg_xcs);
+        }
+
+        if (objs->snk_xcs_file != NULL) {
+            snk_xcs_file_destroy(objs->snk_xcs_file);
         }
 
         if (objs->mod_ssl != NULL) {

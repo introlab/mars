@@ -9,6 +9,10 @@
 
     int name_check_file_cfg(const char * str);
 
+    int name_check_file_spectrabin(const char * str);
+
+    int name_check_file_xcsbin(const char * str);
+
     int name_check_file_potbin(const char * str);
 
     int name_check_file_potxml(const char * str);

@@ -62,46 +62,63 @@
 
         // Perform processing       
 
-        if (objs->mod_ssl != NULL) {
-
-            start = clock();
-            
-            mod_stft_process(objs->mod_stft, 
-                             objs->msg_hops_raw, 
-                             objs->msg_spectra);
-
-            end = clock();
-
-            profiler->stft += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
-
-            start = clock();
-
-            mod_ssl_process(objs->mod_ssl, 
-                            objs->msg_spectra, 
-                            objs->msg_pots);    
-
-            end = clock();
-
-            profiler->ssl += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
-
-        }
+        start = clock();
         
-        if (objs->mod_sst != NULL) {
-            
-            start = clock();
-
-            //mod_sst_process(objs->mod_sst, 
-            //                objs->msg_pots,
-            //                objs->msg_tracks);    
-
-            end = clock();
-
-            profiler->sst += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
-
-
-        }
+        mod_stft_process(objs->mod_stft, 
+                         objs->msg_hops_raw, 
+                         objs->msg_spectra);
 
         end = clock();
+
+        profiler->stft += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
+
+        // Write spectra to file
+
+        if (objs->snk_spectra_file != NULL) {
+
+            snk_spectra_file_process(objs->snk_spectra_file,
+                                     objs->msg_spectra);
+
+        }
+
+        start = clock();
+
+        mod_gcc_process(objs->mod_gcc,
+                        objs->msg_spectra,
+                        objs->msg_xcs);
+
+        end = clock();
+
+        profiler->gcc += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
+
+        // Write xcs to file
+
+        if (objs->snk_xcs_file != NULL) {
+
+            snk_xcs_file_process(objs->snk_xcs_file,
+                                 objs->msg_xcs);
+
+        }
+
+        start = clock();
+
+        mod_ssl_process(objs->mod_ssl, 
+                        objs->msg_xcs, 
+                        objs->msg_pots);    
+
+        end = clock();
+
+        profiler->ssl += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
+                    
+        start = clock();
+
+        mod_sst_process(objs->mod_sst, 
+                        objs->msg_pots,
+                        objs->msg_tracks);    
+
+        end = clock();
+
+        profiler->sst += ((float) (end-start)) / ((float) CLOCKS_PER_SEC);
 
         // Write results to file
 

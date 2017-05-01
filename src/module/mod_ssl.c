@@ -30,10 +30,6 @@
         obj->r = 0;
         obj->R = cfg->R;
 
-        obj->phasors = freqs_construct_zero(obj->nMics, cfg->frameSize/2+1);
-        obj->products = freqs_construct_zero(obj->nPairs, cfg->frameSize/2+1);
-        obj->smooths = freqs_construct_zero(obj->nPairs, cfg->frameSize/2+1);
-
         obj->xcorrsReset = (xcorrs_obj **) malloc(sizeof(xcorrs_obj *) * cfg->nPots);
         obj->xcorrsMax = (xcorrs_obj ***) malloc(sizeof(xcorrs_obj **) * cfg->nPots);
         obj->aimgs = (aimg_obj ***) malloc(sizeof(aimg_obj **) * cfg->nPots);
@@ -53,8 +49,6 @@
 
         }
 
-        obj->freq2freq = freq2freq_construct_zero((cfg->frameSize/2+1), cfg->epsilon, cfg->alpha);
-        obj->freq2xcorr = freq2xcorr_construct_zero(cfg->frameSize, cfg->frameSize/2+1);
         obj->xcorr2xcorr = xcorr2xcorr_construct_zero(cfg->frameSize);
 
         obj->xcorr2aimg = (xcorr2aimg_obj **) malloc(sizeof(xcorr2aimg_obj *) * cfg->nLevels);
@@ -76,10 +70,6 @@
 
         scans_destroy(obj->scans);
 
-        freqs_destroy(obj->phasors);
-        freqs_destroy(obj->products);
-        freqs_destroy(obj->smooths);
-
         for (iPot = 0; iPot < obj->nPots; iPot++) {
 
             for (iLevel = 0; iLevel < obj->nScans; iLevel++) {
@@ -100,10 +90,6 @@
         free((void *) obj->aimgs);
         free((void *) obj->xcorrsReset);
 
-        freq2freq_destroy(obj->freq2freq);
-        freq2xcorr_destroy(obj->freq2xcorr);
-        xcorr2xcorr_destroy(obj->xcorr2xcorr);
-
         for (iLevel = 0; iLevel < obj->nScans; iLevel++) {
             xcorr2aimg_destroy(obj->xcorr2aimg[iLevel]);
         }
@@ -116,7 +102,7 @@
 
     }
 
-    void mod_ssl_process(mod_ssl_obj * obj, msg_spectra_obj * msg_spectra, msg_pots_obj * msg_pots) {
+    void mod_ssl_process(mod_ssl_obj * obj, msg_xcs_obj * msg_xcs, msg_pots_obj * msg_pots) {
 
         unsigned int iPot;
         unsigned int iScan;
@@ -124,10 +110,6 @@
 
         float maxValue;
         unsigned int maxIndex;
-
-        freq2freq_process_phasor(obj->freq2freq, msg_spectra->freqs, obj->phasors);
-        freq2freq_process_product(obj->freq2freq, obj->phasors, obj->phasors, obj->products);
-        freq2freq_process_smooth(obj->freq2freq, obj->products, obj->smooths);
 
         obj->r++;
 
@@ -139,10 +121,9 @@
 
                 if (iPot == 0) {
 
-                    freq2xcorr_process(obj->freq2xcorr, 
-                    	               obj->smooths, 
-                                       obj->scans->allminmax,
-                    	               obj->xcorrsReset[0]);
+                    xcorr2xcorr_process_copy(obj->xcorr2xcorr, 
+                                             msg_xcs->xcorrs,
+                                             obj->xcorrsReset[0]);
 
                 }
                 else {
@@ -199,7 +180,7 @@
         }
 
         memcpy(msg_pots->pots->array, obj->pots->array, sizeof(float) * obj->pots->nPots * 4);
-        msg_pots->timeStamp = msg_spectra->timeStamp;
+        msg_pots->timeStamp = msg_xcs->timeStamp;
 
     }
 
@@ -214,8 +195,6 @@
         cfg->fS = 0;
         cfg->soundspeed = (soundspeed_obj *) NULL;
         cfg->frameSize = 0;
-        cfg->epsilon = 0.0f;
-        cfg->alpha = 0.0f;
         cfg->R = 0;
         cfg->shape = (char *) NULL;
         

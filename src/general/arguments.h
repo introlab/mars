@@ -18,6 +18,8 @@
         char * output_raw_soundcard;
         char * output_raw_socket;
 
+        char * output_spectra_file_bin;
+        char * output_xcs_file_bin;
         char * output_pot_file_bin;
         char * output_pot_file_xml;        
         char * output_track_file_bin;

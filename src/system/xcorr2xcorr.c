@@ -19,6 +19,18 @@
 
     }
 
+    void xcorr2xcorr_process_copy(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrsSrc, xcorrs_obj * xcorrsDest) {
+
+        unsigned int iSignal;
+
+        for (iSignal = 0; iSignal < xcorrsSrc->nSignals; iSignal++) {
+
+            memcpy(xcorrsDest->array[iSignal],xcorrsSrc->array[iSignal],obj->frameSize * sizeof(float));
+
+        }
+
+    }
+
     void xcorr2xcorr_process_max(xcorr2xcorr_obj * obj, const xcorrs_obj * xcorrs, const tdoas_obj * tdoas, const deltas_obj * deltas, xcorrs_obj * xcorrsMax) {
 
         unsigned int iSignal;

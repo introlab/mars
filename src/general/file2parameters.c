@@ -13,6 +13,7 @@
 
         params->general = (parameters_general_obj *) malloc(sizeof(parameters_general_obj));
         params->raw = (parameters_raw_obj *) malloc(sizeof(parameters_raw_obj));
+        params->gcc = (parameters_gcc_obj *) malloc(sizeof(parameters_gcc_obj));
         params->ssl = (parameters_ssl_obj *) malloc(sizeof(parameters_ssl_obj));
         params->sst = (parameters_sst_obj *) malloc(sizeof(parameters_sst_obj));        
 
@@ -231,6 +232,26 @@
                 exit(EXIT_FAILURE);
             }   
 
+        // GCC
+
+            // alpha    
+            if (config_lookup_float(&cfg, "gcc.alpha", &valueDouble)) { 
+                params->gcc->alpha = (float) valueDouble; 
+            } 
+            else { 
+                printf("Missing: gcc.alpha\n"); 
+                exit(EXIT_FAILURE); 
+            }                   
+
+            // epsilon
+            if (config_lookup_float(&cfg, "gcc.epsilon", &valueDouble)) { 
+                params->gcc->epsilon = (float) valueDouble;
+            } 
+            else { 
+                printf("Missing: gcc.epsilon\n"); 
+                exit(EXIT_FAILURE);
+            }                
+
         // SSL
 
             // R
@@ -241,16 +262,7 @@
                 printf("Missing: ssl.R\n");
                 exit(EXIT_FAILURE);
             }    
-    
-            // alpha    
-            if (config_lookup_float(&cfg, "ssl.alpha", &valueDouble)) { 
-                params->ssl->alpha = (float) valueDouble; 
-            } 
-            else { 
-                printf("Missing: ssl.alpha\n"); 
-                exit(EXIT_FAILURE); 
-            }    
-
+ 
             // nMatches
             if (config_lookup_int(&cfg, "ssl.nMatches", &valueInt)) { 
                 params->ssl->nMatches = (float) valueInt;
@@ -276,15 +288,6 @@
             else { 
                 printf("Missing: ssl.probMin\n"); 
                 exit(EXIT_FAILURE); 
-            }    
-
-            // epsilon
-            if (config_lookup_float(&cfg, "ssl.epsilon", &valueDouble)) { 
-                params->ssl->epsilon = (float) valueDouble;
-            } 
-            else { 
-                printf("Missing: ssl.epsilon\n"); 
-                exit(EXIT_FAILURE);
             }    
         
             // nPots

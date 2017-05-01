@@ -107,6 +107,7 @@
         printf("Total processing duration... %1.5f secs\n",timeProcessing);
         printf(" + Resampling............... %1.5f secs\n",profiler->resampling);
         printf(" + STFT..................... %1.5f secs\n",profiler->stft);
+        printf(" + GCC...................... %1.5f secs\n",profiler->gcc);
         printf(" + SSL...................... %1.5f secs\n",profiler->ssl);
         printf(" + SST...................... %1.5f secs\n",profiler->sst);
         printf("Average CPU usage........... %3.2f%%\n",100.0f*timeProcessing/timeSignal);

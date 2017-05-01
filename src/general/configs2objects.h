@@ -9,6 +9,8 @@
     #include "../sink/snk_raw_file.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"
+    #include "../module/mod_gcc.h"
+    #include "../message/msg_xcs.h"
     #include "../module/mod_ssl.h"
     #include "../message/msg_pots.h"
     #include "../sink/snk_pots_file.h"

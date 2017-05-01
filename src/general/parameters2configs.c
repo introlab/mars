@@ -14,6 +14,10 @@
         cfgs->snk_raw_file = parameters2configs_snk_raw_file(params);
         cfgs->mod_stft = parameters2configs_mod_stft(params);
         cfgs->msg_spectra = parameters2configs_msg_spectra(params);
+        cfgs->snk_spectra_file = parameters2configs_snk_spectra_file(params);
+        cfgs->mod_gcc = parameters2configs_mod_gcc(params);
+        cfgs->msg_xcs = parameters2configs_msg_xcs(params);
+        cfgs->snk_xcs_file = parameters2configs_snk_xcs_file(params);
         cfgs->mod_ssl = parameters2configs_mod_ssl(params);
         cfgs->msg_pots = parameters2configs_msg_pots(params);
         cfgs->snk_pots_file = parameters2configs_snk_pots_file(params);
@@ -176,6 +180,60 @@
 
     }
 
+    snk_spectra_file_cfg * parameters2configs_snk_spectra_file(const parameters * params) {
+
+        snk_spectra_file_cfg * cfg;
+
+        cfg = snk_spectra_file_cfg_construct();
+
+        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
+        strcpy(cfg->fileName, "");
+
+        return cfg;
+
+    }
+
+    mod_gcc_cfg * parameters2configs_mod_gcc(const parameters * params) {
+
+        mod_gcc_cfg * cfg;
+
+        cfg = mod_gcc_cfg_construct();
+
+        cfg->nMics = params->general->mics->nMics;
+        cfg->frameSize = params->general->frameSize;
+        cfg->epsilon = params->gcc->epsilon;
+        cfg->alpha = params->gcc->alpha;
+
+        return cfg;
+
+    }
+
+    msg_xcs_cfg * parameters2configs_msg_xcs(const parameters * params) {
+
+        msg_xcs_cfg * cfg;
+
+        cfg = msg_xcs_cfg_construct();
+
+        cfg->nMics = params->general->mics->nMics;
+        cfg->frameSize = params->general->frameSize;
+
+        return cfg;
+
+    }
+
+    snk_xcs_file_cfg * parameters2configs_snk_xcs_file(const parameters * params) {
+
+        snk_xcs_file_cfg * cfg;
+
+        cfg = snk_xcs_file_cfg_construct();
+
+        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
+        strcpy(cfg->fileName, "");        
+
+        return cfg;
+
+    }
+
     mod_ssl_cfg * parameters2configs_mod_ssl(const parameters * params) {
 
         mod_ssl_cfg * cfg;
@@ -197,8 +255,6 @@
         cfg->nMatches = params->ssl->nMatches;
         cfg->probMin = params->ssl->probMin;
         cfg->nRefinedLevels = params->ssl->nRefinedLevels;
-        cfg->epsilon = params->ssl->epsilon;
-        cfg->alpha = params->ssl->alpha;
         cfg->shape = (char *) malloc(sizeof(char) * (strlen(params->ssl->shape)+1));
         strcpy(cfg->shape,params->ssl->shape);
         cfg->nLevels = params->ssl->nLevels;

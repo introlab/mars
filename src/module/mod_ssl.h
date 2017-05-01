@@ -17,7 +17,7 @@
 
     #include "../init/scanning.h"
 
-    #include "../message/msg_spectra.h"
+    #include "../message/msg_xcs.h"
     #include "../message/msg_pots.h"
 
 
@@ -74,7 +74,7 @@
 
     void mod_ssl_destroy(mod_ssl_obj * obj);
 
-    void mod_ssl_process(mod_ssl_obj * obj, msg_spectra_obj * msg_spectra, msg_pots_obj * msg_pots);
+    void mod_ssl_process(mod_ssl_obj * obj, msg_xcs_obj * msg_xcs, msg_pots_obj * msg_pots);
 
     mod_ssl_cfg * mod_ssl_cfg_construct(void);
 

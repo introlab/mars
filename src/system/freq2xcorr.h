@@ -22,6 +22,6 @@
 
     void freq2xcorr_destroy(freq2xcorr_obj * obj);
 
-    void freq2xcorr_process(freq2xcorr_obj * obj, const freqs_obj * freqs, const tdoas_obj * tdoas, xcorrs_obj * xcorrs);
+    void freq2xcorr_process(freq2xcorr_obj * obj, const freqs_obj * freqs, xcorrs_obj * xcorrs);
 
 #endif

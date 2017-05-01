@@ -10,7 +10,7 @@
         nInputs = 0;
         configFile = 0x00;
 
-        while ((c = getopt(argc,argv, "c:i:o:vf")) != -1) {
+        while ((c = getopt(argc,argv, "c:i:o:v")) != -1) {
 
             switch(c) {
 
@@ -90,6 +90,20 @@
 
                     }   
 
+                    if (name_check_file_spectrabin(optarg) == 0) {
+
+                        args->output_spectra_file_bin = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_spectra_file_bin, optarg);
+
+                    }
+
+                    if (name_check_file_xcsbin(optarg) == 0) {
+
+                        args->output_xcs_file_bin = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_xcs_file_bin, optarg);
+
+                    }
+
                     if (name_check_file_potbin(optarg) == 0) {
 
                         args->output_pot_file_bin = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
@@ -123,12 +137,6 @@
                 case 'v':
 
                     args->verbose = 0x01;
-
-                break;
-
-                case 'f':
-
-                    args->force = 0x01;
 
                 break;
 

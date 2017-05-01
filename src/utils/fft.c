@@ -68,7 +68,7 @@
 
         for (iSample = 0; iSample < obj->frameSize; iSample++) {
 
-            out[iSample] = obj->realArray[iSample];
+            out[iSample] = obj->realArray[iSample] / ((float) obj->frameSize);
 
         }
 

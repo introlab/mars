@@ -11,6 +11,10 @@
     #include "../sink/snk_raw_file.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"
+    #include "../sink/snk_spectra_file.h"
+    #include "../module/mod_gcc.h"
+    #include "../message/msg_xcs.h"
+    #include "../sink/snk_xcs_file.h"
     #include "../module/mod_ssl.h"
     #include "../message/msg_pots.h"
     #include "../sink/snk_pots_file.h"
@@ -31,6 +35,10 @@
         snk_raw_file_obj * snk_raw_file;
         mod_stft_obj * mod_stft;
         msg_spectra_obj * msg_spectra;
+        snk_spectra_file_obj * snk_spectra_file;
+        mod_gcc_obj * mod_gcc;
+        msg_xcs_obj * msg_xcs;
+        snk_xcs_file_obj * snk_xcs_file;
         mod_ssl_obj * mod_ssl;
         msg_pots_obj * msg_pots;
         snk_pots_file_obj * snk_pots_file;

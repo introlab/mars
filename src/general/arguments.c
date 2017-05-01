@@ -15,6 +15,8 @@
         args->output_raw_file = (char *) NULL;
         args->output_raw_soundcard = (char *) NULL;
         args->output_raw_socket = (char *) NULL;
+        args->output_spectra_file_bin = (char *) NULL;
+        args->output_xcs_file_bin = (char *) NULL;
         args->output_pot_file_bin = (char *) NULL;
         args->output_pot_file_xml = (char *) NULL;
         args->output_track_file_bin = (char *) NULL;
@@ -59,6 +61,14 @@
         if (args->output_raw_socket != NULL) {
             free((void *) args->output_raw_socket);
         } 
+
+        if (args->output_spectra_file_bin != NULL) {
+            free((void *) args->output_spectra_file_bin);
+        }
+
+        if (args->output_xcs_file_bin != NULL) {
+            free((void *) args->output_xcs_file_bin);
+        }
 
         if (args->output_pot_file_bin != NULL) {
             free((void *) args->output_pot_file_bin);

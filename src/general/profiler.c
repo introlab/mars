@@ -9,6 +9,7 @@
 
         obj->resampling = 0.0f;
         obj->stft = 0.0f;
+        obj->gcc = 0.0f;
         obj->ssl = 0.0f;
         obj->sst = 0.0f;
         obj->duration = 0.0f;

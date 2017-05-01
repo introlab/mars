@@ -43,6 +43,34 @@
 
     }
 
+    int name_check_file_spectrabin(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, ".spectra.bin$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }
+
+    int name_check_file_xcsbin(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, ".xcs.bin$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }
+
     int name_check_file_potbin(const char * str) {
 
         regex_t reg;

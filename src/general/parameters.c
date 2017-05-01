@@ -9,6 +9,7 @@
 
         params->general = (parameters_general_obj *) NULL;
         params->raw = (parameters_raw_obj *) NULL;
+        params->gcc = (parameters_gcc_obj *) NULL;
         params->ssl = (parameters_ssl_obj *) NULL;
         params->sst = (parameters_sst_obj *) NULL;    
 
@@ -30,6 +31,12 @@
         if (params->raw != NULL) {
 
             free((void *) params->raw);
+
+        }
+
+        if (params->gcc != NULL) {
+
+            free((void *) params->gcc);
 
         }
 
@@ -108,6 +115,13 @@
         printf(" - hopSizeOut: %u\n",params->raw->hopSizeOut);
         printf(" - nBitsOut: %u\n",params->raw->nBitsOut);
 
+        // GCC
+
+        printf("gcc:\n");
+
+        printf(" - alpha: %f\n",params->gcc->alpha);
+        printf(" - epsilon: %1.3e\n",params->gcc->epsilon);
+
         // SSL
 
         printf("ssl:\n");
@@ -128,8 +142,6 @@
         printf(" - nMatches: %u\n",params->ssl->nMatches);
         printf(" - probMin: %+1.3f\n",params->ssl->probMin);
         printf(" - nRefinedLevels: %u\n",params->ssl->nRefinedLevels);
-        printf(" - epsilon: %1.3e\n",params->ssl->epsilon);
-        printf(" - alpha: %1.3f\n",params->ssl->alpha);
         printf(" - R: %u\n",params->ssl->R);
         printf(" - shape: %s\n",params->ssl->shape);
 

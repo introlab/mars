@@ -73,76 +73,90 @@
             
         }  
 
+        // STFT
+
+        objs->mod_stft = mod_stft_construct(cfgs->mod_stft);
+        objs->msg_spectra = msg_spectra_construct(cfgs->msg_spectra);
+
+        if (args->output_spectra_file_bin != NULL) {
+
+            cfgs->snk_spectra_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_spectra_file_bin)+1));
+            strcpy(cfgs->snk_spectra_file->fileName, args->output_spectra_file_bin);
+
+            cfgs->snk_spectra_file->format = 'b';
+
+            objs->snk_spectra_file = snk_spectra_file_construct(cfgs->snk_spectra_file);
+
+        }
+
+        // GCC
+
+        objs->mod_gcc = mod_gcc_construct(cfgs->mod_gcc);
+        objs->msg_xcs = msg_xcs_construct(cfgs->msg_xcs);
+
+        if (args->output_xcs_file_bin != NULL) {
+
+            cfgs->snk_xcs_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_xcs_file_bin)+1));
+            strcpy(cfgs->snk_xcs_file->fileName, args->output_xcs_file_bin);
+
+            cfgs->snk_xcs_file->format = 'b';
+
+            objs->snk_xcs_file = snk_xcs_file_construct(cfgs->snk_xcs_file);
+
+        }
+
         // SSL
 
-        if ((args->output_pot_file_bin != NULL) ||
-            (args->output_pot_file_xml != NULL) ||
-            (args->output_track_file_bin != NULL) ||
-            (args->output_track_file_xml != NULL) ||
-            (args->verbose == 0x01) ||
-            (args->force == 0x01)) {
+        objs->mod_ssl = mod_ssl_construct(cfgs->mod_ssl);
+        objs->msg_pots = msg_pots_construct(cfgs->msg_pots);
 
-            objs->mod_stft = mod_stft_construct(cfgs->mod_stft);
-            objs->msg_spectra = msg_spectra_construct(cfgs->msg_spectra);
-            objs->mod_ssl = mod_ssl_construct(cfgs->mod_ssl);
-            objs->msg_pots = msg_pots_construct(cfgs->msg_pots);
+        if (args->output_pot_file_bin != NULL) {
 
-            if (args->output_pot_file_bin != NULL) {
+            cfgs->snk_pots_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_bin)+1));
+            strcpy(cfgs->snk_pots_file->fileName, args->output_pot_file_bin);
 
-                cfgs->snk_pots_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_bin)+1));
-                strcpy(cfgs->snk_pots_file->fileName, args->output_pot_file_bin);
+            cfgs->snk_pots_file->format = 'b';
 
-                cfgs->snk_pots_file->format = 'b';
+            objs->snk_pots_file = snk_pots_file_construct(cfgs->snk_pots_file);
 
-                objs->snk_pots_file = snk_pots_file_construct(cfgs->snk_pots_file);
+        }
 
-            }
+        if (args->output_pot_file_xml != NULL) {
 
-            if (args->output_pot_file_xml != NULL) {
+            cfgs->snk_pots_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_xml)+1));
+            strcpy(cfgs->snk_pots_file->fileName, args->output_pot_file_xml);
 
-                cfgs->snk_pots_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_pot_file_xml)+1));
-                strcpy(cfgs->snk_pots_file->fileName, args->output_pot_file_xml);
+            cfgs->snk_pots_file->format = 'x';
 
-                cfgs->snk_pots_file->format = 'x';
-
-                objs->snk_pots_file = snk_pots_file_construct(cfgs->snk_pots_file);
-
-            }
+            objs->snk_pots_file = snk_pots_file_construct(cfgs->snk_pots_file);
 
         }
 
         // SST
 
-        if ((args->output_track_file_bin != NULL) ||
-            (args->output_track_file_xml != NULL) ||
-            (args->verbose == 0x01) ||
-            (args->force == 0x01)) {
+        objs->mod_sst = mod_sst_construct(cfgs->mod_sst);
+        objs->msg_tracks = msg_tracks_construct(cfgs->msg_tracks);
 
-            objs->mod_sst = mod_sst_construct(cfgs->mod_sst);
-            objs->msg_tracks = msg_tracks_construct(cfgs->msg_tracks);
+        if (args->output_track_file_bin != NULL) {
 
-            if (args->output_track_file_bin != NULL) {
+            cfgs->snk_tracks_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_bin)+1));
+            strcpy(cfgs->snk_tracks_file->fileName, args->output_track_file_bin);
 
-                cfgs->snk_tracks_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_bin)+1));
-                strcpy(cfgs->snk_tracks_file->fileName, args->output_track_file_bin);
+            cfgs->snk_tracks_file->format = 'b';
 
-                cfgs->snk_tracks_file->format = 'b';
+            objs->snk_tracks_file = snk_tracks_file_construct(cfgs->snk_tracks_file);
 
-                objs->snk_tracks_file = snk_tracks_file_construct(cfgs->snk_tracks_file);
+        }           
 
-            }           
+        if (args->output_track_file_xml != NULL) {
 
-            if (args->output_track_file_xml != NULL) {
+            cfgs->snk_tracks_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_xml)+1));
+            strcpy(cfgs->snk_tracks_file->fileName, args->output_track_file_xml);
 
-                cfgs->snk_tracks_file->fileName = (char *) malloc(sizeof(char) * (strlen(args->output_track_file_xml)+1));
-                strcpy(cfgs->snk_tracks_file->fileName, args->output_track_file_xml);
+            cfgs->snk_tracks_file->format = 'x';
 
-                cfgs->snk_tracks_file->format = 'x';
+            objs->snk_tracks_file = snk_tracks_file_construct(cfgs->snk_tracks_file);
 
-                objs->snk_tracks_file = snk_tracks_file_construct(cfgs->snk_tracks_file);
-
-            }                   
-
-        }
+        }                   
 
     }

@@ -28,7 +28,7 @@
 
     }
 
-    void freq2xcorr_process(freq2xcorr_obj * obj, const freqs_obj * freqs, const tdoas_obj * tdoas, xcorrs_obj * xcorrs) {
+    void freq2xcorr_process(freq2xcorr_obj * obj, const freqs_obj * freqs, xcorrs_obj * xcorrs) {
 
         unsigned int iSignal;
         unsigned int iSample;
@@ -41,24 +41,8 @@
                     freqs->array[iSignal],
                     obj->frame);
 
-            for (iSample = tdoas->array[0 * freqs->nSignals + iSignal]; iSample <= tdoas->array[1 * freqs->nSignals + iSignal]; iSample++) {
-
-                iSampleDest = iSample;
-
-                if (iSample < obj->frameSize/2) {
-                    
-                    iSampleSrc = iSample + obj->frameSize/2;
-
-                }
-                else {
-
-                    iSampleSrc = iSample - obj->frameSize/2;
-
-                }
-
-                xcorrs->array[iSignal][iSampleDest] = obj->frame[iSampleSrc] / ((float) obj->frameSize);
-
-            }        
+            memcpy(&(xcorrs->array[iSignal][0]),&(obj->frame[obj->frameSize/2]),(obj->frameSize/2)*sizeof(float));
+            memcpy(&(xcorrs->array[iSignal][obj->frameSize/2]),&(obj->frame[0]),(obj->frameSize/2)*sizeof(float));
 
         }
 
