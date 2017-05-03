@@ -18,7 +18,7 @@ app.get('/legal', function(req, res) {
 });
 
 app.use(function(req, res, next){
-    res.sendFile(path.join(__dirname+'/drag_mieux.html'));
+    res.sendFile(path.join(__dirname+'/live_data.html'));
 });
 
 app.listen(8080);
