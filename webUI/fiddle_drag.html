@@ -1,0 +1,74 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var geometry = new THREE.SphereGeometry( 1, 8, 8 );
+			var material = new THREE.MeshBasicMaterial( { color: 0xffffff ,wireframe:true} );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+
+            cube.rotation.x = 20*3.1416/180;
+			camera.position.z = 5;
+
+			var render = function () {
+				requestAnimationFrame( render );
+				renderer.render(scene, camera);
+			};
+            
+            /* */
+            var isDragging = false;
+            var previousMousePosition = {
+                x: 0,
+                y: 0
+            };
+            
+            render();
+            
+            canvas = document.getElementsByTagName('canvas')[0];
+            
+            canvas.addEventListener('mousedown', function(e) {
+                isDragging = true;
+            });
+            
+            canvas.addEventListener('mousemove', function(e) {
+                //console.log(e);
+                var deltaMove = {
+                    x: e.offsetX-previousMousePosition.x,
+                    y: e.offsetY-previousMousePosition.y
+                };
+
+                if(isDragging) {
+
+                    cube.rotation.x += deltaMove.y/100;
+                    cube.rotation.y += -deltaMove.x/100;
+                    render();
+                }
+
+                previousMousePosition = {
+                    x: e.offsetX,
+                    y: e.offsetY
+                };
+            });
+            /* */
+
+            canvas.addEventListener('mouseup',function(e) {
+                isDragging = false;
+            });
+            
+		</script>
+	</body>
+</html>

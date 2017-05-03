@@ -1,0 +1,7 @@
+{
+  "name": "mars-web",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
