@@ -15,7 +15,8 @@ class ChartBundle {
                     backgroundColor: "rgba(75,192,192,0.4)",
                     borderColor: "rgba(75,192,192,1)",
                     spanGaps: false,
-                    data: this.cdata[0]
+                    data: this.cdata[0],
+                    hidden : true
                   },
                   
                   {
@@ -26,7 +27,8 @@ class ChartBundle {
                     backgroundColor: "rgba(192,75,192,0.4)",
                     borderColor: "rgba(192,75,192,1)",
                     spanGaps: false,
-                    data: this.cdata[1]
+                    data: this.cdata[1],
+                    hidden : true
                   },
                   
                   {
@@ -37,18 +39,20 @@ class ChartBundle {
                     backgroundColor: "rgba(192,192,30,0.4)",
                     borderColor: "rgba(192,192,30,1)",
                     spanGaps: false,
-                    data: this.cdata[2]
+                    data: this.cdata[2],
+                    hidden : true
                   },
                   
                   {
                     label : 'Test Data 4',
                     fill : false,
-                    pointBorderColor: "rgba(30,129,129,1)",
-                    pointBackgroundColor: "rgba(30,129,129,1)",
-                    backgroundColor: "rgba(30,129,129,0.4)",
-                    borderColor: "rgba(30,129,129,1)",
+                    pointBorderColor: "rgba(0,200,40,1)",
+                    pointBackgroundColor: "rgba(0,200,40,1)",
+                    backgroundColor: "rgba(0,200,40,0.4)",
+                    borderColor: "rgba(0,200,40,1)",
                     spanGaps: false,
-                    data: this.cdata[3]
+                    data: this.cdata[3],
+                    hidden : true
                   }
               ]
         };
@@ -100,20 +104,37 @@ ctxs.forEach(function(ctx) {
 
 document.addEventListener('data', function(e) {
     
-    data = e.detail;
-    console.log(data);
+    currentFrame.sources.forEach(function(source,index) {
+        
+        charts[0].cdata[index].push(source.active);
+        charts[1].cdata[index].push(source.lat*180/Math.PI);
+        charts[2].cdata[index].push(source.energy);
+        charts[3].cdata[index].push(source.long*180/Math.PI);
+    });
     
     charts.forEach(function(bundle) {
-        
-        bundle.cdata.forEach(function(d) {
-            console.log(d);
-            d.shift();
-            if(Math.random()>0.2)
-                d.push(Math.random()*100);
-            else
-                d.push(null);
+        bundle.cdata.forEach(function(data) {
+            data.shift();
         });
         
         bundle.chart.update();
     });
+    
 },false);
+
+var showHide = function(e) {
+    
+    console.log('Hidding');
+    
+    charts.forEach(function(bundle) {
+        bundle.chart.config.data.datasets.forEach(function(dataset,index) {
+            dataset.hidden = !currentFrame.sources[index].selected;
+        });
+        
+        bundle.chart.update();
+    });
+    
+    currentFrame.sources.forEach(function(source,index) {
+        sources3D[index].visible = source.active && source.selected;
+    });
+};

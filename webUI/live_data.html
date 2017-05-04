@@ -35,27 +35,27 @@
             <div class="container-fluid content">
                 <div class="row content">
                     <div class="col-md-3 layout">
-                        <h1>Mars Data</h1>
-                        <p>Lorem Ipsum.<br>Je suis la colonne gauche.</p>
+                        <h2>Mars Data</h2>
+                        <p>Params</p>
                     </div>
                     <div class="col-md-6 layout">
                         <div class="row graph-row">
                             <div class="col-md-6">
-                                <h4>Graph1</h4>
+                                <h4>Source Activity</h4>
                                 <canvas class="graph"></canvas>
                             </div>
                             <div class="col-md-6">
-                                <h4>Graph2</h4>
+                                <h4>Source Latitude</h4>
                                 <canvas class="graph"></canvas>
                             </div>
                         </div>
                         <div class="row graph-row">
                             <div class="col-md-6">
-                                <h4>Graph3</h4>
+                                <h4>Source Energy</h4>
                                 <canvas class="graph"></canvas>
                             </div>
                             <div class="col-md-6">
-                                <h4>Graph4</h4>
+                                <h4>Source Longitude</h4>
                                 <canvas class="graph"></canvas>
                             </div>
                         </div>
@@ -64,9 +64,19 @@
                         </div>
                     </div>
                     <div class="col-md-3 layout">
-                        <h2>Filters</h2>
-                        <p>Lorem Ipsum.<br>Je suis la colonne droite.</p>
                         <h2>Sources</h2>
+                        <table class="table table-hover" id="source_table">
+                            <tr v-for = "source in sources">
+                                <td>
+                                    <div class="checkbox"  onclick="showHide()">
+                                        <label><input type="checkbox" v-model="source.selected">{{source.name}}</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="sim_check" v-model="checked" >Simulate data</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,6 +93,7 @@
 
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/vue.js"></script>
         
         <script src="js/tcp_link.js"></script>
         

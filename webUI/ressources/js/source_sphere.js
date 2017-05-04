@@ -1,6 +1,7 @@
 var container, stats, canvas, area;
 var camera, controls, scene, renderer;
 var objects = [];
+var sources3D = new Array(4);
 init();
 animate();
 
@@ -30,19 +31,29 @@ function init() {
     var sphereGeometry = new THREE.SphereGeometry( 1, 10, 10);
     var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} );
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial ); 
+    
+    var sourceGroup = new THREE.Group();
+    sourceGroup.add(sphere);
 
     var sourceGeometry = new THREE.SphereGeometry( 0.08, 10, 10);
-    var sourceMaterial = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe:false} );
-    var source = new THREE.Mesh( sourceGeometry, sourceMaterial );
-
-    source.position.x = 1;
-
-    var sourceGroup = new THREE.Group();
-
-    sourceGroup.add(sphere);
-    sourceGroup.add(source);
+    
+    var colors = ["rgb(75,192,192)","rgb(192,75,192)","rgb(192,192,30)","rgb(0,200,40)"]
+    
+    for(var i = 0; i<4; i++) {
+        
+        console.log('Sourcing...');
+        var sourceMaterial = new THREE.MeshBasicMaterial( {color: colors[i], wireframe:false} );
+        var source = new THREE.Mesh( sourceGeometry, sourceMaterial );
+        source.visible = false;
+        
+        sources3D[i] = source;
+        sourceGroup.add(sources3D[i]);
+    }
 
     scene.add( sourceGroup );
+    
+    var axisHelper = new THREE.AxisHelper(1.2);
+    scene.add( axisHelper );
 
     renderer = new THREE.WebGLRenderer( { antialias: true, canvas: canvas });
     renderer.setClearColor( 0x000000 );
@@ -50,10 +61,6 @@ function init() {
     renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
     renderer.sortObjects = false;
     renderer.shadowMap.enabled = false;
-    
-    stats = new Stats();
-    
-    //area.appendChild( stats.dom );
 
     window.addEventListener( 'resize', onWindowResize, false );
 }
@@ -70,10 +77,23 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame( animate );
     render();
-    stats.update();
 }
 
 function render() {
     controls.update();
     renderer.render( scene, camera );
 }
+
+document.addEventListener('data', function(e) {
+    
+    currentFrame.sources.forEach(function(source,index) {
+        
+        sources3D[index].visible = source.active && source.selected;
+        
+        sources3D[index].position.x = Math.cos(source.long)*Math.sin(source.lat);
+        sources3D[index].position.y = Math.sin(source.long)*Math.sin(source.lat)
+        sources3D[index].position.z = Math.cos(source.lat);
+        
+    });
+    
+},false);
