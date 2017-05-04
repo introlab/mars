@@ -28,7 +28,7 @@
 
         for (iPot = 0; iPot < obj->nPots; iPot++) {
 
-            printf("(%02u): %+1.3f %+1.3f %+1.3f > %+1.3f\n",
+            printf("(%02u): %+1.3f %+1.3f %+1.3f %+1.3f\n",
                    iPot,
                    obj->array[iPot * 4 + 0],
                    obj->array[iPot * 4 + 1],

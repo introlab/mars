@@ -130,6 +130,13 @@ target_link_libraries(demo
     mars
 )
 
+add_executable(swarm
+    demo/swarm.c
+)
+target_link_libraries(swarm
+    mars
+)
+
 add_executable(twtm
     demo/twtm.c
 )
