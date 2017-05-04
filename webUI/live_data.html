@@ -9,78 +9,77 @@
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid"> 
-                
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="https://github.com/introlab/mars">MARS</a>
+        <div class="wrapper">
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid"> 
+
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="https://github.com/introlab/mars">MARS</a>
+                    </div>
+
+                <div class="collapse navbar-collapse" id="navbar-content">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href='/'>Live Data</a></li>
+                        <li><a href="/config">Configure</a></li>
+                    </ul>
                 </div>
 
-            <div class="collapse navbar-collapse" id="navbar-content">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href='/'>Live Data</a></li>
-                    <li><a href="/config">Configure</a></li>
-                </ul>
-            </div>
-                
-            </div>
-        </nav>
+                </div>
+            </nav>
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
-                    <h1>Mars Data</h1>
-                    <p>Lorem Ipsum.<br>Je suis la colonne gauche.</p>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4>Graph1</h4>
-                            <canvas class="graph"></canvas>
+            <div class="container-fluid content">
+                <div class="row content">
+                    <div class="col-md-3 layout">
+                        <h1>Mars Data</h1>
+                        <p>Lorem Ipsum.<br>Je suis la colonne gauche.</p>
+                    </div>
+                    <div class="col-md-6 layout">
+                        <div class="row graph-row">
+                            <div class="col-md-6">
+                                <h4>Graph1</h4>
+                                <canvas class="graph"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Graph2</h4>
+                                <canvas class="graph"></canvas>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <h4>Graph2</h4>
-                            <canvas class="graph"></canvas>
+                        <div class="row graph-row">
+                            <div class="col-md-6">
+                                <h4>Graph3</h4>
+                                <canvas class="graph"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Graph4</h4>
+                                <canvas class="graph"></canvas>
+                            </div>
+                        </div>
+                        <div class="row sphere-row">
+                                <canvas id="sphere"></canvas>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4>Graph3</h4>
-                            <canvas class="graph"></canvas>
-                        </div>
-                        <div class="col-md-6">
-                            <h4>Graph4</h4>
-                            <canvas class="graph"></canvas>
-                        </div>
+                    <div class="col-md-3 layout">
+                        <h2>Filters</h2>
+                        <p>Lorem Ipsum.<br>Je suis la colonne droite.</p>
+                        <h2>Sources</h2>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h4>Source Location</h4>
-                            <canvas id="sphere"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <h2>Filters</h2>
-                    <p>Lorem Ipsum.<br>Je suis la colonne droite.</p>
-                    <h2>Sources</h2>
                 </div>
             </div>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <p class="col-xs-10 text-muted">MARS platform web interface</p>
+                        <a href="/legal" class="col-xs-2 text-right">Legal</a>
+                    </div>
+                </div>
+            </footer>
         </div>
-        
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <p class="col-xs-10 text-muted">MARS platform web interface</p>
-                    <a href="/legal" class="col-xs-2 text-right">Legal</a>
-                </div>
-            </div>
-        </footer>
 
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

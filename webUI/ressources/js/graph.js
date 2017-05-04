@@ -89,6 +89,8 @@ ctxs.forEach(function(ctx) {
             legend: {
                 display:false
             },
+            
+            responsive:true
         }
     });
     
