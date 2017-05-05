@@ -103,6 +103,41 @@
         <script src="js/three.min.js"></script>
         <script src="js/stats.min.js"></script>
         <script src="js/TrackballControls.js"></script>
+        
+        <script id="vertexShader" type="x-shader/x-vertex">
+            varying vec2 vUv;
+            
+            uniform mat4 uMVMat;
+            uniform mat4 uProjMat;
+            
+            varying vec4 fpos;
+            varying vec4 color;
+
+            void main() {
+                vUv = uv;
+
+                gl_Position =   projectionMatrix * 
+                                modelViewMatrix * 
+                                vec4(position,1.0);
+                                
+                fpos = gl_Position;
+                
+                color = vec4(fpos.x,fpos.y,fpos.x*fpos.y*4.0, 0.0);
+            }
+        </script>
+        
+        <script id="fragmentShader" type="x-shader/x-fragment">
+            uniform sampler2D texture1;
+
+            varying vec2 vUv;
+            varying vec4 color;
+
+            void main() {
+                gl_FragColor = color;
+            }
+        </script>
+        
+        
         <script src="js/source_sphere.js"></script>
         
         <script src="js/Chart.bundle.min.js"></script>

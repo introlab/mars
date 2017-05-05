@@ -29,7 +29,22 @@ function init() {
     scene = new THREE.Scene();
 
     var sphereGeometry = new THREE.SphereGeometry( 1, 10, 10);
-    var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} );
+    
+    //var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} );
+    
+    var vertShader = document.getElementById('vertexShader').innerHTML;
+    var fragShader = document.getElementById('fragmentShader').innerHTML;
+
+    var uniforms = {
+        texture1: { type: 't', value: 0, texture: THREE.ImageUtils.loadTexture( 'texture.jpg' ) }
+    };
+
+    var sphereMaterial = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: vertShader,
+        fragmentShader: fragShader
+    });
+    
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial ); 
     
     var sourceGroup = new THREE.Group();
