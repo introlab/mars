@@ -1,9 +1,12 @@
 var angle = 0;
+rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
 
 class Source {
     constructor(index, name) {
         this.index = index;
         this.name = name;
+        this.rgbValueString = rgbValueStrings[index];
+        
         this.active = false;
         this.selected = false;
         this.energy = 0.0;
@@ -30,15 +33,15 @@ var simStarter = new Vue({
 var sourceManager = new Vue({
     el: '#source_table',
     data: {
-        sources : currentFrame.sources
+        sources : currentFrame.sources,
     }
 });
 
 setInterval(function() {
     
-    angle += (Math.PI*2)/36;
-    
     if(simStarter.checked) {
+        
+        angle += (Math.PI*2)/36;
     
         currentFrame.sources.forEach(function(source,i) {
             source.energy = Math.random();

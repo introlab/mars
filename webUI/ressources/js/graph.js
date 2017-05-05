@@ -8,7 +8,7 @@ class ChartBundle {
               labels: clabel,
               datasets: [
                   {
-                    label : 'Activity',
+                    label : 'source0',
                     fill : false,
                     pointBorderColor: "rgba(75,192,192,1)",
                     pointBackgroundColor: "rgba(75,192,192,1)",
@@ -20,7 +20,7 @@ class ChartBundle {
                   },
                   
                   {
-                    label : 'Elevation',
+                    label : 'source1',
                     fill : false,
                     pointBorderColor: "rgba(192,75,192,1)",
                     pointBackgroundColor: "rgba(192,75,192,1)",
@@ -32,7 +32,7 @@ class ChartBundle {
                   },
                   
                   {
-                    label : 'Energy',
+                    label : 'source2',
                     fill : false,
                     pointBorderColor: "rgba(192,192,30,1)",
                     pointBackgroundColor: "rgba(192,192,30,1)",
@@ -44,7 +44,7 @@ class ChartBundle {
                   },
                   
                   {
-                    label : 'Azimut',
+                    label : 'source3',
                     fill : false,
                     pointBorderColor: "rgba(0,200,40,1)",
                     pointBackgroundColor: "rgba(0,200,40,1)",

@@ -4,7 +4,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
         <title>Live Data</title>
+        <link rel="icon" href="images/introlab_icon.png">
+        
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
     </head>
@@ -69,7 +72,7 @@
                             <tr v-for = "source in sources">
                                 <td>
                                     <div class="checkbox"  onclick="showHide()">
-                                        <label><input type="checkbox" v-model="source.selected">{{source.name}}</label>
+                                        <label><input type="checkbox" v-model="source.selected">Source  <span class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.index+1}}</span></label>
                                     </div>
                                 </td>
                             </tr>
