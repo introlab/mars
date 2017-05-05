@@ -8,7 +8,7 @@ class ChartBundle {
               labels: clabel,
               datasets: [
                   {
-                    label : 'Test Data',
+                    label : 'Activity',
                     fill : false,
                     pointBorderColor: "rgba(75,192,192,1)",
                     pointBackgroundColor: "rgba(75,192,192,1)",
@@ -20,7 +20,7 @@ class ChartBundle {
                   },
                   
                   {
-                    label : 'Test Data 2',
+                    label : 'Elevation',
                     fill : false,
                     pointBorderColor: "rgba(192,75,192,1)",
                     pointBackgroundColor: "rgba(192,75,192,1)",
@@ -32,7 +32,7 @@ class ChartBundle {
                   },
                   
                   {
-                    label : 'Test Data 3',
+                    label : 'Energy',
                     fill : false,
                     pointBorderColor: "rgba(192,192,30,1)",
                     pointBackgroundColor: "rgba(192,192,30,1)",
@@ -44,7 +44,7 @@ class ChartBundle {
                   },
                   
                   {
-                    label : 'Test Data 4',
+                    label : 'Azimut',
                     fill : false,
                     pointBorderColor: "rgba(0,200,40,1)",
                     pointBackgroundColor: "rgba(0,200,40,1)",
@@ -61,11 +61,15 @@ class ChartBundle {
 
 var charts = [];
 
-var i = 0;
 var ctxc = document.getElementsByClassName('graph');
 var ctxs = Array.prototype.slice.call( ctxc );
 
-ctxs.forEach(function(ctx) {
+var mins = [0,-90, 0, -180];
+var maxs = [1, 90, 1, 180];
+var stepSizes = [0.5, 30, 0.2, 60];
+var pointsRadius = [3, 0, 3, 0];
+
+ctxs.forEach(function(ctx,i) {
     
     charts[i] = new ChartBundle();
     charts[i].chart = new Chart(ctx.getContext('2d'),{
@@ -73,9 +77,20 @@ ctxs.forEach(function(ctx) {
         data: charts[i].cdataSetup,
         options: {
             showLines: i==1||i==3,
+            
             animation: {
                 duration : 0,
                 easing : 'linear'
+            },
+            
+            tooltips: {
+                enabled: false
+            },
+            
+            elements: {
+                point: {
+                    radius: pointsRadius[i]
+                }
             },
             
             scales: {
@@ -87,6 +102,14 @@ ctxs.forEach(function(ctx) {
                         display: false,
                         labelString: 'Time (s)'
                       }
+                }],
+                
+                yAxes: [{
+                    ticks: {
+                        max: maxs[i],
+                        min: mins[i],
+                        stepSize: stepSizes[i]
+                    }
                 }]
             },
             
@@ -98,20 +121,6 @@ ctxs.forEach(function(ctx) {
         }
         
     });
-    
-    if(i==1) {
-        var ax = charts[i].chart.scales["y-axis-0"].ticks = [-90, -60, -30, 0, 30, 60, 90];
-    }
-
-    if(i==3) {
-        var ax = charts[i].chart.scales["y-axis-0"].min = -180;
-        var ax = charts[i].chart.scales["y-axis-0"].max = 180;
-    }
-    
-    i ++;
-    
-    charts[i].chart.update();
-    console.log(i);
 });
 
 document.addEventListener('data', function(e) {
