@@ -36,22 +36,20 @@ var sourceManager = new Vue({
 
 setInterval(function() {
     
-    angle += (Math.PI*2)/360;
-    if (angle > Math.PI*2)
-        angle = 0;
+    angle += (Math.PI*2)/36;
     
     if(simStarter.checked) {
     
-        currentFrame.sources.forEach(function(source) {
+        currentFrame.sources.forEach(function(source,i) {
             source.energy = Math.random();
-            //source.active = source.energy > 0.4;
-            source.active = 1;
-            source.lat = Math.sin(angle)*Math.PI*2;
-            source.long = Math.cos(angle)*Math.PI*2;
+            source.active = source.energy > 0.2;
+            //source.active = 1;
+            source.lat = Math.sin(angle+i)*Math.PI/2;
+            source.long = Math.cos(angle+i)*Math.PI;
         });
 
         var event = new Event('data');
         document.dispatchEvent(event);
     }
     
-},50);
+},100);
