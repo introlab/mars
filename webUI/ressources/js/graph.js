@@ -96,9 +96,21 @@ ctxs.forEach(function(ctx) {
             
             responsive:true
         }
+        
     });
     
+    if(i==1) {
+        var ax = charts[i].chart.scales["y-axis-0"].ticks = [-90, -60, -30, 0, 30, 60, 90];
+    }
+
+    if(i==3) {
+        var ax = charts[i].chart.scales["y-axis-0"].min = -180;
+        var ax = charts[i].chart.scales["y-axis-0"].max = 180;
+    }
+    
     i ++;
+    
+    charts[i].chart.update();
     console.log(i);
 });
 

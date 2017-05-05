@@ -1,3 +1,5 @@
+var angle = 0;
+
 class Source {
     constructor(index, name) {
         this.index = index;
@@ -34,17 +36,22 @@ var sourceManager = new Vue({
 
 setInterval(function() {
     
+    angle += (Math.PI*2)/360;
+    if (angle > Math.PI*2)
+        angle = 0;
+    
     if(simStarter.checked) {
     
         currentFrame.sources.forEach(function(source) {
             source.energy = Math.random();
-            source.active = source.energy > 0.4;
-            source.lat = Math.random()*Math.PI*2;
-            source.long = Math.random()*Math.PI*2;
+            //source.active = source.energy > 0.4;
+            source.active = 1;
+            source.lat = Math.sin(angle)*Math.PI*2;
+            source.long = Math.cos(angle)*Math.PI*2;
         });
 
         var event = new Event('data');
         document.dispatchEvent(event);
     }
     
-},200);
+},50);
