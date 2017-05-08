@@ -117,7 +117,8 @@ ctxs.forEach(function(ctx,i) {
                 display:false
             },
             
-            responsive:true
+            responsive:true,
+            maintainAspectRatio: false
         }
         
     });
