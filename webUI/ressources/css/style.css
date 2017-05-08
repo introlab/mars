@@ -26,6 +26,11 @@ body {
     max-height: 180px;
 }
 
+#axis {
+    position: absolute;
+    bottom: 5px;
+}
+
 @media screen and (min-width: 992px) {
     
     .wrapper {
@@ -76,5 +81,9 @@ body {
     .graph {
         padding-top: 40px
     }
+    
+    #axis {
+    position: absolute;
+    bottom: 0
 }
-
+}

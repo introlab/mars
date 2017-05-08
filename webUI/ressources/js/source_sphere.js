@@ -1,6 +1,5 @@
-var container, stats, canvas, area, axis;
-var camera, controls, scene, renderer;
-var objects = [];
+var canvas, camera, controls, scene, renderer;
+var subCanvas, subCamera, subScene, subRenderer;
 var sources3D = new Array(4);
 init();
 animate();
@@ -8,7 +7,6 @@ animate();
 function init() {
     
     canvas = document.getElementById("sphere");
-    area = document.getElementById("draw-zone");
     
     canvas.style.height = '100%';
     canvas.style.width = '100%';
@@ -49,6 +47,8 @@ function init() {
     
     var sourceGroup = new THREE.Group();
     sourceGroup.add(sphere);
+    
+    console.log(sphere);
 
     var sourceGeometry = new THREE.SphereGeometry( 0.08, 10, 10);
     
@@ -67,14 +67,44 @@ function init() {
 
     scene.add( sourceGroup );
     
-    axis = new THREE.AxisHelper(1.2);
-    scene.add( axis );
+    renderer = new THREE.WebGLRenderer( { antialias: true, canvas: canvas });
+    renderer.setClearColor( 0x000000 );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
+    renderer.sortObjects = false;
+    renderer.shadowMap.enabled = false;
     
+    /*
+     * Draw sub canvas with axis
+     */
+    
+    // Canvas
+    subCanvas = document.getElementById("axis");
+    
+    // Renderer
+    subRenderer = new THREE.WebGLRenderer( { antialias: true, canvas: subCanvas });
+    subRenderer.setClearColor(0x000000);
+    subRenderer.setSize(80,80);
+    
+    // Scene
+    subScene = new THREE.Scene();
+    
+    // Camera
+    subCamera = new THREE.PerspectiveCamera(70,1,0.1,5);
+    subCamera.position.z = 3.5;
+    subCamera.up = camera.up;
+    
+    // Axis
+    var axis = new THREE.AxisHelper(1.2);
+    console.log(axis);
+    subScene.add( axis );
+    
+    // Load fonts
     var loader = new THREE.FontLoader();
     loader.load( 'fonts/helvetiker_regular.typeface.json', function ( helFont ) {
         
         var  textGeo = new THREE.TextGeometry('X', {
-             size: 0.1,
+             size: 0.2,
              height: 0.001,
              curveSegments: 6,
              font: helFont,
@@ -88,7 +118,7 @@ function init() {
         text.position.y = 0.01;
         text.position.z = 0;
         text.rotation = 0;
-        scene.add(text);
+        subScene.add(text);
         
         var  textGeo = new THREE.TextGeometry('Y', {
              size: 0.1,
@@ -105,7 +135,7 @@ function init() {
         text.position.y = 1.1;
         text.position.z = 0;
         text.rotation = 0;
-        scene.add(text);
+        subScene.add(text);
         
         var  textGeo = new THREE.TextGeometry('Z', {
              size: 0.1,
@@ -122,16 +152,9 @@ function init() {
         text.position.y = 0.01;
         text.position.z = 1.2;
         text.rotation = 0;
-        scene.add(text);
+        subScene.add(text);
         
     } );
-
-    renderer = new THREE.WebGLRenderer( { antialias: true, canvas: canvas });
-    renderer.setClearColor( 0x000000 );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
-    renderer.sortObjects = false;
-    renderer.shadowMap.enabled = false;
 
     window.addEventListener( 'resize', onWindowResize, false );
 }
@@ -147,12 +170,22 @@ function onWindowResize() {
 
 function animate() {
     requestAnimationFrame( animate );
+    
+    controls.update();
+    
+    subCamera.rotation.copy(camera.rotation);
+    subCamera.position.copy(camera.position);
+    //subCamera.position.sub(controls.target);
+    //subCamera.position.setLength(4);
+    
     render();
 }
 
 function render() {
-    controls.update();
+    
     renderer.render( scene, camera );
+    subRenderer.render( subScene, subCamera);
+    
 }
 
 document.addEventListener('data', function(e) {
