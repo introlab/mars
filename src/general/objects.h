@@ -21,6 +21,7 @@
     #include "../module/mod_sst.h"
     #include "../message/msg_tracks.h"
     #include "../sink/snk_tracks_file.h"
+    #include "../sink/snk_tracks_socket.h"
     
     typedef struct objects {
 
@@ -45,6 +46,7 @@
         mod_sst_obj * mod_sst;
         msg_tracks_obj * msg_tracks;
         snk_tracks_file_obj * snk_tracks_file;
+        snk_tracks_socket_obj * snk_tracks_socket;
 
     } objects;
 

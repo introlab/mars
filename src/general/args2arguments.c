@@ -45,16 +45,7 @@
 
                         nInputs++;
 
-                    }       
-
-                    if (name_check_ipv4(optarg) == 0) {
-
-                        args->input_raw_socket = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
-                        strcpy(args->input_raw_socket, optarg);
-
-                        nInputs++;
-
-                    }       
+                    }          
 
                     if (name_check_file_wav(optarg) == 0) {
 
@@ -83,13 +74,6 @@
 
                     }       
 
-                    if (name_check_ipv4(optarg) == 0) {
-
-                        args->output_raw_socket = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
-                        strcpy(args->output_raw_socket, optarg);
-
-                    }   
-
                     if (name_check_file_spectrabin(optarg) == 0) {
 
                         args->output_spectra_file_bin = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
@@ -116,7 +100,7 @@
                         args->output_pot_file_xml = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
                         strcpy(args->output_pot_file_xml, optarg);
 
-                    }
+                    }                   
 
                     if (name_check_file_trackbin(optarg) == 0) {
 
@@ -131,6 +115,20 @@
                         strcpy(args->output_track_file_xml, optarg);
 
                     }                    
+
+                    if (name_check_ipv4_trackxml(optarg) == 0) {
+
+                        args->output_track_socket_xml = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_track_socket_xml, optarg);
+
+                    }                       
+
+                    if (name_check_ipv4_trackjson(optarg) == 0) {
+
+                        args->output_track_socket_json = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_track_socket_json, optarg);
+
+                    }   
 
                 break;
 

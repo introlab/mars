@@ -21,7 +21,13 @@
 
     int name_check_file_trackxml(const char * str);
 
-    int name_check_ipv4(const char * str);
+    int name_check_ipv4_raw(const char * str);
+
+    int name_check_ipv4_potxml(const char * str);
+
+    int name_check_ipv4_trackxml(const char * str);
+
+    int name_check_ipv4_trackjson(const char * str);
 
     int name_check_hw(const char * str);
 

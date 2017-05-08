@@ -17,10 +17,12 @@
     #include "../module/mod_sst.h"
     #include "../message/msg_tracks.h"
     #include "../sink/snk_tracks_file.h"
+    #include "../sink/snk_tracks_socket.h"
 
     #include "objects.h"
     #include "configs.h"
     #include "arguments.h"
+    #include "parser.h"
 
     void configs2objects(objects * objs, const configs * cfgs, const arguments * args);
 

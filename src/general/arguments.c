@@ -10,7 +10,6 @@
         args->config_file = (char *) NULL;
         args->input_raw_file = (char *) NULL;
         args->input_raw_soundcard = (char *) NULL;
-        args->input_raw_socket = (char *) NULL;
         args->input_wav_file = (char *) NULL;
         args->output_raw_file = (char *) NULL;
         args->output_raw_soundcard = (char *) NULL;
@@ -21,8 +20,9 @@
         args->output_pot_file_xml = (char *) NULL;
         args->output_track_file_bin = (char *) NULL;
         args->output_track_file_xml = (char *) NULL;
+        args->output_track_socket_xml = (char *) NULL;
+        args->output_track_socket_json = (char *) NULL;
         args->verbose = 0x00;
-        args->force = 0x00;
 
         return args;
 
@@ -42,10 +42,6 @@
             free((void *) args->input_raw_soundcard);
         }
          
-        if (args->input_raw_socket != NULL) {
-            free((void *) args->input_raw_socket);
-        }
-
         if (args->input_wav_file != NULL) {
             free((void *) args->input_wav_file);
         }
@@ -86,6 +82,14 @@
             free((void *) args->output_track_file_xml);
         }        
 
+        if (args->output_track_socket_xml != NULL) {
+            free((void *) args->output_track_socket_xml);
+        }        
+
+        if (args->output_track_socket_json != NULL) {
+            free((void *) args->output_track_socket_json);
+        }  
+
         free((void *) args);
 
     }
@@ -95,7 +99,6 @@
         printf("config_file: %s\n",args->config_file);
         printf("input_raw_file: %s\n",args->input_raw_file);
         printf("input_raw_soundcard: %s\n",args->input_raw_soundcard);
-        printf("input_raw_socket: %s\n",args->input_raw_socket);
         printf("input_wav_file: %s\n",args->input_wav_file);
         printf("output_raw_file: %s\n",args->output_raw_file);
         printf("output_raw_soundcard: %s\n",args->output_raw_soundcard);
@@ -104,5 +107,7 @@
         printf("output_pot_file_xml: %s\n",args->output_pot_file_xml);
         printf("output_track_file_bin: %s\n",args->output_track_file_bin);
         printf("output_track_file_xml: %s\n",args->output_track_file_xml);
+        printf("output_track_socket_xml: %s\n",args->output_track_socket_xml);
+        printf("output_track_socket_json: %s\n",args->output_track_socket_json);
 
     }

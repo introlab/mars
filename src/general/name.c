@@ -127,19 +127,75 @@
 
     }
 
-    int name_check_ipv4(const char * str) {
+    int name_check_file_trackjson(const char * str) {
 
         regex_t reg;
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}$", REG_EXTENDED);
+        regcomp(&reg, ".track.json$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }    
+
+    int name_check_ipv4_raw(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.raw$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
         return rtnValue;
 
     }
+
+    int name_check_ipv4_potxml(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.pot.xml$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }
+
+    int name_check_ipv4_trackxml(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.track.xml$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }
+
+    int name_check_ipv4_trackjson(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.track.json$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }    
 
     int name_check_hw(const char * str) {
 

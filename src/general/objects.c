@@ -28,6 +28,7 @@
         objs->mod_sst = (mod_sst_obj *) NULL;
         objs->msg_tracks = (msg_tracks_obj *) NULL;
         objs->snk_tracks_file = (snk_tracks_file_obj *) NULL;
+        objs->snk_tracks_socket = (snk_tracks_socket_obj *) NULL;
 
         return objs;
 
@@ -109,6 +110,10 @@
         
         if (objs->snk_tracks_file != NULL) {
             snk_tracks_file_destroy(objs->snk_tracks_file);
+        }
+
+        if (objs->snk_tracks_socket != NULL) {
+            snk_tracks_socket_destroy(objs->snk_tracks_socket);
         }
 
         free((void *) objs);

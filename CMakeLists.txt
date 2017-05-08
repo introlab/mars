@@ -23,6 +23,7 @@ set(SRC
     src/general/name.c
     src/general/objects.c
     src/general/parameters.c
+    src/general/parser.c
     src/general/profiler.c
 
     src/general/args2arguments.c
@@ -84,6 +85,7 @@ set(SRC
     src/sink/snk_raw_file.c
     src/sink/snk_spectra_file.c
     src/sink/snk_tracks_file.c
+    src/sink/snk_tracks_socket.c
     src/sink/snk_xcs_file.c
 
     src/source/src_raw_soundcard.c
@@ -130,6 +132,13 @@ target_link_libraries(demo
     mars
 )
 
+add_executable(swarm
+    demo/swarm.c
+)
+target_link_libraries(swarm
+    mars
+)
+
 add_executable(twtm
     demo/twtm.c
 )
@@ -142,4 +151,11 @@ add_executable(dummy
 )
 target_link_libraries(dummy
     mars
+)
+
+add_executable(server
+    demo/server.c
+)
+add_executable(client
+    demo/client.c
 )
