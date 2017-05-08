@@ -28,6 +28,7 @@
         cfgs->mod_sst = (mod_sst_cfg *) NULL;
         cfgs->msg_tracks = (msg_tracks_cfg *) NULL;
         cfgs->snk_tracks_file = (snk_tracks_file_cfg *) NULL;
+        cfgs->snk_tracks_socket = (snk_tracks_socket_cfg *) NULL;
 
         return cfgs;
 
@@ -97,6 +98,9 @@
         }
         if (cfgs->snk_tracks_file != NULL) {
             snk_tracks_file_cfg_destroy(cfgs->snk_tracks_file);
+        }
+        if (cfgs->snk_tracks_socket != NULL) {
+            snk_tracks_socket_cfg_destroy(cfgs->snk_tracks_socket);
         }
 
         free((void *) cfgs);

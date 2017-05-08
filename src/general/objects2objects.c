@@ -136,6 +136,15 @@
 
         }
 
+        // Write results to socket
+
+        if (objs->snk_tracks_socket != NULL) {
+
+            snk_tracks_socket_process(objs->snk_tracks_socket,
+                                      objs->msg_tracks);
+
+        }
+
         // Update times
 
         profiler->duration += ((float) (objs->msg_hops_raw->hops->hopSize)) / profiler->fS;

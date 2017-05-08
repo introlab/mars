@@ -21,6 +21,7 @@
     #include "../module/mod_sst.h"
     #include "../message/msg_tracks.h"
     #include "../sink/snk_tracks_file.h"
+    #include "../sink/snk_tracks_socket.h"
 
     typedef struct configs {
 
@@ -45,6 +46,7 @@
         mod_sst_cfg * mod_sst;
         msg_tracks_cfg * msg_tracks;
         snk_tracks_file_cfg * snk_tracks_file;
+        snk_tracks_socket_cfg * snk_tracks_socket;
 
     } configs;
 

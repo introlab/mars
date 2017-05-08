@@ -24,6 +24,7 @@
         cfgs->mod_sst = parameters2configs_mod_sst(params);
         cfgs->msg_tracks = parameters2configs_msg_tracks(params);
         cfgs->snk_tracks_file = parameters2configs_snk_tracks_file(params);
+        cfgs->snk_tracks_socket = parameters2configs_snk_tracks_socket(params);
 
     }
 
@@ -33,6 +34,7 @@
 
         cfg = src_raw_file_cfg_construct();
 
+        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeIn;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsIn;
@@ -47,6 +49,7 @@
 
         cfg = src_raw_soundcard_cfg_construct();
 
+        cfg->cardName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeIn;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsIn;
@@ -62,6 +65,7 @@
 
         cfg = src_wav_file_cfg_construct();
 
+        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeIn;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsIn;
@@ -143,6 +147,7 @@
 
         cfg = snk_raw_file_cfg_construct();
 
+        cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeOut;
         cfg->nMics = params->general->mics->nMics;
         cfg->nBits = params->raw->nBitsOut;
@@ -380,6 +385,21 @@
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
+
+        return cfg;
+
+    }
+
+    snk_tracks_socket_cfg * parameters2configs_snk_tracks_socket(const parameters * params) {
+
+        snk_tracks_socket_cfg * cfg;
+
+        cfg = snk_tracks_socket_cfg_construct();
+
+        cfg->ipAddress = (char *) malloc(sizeof(char) * 256);
+        strcpy(cfg->ipAddress, "");
+        cfg->portNumber = (char *) malloc(sizeof(char) * 16);
+        strcpy(cfg->portNumber, "");
 
         return cfg;
 

@@ -48,4 +48,6 @@
 
     snk_tracks_file_cfg * parameters2configs_snk_tracks_file(const parameters * params);
 
+    snk_tracks_socket_cfg * parameters2configs_snk_tracks_socket(const parameters * params);
+
 #endif
