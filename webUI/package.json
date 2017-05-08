@@ -2,6 +2,7 @@
   "name": "mars-web",
   "version": "0.1.0",
   "dependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "express-ws": "^3.0.0"
   }
 }

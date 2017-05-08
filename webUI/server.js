@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 
 var app = express();
+var expressWs = require('express-ws')(app);
 
 app.use(express.static('ressources'));
 
@@ -15,6 +16,14 @@ app.get('/config', function(req, res) {
 
 app.get('/legal', function(req, res) {
     res.sendFile(path.join(__dirname+'/legal.html'));
+});
+
+app.ws('/stream',function(ws, req) {
+    
+    ws.on('message',function(msg) {
+       console.log(msg); 
+    });
+
 });
 
 app.use(function(req, res, next){
