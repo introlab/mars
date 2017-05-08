@@ -11,12 +11,6 @@ new_uri += "//" + loc.host + "/stream";
 var socket = new WebSocket(new_uri);
 console.log(new_uri);
 
-socket.onopen = function(e) {
-    
-    setInterval(function() {
-        
-        socket.send('Hello there');
-        
-    },1000);
-    
+socket.onmessage = function(msg) {
+    console.log(msg);
 };
