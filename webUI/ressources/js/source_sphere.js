@@ -1,5 +1,6 @@
 var canvas, camera, controls, scene, renderer;
 var subCanvas, subCamera, subScene, subRenderer;
+var labelX, labelY, labelZ;
 var sources3D = new Array(4);
 
 init();
@@ -78,7 +79,7 @@ function init() {
     subScene = new THREE.Scene();
     
     // Camera
-    subCamera = new THREE.PerspectiveCamera(70,1,0.1,5);
+    subCamera = new THREE.PerspectiveCamera(90,1,0.1,5);
     subCamera.position.z = 3.5;
     subCamera.up = camera.up;
     
@@ -100,13 +101,13 @@ function init() {
         });
 
         var  textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255,0,0)" });
-        var  text = new THREE.Mesh(textGeo , textMaterial);
+        labelX = new THREE.Mesh(textGeo , textMaterial);
 
-        text.position.x = 0.9;
-        text.position.y = 0.01;
-        text.position.z = 0;
-        text.rotation = 0;
-        subScene.add(text);
+        labelX.position.x = 1.2;
+        labelX.position.y = 0.01;
+        labelX.position.z = 0;
+        labelX.rotation = 0;
+        subScene.add(labelX);
         
         var  textGeo = new THREE.TextGeometry('Y', {
              size: 0.3,
@@ -117,16 +118,16 @@ function init() {
         });
 
         var  textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(0,255,0)" });
-        var  text = new THREE.Mesh(textGeo , textMaterial);
+        labelY = new THREE.Mesh(textGeo , textMaterial);
 
-        text.position.x = 0.03;
-        text.position.y = 0.9;
-        text.position.z = 0;
-        text.rotation = 0;
-        subScene.add(text);
+        labelY.position.x = 0.03;
+        labelY.position.y = 1.2;
+        labelY.position.z = 0;
+        labelY.rotation = 0;
+        subScene.add(labelY);
         
         var  textGeo = new THREE.TextGeometry('Z', {
-             size: 0.1,
+             size: 0.3,
              height: 0.001,
              curveSegments: 6,
              font: helFont,
@@ -134,13 +135,13 @@ function init() {
         });
 
         var  textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(0,0,255)" });
-        var  text = new THREE.Mesh(textGeo , textMaterial);
+        labelZ = new THREE.Mesh(textGeo , textMaterial);
 
-        text.position.x = 0.01;
-        text.position.y = 0.01;
-        text.position.z = 1.2;
-        text.rotation = 0;
-        subScene.add(text);
+        labelZ.position.x = 0.01;
+        labelZ.position.y = 0.01;
+        labelZ.position.z = 1.2;
+        labelZ.rotation = 0;
+        subScene.add(labelZ);
         
     } );
 
@@ -165,6 +166,10 @@ function animate() {
     
     subCamera.rotation.copy(camera.rotation);
     subCamera.position.copy(camera.position);
+    
+    labelX.rotation.copy(camera.rotation);
+    labelY.rotation.copy(camera.rotation);
+    labelZ.rotation.copy(camera.rotation);
     
     render();
 }
