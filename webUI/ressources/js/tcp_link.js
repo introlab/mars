@@ -1,3 +1,7 @@
+/*
+ * Data structures to manage source data
+ */
+
 var angle = 0;
 rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
 
@@ -23,6 +27,11 @@ class DataFrame {
 
 var currentFrame = new DataFrame();
 
+
+/*
+ * Vue models for dynamic UI
+ */
+
 var simStarter = new Vue({
         el: '#sim_check',
         data: {
@@ -37,22 +46,34 @@ var sourceManager = new Vue({
     }
 });
 
-setInterval(function() {
-    
-    if(simStarter.checked) {
-        
-        angle += (Math.PI*2)/36;
-    
-        currentFrame.sources.forEach(function(source,i) {
-            source.energy = Math.random();
-            source.active = source.energy > 0.2;
-            //source.active = 1;
-            source.lat = Math.sin(angle+i)*Math.PI/2;
-            source.long = Math.cos(angle+i)*Math.PI;
-        });
 
-        var event = new Event('data');
-        document.dispatchEvent(event);
-    }
+/*
+ * Web Socket connection to server
+ */
+
+var loc = window.location, new_uri;
+
+if (loc.protocol === "https:") {
+    new_uri = "wss:";
+} else {
+    new_uri = "ws:";
+}
+
+new_uri += "//" + loc.host + "/stream";
+
+var socket = new WebSocket(new_uri);
+console.log(new_uri);
+
+socket.onmessage = function(msg) {
     
-},100);
+    console.log(msg);
+    var data = JSON.parse(msg.data);
+    
+    currentFrame.sources.forEach(function(source,i) {
+        // Parse JSON here!!
+        // source.param = data[i].param
+    });
+    
+    var event = new Event('data');
+    document.dispatchEvent(event);
+};

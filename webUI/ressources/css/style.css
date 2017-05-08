@@ -16,24 +16,65 @@ body {
   height: 30px;
   background-color: #f5f5f5;
 }
-.wrapper {
-    height: 100vh;
-}
 
-.content {
-    height: 100%;
-}
-
-.layout {
-    height: 100%;
+.main {
     padding-top: 60px;
     padding-bottom: 30px;
 }
 
-.graph-row {
-    height: 30%
+.graph {
+    max-height: 180px;
 }
 
-.sphere-row {
-    height: 40%
+@media screen and (min-width: 992px) {
+    
+    .wrapper {
+    height: 100vh;
+    }
+
+    .content {
+        height: 100%;
+    }
+    
+    .main {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .layout {
+        height: 100%;
+        padding-top: 60px;
+        padding-bottom: 30px;
+    }
+
+    .graph-row {
+        height: 30%
+    }
+    
+    .graph {
+        max-height: none
+    }
+
+    .sphere-row {
+        height: 40%
+    }
+    
+    #sphere_heading {
+        position: absolute;
+        color: white;
+        padding-left: 10px
+    }
+    
+    #sphere {
+        padding-top: 0;
+    }
+    
+    .abs_head {
+        position: absolute
+    }
+    
+    .graph {
+        padding-top: 40px
+    }
 }
+
