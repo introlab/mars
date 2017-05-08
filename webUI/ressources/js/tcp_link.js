@@ -67,7 +67,7 @@ console.log(new_uri);
 socket.onmessage = function(msg) {
     
     console.log(msg);
-    var data = JSON.parse(msg);
+    var data = JSON.parse(msg.data);
     
     currentFrame.sources.forEach(function(source,i) {
         // Parse JSON here!!

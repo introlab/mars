@@ -35,7 +35,7 @@
                 </div>
             </nav>
 
-            <div class="container-fluid content">
+            <div class="container-fluid content main">
                 <div class="row content">
                     <div class="col-md-3 layout">
                         <h2>Mars Data</h2>
@@ -43,27 +43,30 @@
                     </div>
                     <div class="col-md-6 layout">
                         <div class="row graph-row">
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <h4>Source Activity</h4>
                                 <canvas class="graph"></canvas>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <h4>Source Elevation</h4>
                                 <canvas class="graph"></canvas>
                             </div>
                         </div>
                         <div class="row graph-row">
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <h4>Source Energy</h4>
                                 <canvas class="graph"></canvas>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-xs-6">
                                 <h4>Source Azimut</h4>
                                 <canvas class="graph"></canvas>
                             </div>
                         </div>
                         <div class="row sphere-row">
+                            <div class="col-xs-12 content">
+                                <h4 id="sphere_heading">Active sources locations</h4>
                                 <canvas id="sphere"></canvas>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3 layout">
