@@ -1,62 +1,57 @@
 var canvas, camera, controls, scene, renderer;
 var subCanvas, subCamera, subScene, subRenderer;
 var sources3D = new Array(4);
+
 init();
 animate();
 
 function init() {
     
+    /*
+     * Draw sources and sphere
+     */
+    
+    // Canvas
     canvas = document.getElementById("sphere");
     
     canvas.style.height = '100%';
     canvas.style.width = '100%';
     
-    console.log(canvas);
-    console.log(canvas.offsetWidth);
-    console.log(canvas.offsetHeight);
+    // Renderer
+    renderer = new THREE.WebGLRenderer( { antialias: true, canvas: canvas });
+    renderer.setClearColor( 0x000000 );
+    renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
 
+    // Cameras
     camera = new THREE.PerspectiveCamera( 70, canvas.offsetWidth/canvas.offsetHeight , 1, 4 );
     camera.position.z = 2.1;
 
+    // Cameras controls
     controls = new THREE.TrackballControls( camera,canvas );
     controls.rotateSpeed = 5.0;
     controls.noZoom = true;
     controls.noPan = true;
     controls.dynamicDampingFactor = 0.2;
 
+    // Scene
     scene = new THREE.Scene();
 
+    // Sphere
     var sphereGeometry = new THREE.SphereGeometry( 1, 10, 10);
+    var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} ); 
     
-    //var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} );
+    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    scene.add(sphere);
     
-    var vertShader = document.getElementById('vertexShader').innerHTML;
-    var fragShader = document.getElementById('fragmentShader').innerHTML;
-
-    var uniforms = {
-        texture1: { type: 't', value: 0, texture: THREE.ImageUtils.loadTexture( 'texture.jpg' ) }
-    };
-
-    var sphereMaterial = new THREE.ShaderMaterial({
-        uniforms: uniforms,
-        vertexShader: vertShader,
-        fragmentShader: fragShader
-    });
-    
-    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial ); 
-    
+    // Sources
     var sourceGroup = new THREE.Group();
-    sourceGroup.add(sphere);
-    
-    console.log(sphere);
 
     var sourceGeometry = new THREE.SphereGeometry( 0.08, 10, 10);
-    
+
     var colors = ["rgb(75,192,192)","rgb(192,75,192)","rgb(192,192,30)","rgb(0,200,40)"]
     
     for(var i = 0; i<4; i++) {
         
-        console.log('Sourcing...');
         var sourceMaterial = new THREE.MeshBasicMaterial( {color: colors[i], wireframe:false} );
         var source = new THREE.Mesh( sourceGeometry, sourceMaterial );
         source.visible = false;
@@ -66,13 +61,6 @@ function init() {
     }
 
     scene.add( sourceGroup );
-    
-    renderer = new THREE.WebGLRenderer( { antialias: true, canvas: canvas });
-    renderer.setClearColor( 0x000000 );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
-    renderer.sortObjects = false;
-    renderer.shadowMap.enabled = false;
     
     /*
      * Draw sub canvas with axis
@@ -99,12 +87,12 @@ function init() {
     console.log(axis);
     subScene.add( axis );
     
-    // Load fonts
+    // Add axes labels
     var loader = new THREE.FontLoader();
     loader.load( 'fonts/helvetiker_regular.typeface.json', function ( helFont ) {
         
         var  textGeo = new THREE.TextGeometry('X', {
-             size: 0.2,
+             size: 0.3,
              height: 0.001,
              curveSegments: 6,
              font: helFont,
@@ -114,14 +102,14 @@ function init() {
         var  textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(255,0,0)" });
         var  text = new THREE.Mesh(textGeo , textMaterial);
 
-        text.position.x = 1.1;
+        text.position.x = 0.9;
         text.position.y = 0.01;
         text.position.z = 0;
         text.rotation = 0;
         subScene.add(text);
         
         var  textGeo = new THREE.TextGeometry('Y', {
-             size: 0.1,
+             size: 0.3,
              height: 0.001,
              curveSegments: 6,
              font: helFont,
@@ -131,8 +119,8 @@ function init() {
         var  textMaterial = new THREE.MeshBasicMaterial({ color: "rgb(0,255,0)" });
         var  text = new THREE.Mesh(textGeo , textMaterial);
 
-        text.position.x = 0.01;
-        text.position.y = 1.1;
+        text.position.x = 0.03;
+        text.position.y = 0.9;
         text.position.z = 0;
         text.rotation = 0;
         subScene.add(text);
@@ -160,6 +148,7 @@ function init() {
 }
 
 function onWindowResize() {
+    
     camera.aspect = canvas.offsetWidth/canvas.offsetHeight ;
     camera.updateProjectionMatrix();
     renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
@@ -169,14 +158,13 @@ function onWindowResize() {
 }
 
 function animate() {
+    
     requestAnimationFrame( animate );
     
     controls.update();
     
     subCamera.rotation.copy(camera.rotation);
     subCamera.position.copy(camera.position);
-    //subCamera.position.sub(controls.target);
-    //subCamera.position.setLength(4);
     
     render();
 }
