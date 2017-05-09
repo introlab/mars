@@ -20,7 +20,7 @@ function init() {
     
     // Renderer
     renderer = new THREE.WebGLRenderer( { antialias: true, canvas: canvas });
-    renderer.setClearColor( 0x000000 );
+    renderer.setClearColor( 0xffffff );
     renderer.setSize(canvas.offsetWidth,canvas.offsetHeight);
 
     // Cameras
@@ -40,7 +40,7 @@ function init() {
 
     // Sphere
     var sphereGeometry = new THREE.SphereGeometry( 1, 10, 10);
-    var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, wireframe:true} ); 
+    var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe:true} ); 
     
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
     scene.add(sphere);
@@ -73,7 +73,7 @@ function init() {
     
     // Renderer
     subRenderer = new THREE.WebGLRenderer( { antialias: true, canvas: subCanvas });
-    subRenderer.setClearColor(0x000000);
+    subRenderer.setClearColor(0xffffff);
     subRenderer.setSize(80,80);
     
     // Scene
@@ -202,6 +202,6 @@ document.addEventListener('data', function(e) {
 document.addEventListener('update-selection',function(e){
     
     currentFrame.sources.forEach(function(source,index) {
-        sources3D[index].visible = source.active && source.selected;
+        sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
     });  
 });

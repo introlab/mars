@@ -106,7 +106,7 @@ socket.onmessage = function(msg) {
             source.x = cSrc.x;
             source.y = cSrc.y;
             source.z = cSrc.z;
-            source.active = true;
+            source.active = true && source.x!=0 && source.y!=0 && source.z!=0;
         }
 
         catch(err) {  // Clear source
@@ -115,6 +115,7 @@ socket.onmessage = function(msg) {
             source.y = null;
             source.z = null;
             source.active = false;
+            source.selected = true;
         }
 
     });
