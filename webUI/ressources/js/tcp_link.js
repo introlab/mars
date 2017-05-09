@@ -43,6 +43,11 @@ var sourceManager = new Vue({
     el: '#source_table',
     data: {
         sources : currentFrame.sources,
+    },
+    methods : {
+        showHide: function(e) {
+            document.dispatchEvent(new Event('update-selection'));
+        }
     }
 });
 

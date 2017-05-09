@@ -1,4 +1,4 @@
-var clabel = Array.apply(null, {length: 101}).map(Number.call, Number)
+clabel = new Array(101);
 
 class ChartBundle {
     constructor() {
@@ -96,8 +96,8 @@ ctxs.forEach(function(ctx,i) {
                         maxTicksLimit : 11
                     },
                     scaleLabel: {
-                        display: false,
-                        labelString: 'Time (s)'
+                        display: true,
+                        labelString: 'Sample'
                       }
                 }],
                 
@@ -128,18 +128,22 @@ ctxs.forEach(function(ctx,i) {
 document.addEventListener('data', function(e) {
     
     currentFrame.sources.forEach(function(source,index) {
+        
+        if(currentFrame.timestamp%20 == 0) {
             
-        x = source.x;
-        y = source.y;
-        z = source.z;
+            x = source.x;
+            y = source.y;
+            z = source.z;
 
-        inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
-        az = Math.atan(y/x);
+            inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
+            az = Math.atan(y/x);
 
-        charts[0].cdata[index].push(inc*180/Math.PI);
-        charts[0].cdata[index].shift();
-        charts[1].cdata[index].push(az*180/Math.PI);
-        charts[1].cdata[index].shift();
+            charts[0].cdata[index].push(inc*180/Math.PI);
+            charts[0].cdata[index].shift();
+            charts[1].cdata[index].push(az*180/Math.PI);
+            charts[1].cdata[index].shift();
+            
+        }
         
         sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
         
@@ -149,10 +153,16 @@ document.addEventListener('data', function(e) {
         
     });
     
+    if(currentFrame.timestamp%20 == 0) {
+        clabel.push(currentFrame.timestamp);
+        clabel.shift();
+        document.dispatchEvent(new Event('request-chart'));
+    }
+    
 },false);
 
-var showHide = function(e) {
-    
+document.addEventListener('update-selection',function(e){
+                          
     console.log('Hidding');
     
     charts.forEach(function(bundle) {
@@ -165,9 +175,6 @@ var showHide = function(e) {
     
     currentFrame.sources.forEach(function(source,index) {
         sources3D[index].visible = source.active && source.selected;
-    });
-};
+    });  
 
-setInterval(function() {
-    document.dispatchEvent(new Event('request-chart'));
-},100);
+});
