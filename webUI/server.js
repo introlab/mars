@@ -8,6 +8,7 @@ var buffer = [];
 var express = require('express');
 var path = require('path');
 var events = require('events');
+var StringDecoder = require('string_decoder').StringDecoder;
 
 // Prep app and event manager
 var app = express();
@@ -96,11 +97,19 @@ function handleConnection(conn) {
   conn.on('error', onConnError);
 
   function onConnData(d) {
-    console.log('connection data from %s: %j', remoteAddress, d);
-    console.log(d);
+    //console.log('connection data from %s: %j', remoteAddress, d);
+    //console.log(d);
     currentData = d;
     //eventEmitter.emit('newData');
-    buffer.unshift(d);
+      
+    var decoder = new StringDecoder();
+    
+    var splitted = decoder.write(d).split('$');
+    splitted.forEach(function(str) {
+        console.log(str);
+        if(str.length > 0)
+            buffer.unshift(str);
+    });
   }
 
   function onConnClose() {

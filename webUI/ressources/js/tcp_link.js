@@ -75,54 +75,50 @@ console.log(new_uri);
 
 // Update current data with received data
 socket.onmessage = function(msg) {
-    
-    
-    // Read incoming data
-    var reader = new window.FileReader();
-    reader.readAsText(msg.data); 
-    reader.onloadend = function() {
         
-        try {
-        
-            // Parse received string as JSON
-            var strData = reader.result;                   
-            var data = JSON.parse(strData);
-            
-        }
-        
-        catch(err) {
-            
-            // Can't parse frame
-            return;
-        }
-        
-        currentFrame.timestamp = data.frame.timestamp;
-        
-        // Update sources
-        currentFrame.sources.forEach(function(source,index) {
-            
-            try { // If source exist in received data
-                
-                cSrc = data.frame.src[index];
-                
-                source.id = cSrc.id;
-                source.x = cSrc.x;
-                source.y = cSrc.y;
-                source.z = cSrc.z;
-                source.active = true;
-            }
-            
-            catch(err) {  // Clear source
-                
-                source.x = null;
-                source.y = null;
-                source.z = null;
-                source.active = false;
-            }
-            
-        });
+    try { 
+        var strData = msg.data;
+        var data = JSON.parse(strData);
+    }
 
-        // Trigger update
-        document.dispatchEvent(new Event('data'));
-    };
+    catch(err) {
+
+        // Can't parse frame
+        console.error(err);
+        console.log(strData);
+        return;
+    }
+    
+    if(data.frame.timestamp -  currentFrame.timestamp > 1)
+        console.warn('Frame skipped ' + data.frame.timestamp.toString());
+
+    currentFrame.timestamp = data.frame.timestamp;
+    console.log(currentFrame.timestamp);
+
+    // Update sources
+    currentFrame.sources.forEach(function(source,index) {
+
+        try { // If source exist in received data
+
+            cSrc = data.frame.src[index];
+
+            source.id = cSrc.id;
+            source.x = cSrc.x;
+            source.y = cSrc.y;
+            source.z = cSrc.z;
+            source.active = true;
+        }
+
+        catch(err) {  // Clear source
+
+            source.x = null;
+            source.y = null;
+            source.z = null;
+            source.active = false;
+        }
+
+    });
+
+    // Trigger update
+    document.dispatchEvent(new Event('data'));
 };
