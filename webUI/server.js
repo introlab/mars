@@ -2,6 +2,8 @@
  * Create web server
  */
 
+var buffer = [];
+
 // Load modules
 var express = require('express');
 var path = require('path');
@@ -43,9 +45,20 @@ app.ws('/stream',function(ws, req) {
     // Register client to event
     eventEmitter.on('newData',sendData);
     
+    var id;
+    
+    id = setInterval(function() {
+        ws.send(buffer.pop());
+        
+        if(buffer.length < 1) {
+            clearInterval(id);
+        }
+    },50);
+    
     // Remove listener when connection closes
     ws.on('close', function() {
         eventEmitter.removeListener('newData',sendData);
+        clearInterval(id);
     });
 
 });
@@ -86,7 +99,8 @@ function handleConnection(conn) {
     console.log('connection data from %s: %j', remoteAddress, d);
     console.log(d);
     currentData = d;
-    eventEmitter.emit('newData');
+    //eventEmitter.emit('newData');
+    buffer.push(d);
   }
 
   function onConnClose() {

@@ -102,8 +102,8 @@
         unsigned int iTrack;
         unsigned int nElements;
 
-        sprintf(obj->message, "frame: {\n");
-        sprintf(obj->message, "%s   timestamp: %llu",obj->message, msg_tracks->timeStamp);
+        sprintf(obj->message, "{\n\"frame\": {\n");
+        sprintf(obj->message, "%s   \"timestamp\": %llu",obj->message, msg_tracks->timeStamp);
 
         nElements = 0;
 
@@ -117,10 +117,10 @@
                     sprintf(obj->message,"%s,\n",obj->message);
                 }
                 else {
-                    sprintf(obj->message, "%s,\n   src: [\n",obj->message);
+                    sprintf(obj->message, "%s,\n   \"src\": [\n",obj->message);
                 }
 
-                sprintf(obj->message, "%s       { id: %llu, x: %+1.3f, y: %+1.3f, z: %+1.3f }", 
+                sprintf(obj->message, "%s       { \"id\": %llu, \"x\": %1.3f, \"y\": %1.3f, \"z\": %1.3f }", 
                         obj->message,
                         msg_tracks->tracks->ids[iTrack],
                         msg_tracks->tracks->array[iTrack * 3 + 0],
@@ -138,7 +138,7 @@
             sprintf(obj->message, "%s\n", obj->message);       
         }
 
-        sprintf(obj->message, "%s}\n", obj->message);
+        sprintf(obj->message, "%s}\n}\n", obj->message);
         
         if (send(obj->id, obj->message, strlen(obj->message), 0) < 0) {
             printf("Could not send message.\n");

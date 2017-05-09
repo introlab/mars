@@ -180,17 +180,3 @@ function render() {
     subRenderer.render( subScene, subCamera);
     
 }
-
-document.addEventListener('data', function(e) {
-    
-    currentFrame.sources.forEach(function(source,index) {
-        
-        sources3D[index].visible = source.active && source.selected;
-        
-        sources3D[index].position.x = Math.cos(source.long)*Math.sin(source.lat);
-        sources3D[index].position.y = Math.sin(source.long)*Math.sin(source.lat)
-        sources3D[index].position.z = Math.cos(source.lat);
-        
-    });
-    
-},false);

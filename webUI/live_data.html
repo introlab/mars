@@ -22,7 +22,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="https://github.com/introlab/mars">MARS</a>
+                        <a class="navbar-brand" width="120" href="https://github.com/introlab/mars">MARS</a>
                     </div>
 
                 <div class="collapse navbar-collapse" id="navbar-content">
@@ -76,14 +76,11 @@
                             <tr v-for = "source in sources">
                                 <td>
                                     <div class="checkbox"  onclick="showHide()">
-                                        <label><input type="checkbox" v-model="source.selected">Source  <span class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.index+1}}</span></label>
+                                        <label><input type="checkbox" v-model="source.selected">Source  <span class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.id}}</span></label>
                                     </div>
                                 </td>
                             </tr>
                         </table>
-                        <div class="checkbox">
-                            <label><input type="checkbox" id="sim_check" v-model="checked" >Simulate data</label>
-                        </div>
                     </div>
                 </div>
             </div>

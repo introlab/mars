@@ -1,9 +1,9 @@
-var clabel = Array.apply(null, {length: 41}).map(Number.call, Number)
+var clabel = Array.apply(null, {length: 201}).map(Number.call, Number)
 
 class ChartBundle {
     constructor() {
         this.chart = null;
-        this.cdata = [new Array(41),new Array(41),new Array(41),new Array(41)];
+        this.cdata = [new Array(201),new Array(201),new Array(201),new Array(201)];
         this.cdataSetup = {
               labels: clabel,
               datasets: [
@@ -16,7 +16,7 @@ class ChartBundle {
                     borderColor: "rgba(75,192,192,1)",
                     spanGaps: false,
                     data: this.cdata[0],
-                    hidden : true
+                    hidden : false
                   },
                   
                   {
@@ -28,7 +28,7 @@ class ChartBundle {
                     borderColor: "rgba(192,75,192,1)",
                     spanGaps: false,
                     data: this.cdata[1],
-                    hidden : true
+                    hidden : false
                   },
                   
                   {
@@ -40,7 +40,7 @@ class ChartBundle {
                     borderColor: "rgba(192,192,30,1)",
                     spanGaps: false,
                     data: this.cdata[2],
-                    hidden : true
+                    hidden : false
                   },
                   
                   {
@@ -52,7 +52,7 @@ class ChartBundle {
                     borderColor: "rgba(0,200,40,1)",
                     spanGaps: false,
                     data: this.cdata[3],
-                    hidden : true
+                    hidden : false
                   }
               ]
         };
@@ -64,8 +64,8 @@ var charts = [];
 var ctxc = document.getElementsByClassName('graph');
 var ctxs = Array.prototype.slice.call( ctxc );
 
-var mins = [0,-90, 0, -180];
-var maxs = [1, 90, 1, 180];
+var mins = [0,-180, 0, -180];
+var maxs = [1, 180, 1, 180];
 var stepSizes = [0.5, 30, 0.2, 60];
 var pointsRadius = [3, 0, 3, 0];
 
@@ -128,10 +128,24 @@ document.addEventListener('data', function(e) {
     
     currentFrame.sources.forEach(function(source,index) {
         
+        x = source.x;
+        y = source.y;
+        z = source.z;
+        
+        inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
+        az = Math.atan(y/x);
+        
         charts[0].cdata[index].push(source.active);
-        charts[1].cdata[index].push(source.lat*180/Math.PI);
+        charts[1].cdata[index].push(inc*180/Math.PI);
         charts[2].cdata[index].push(source.energy);
-        charts[3].cdata[index].push(source.long*180/Math.PI);
+        charts[3].cdata[index].push(az*180/Math.PI);
+        
+        sources3D[index].visible = source.active && source.selected;
+        
+        sources3D[index].position.x = source.x;
+        sources3D[index].position.y = source.y;
+        sources3D[index].position.z = source.z;
+        
     });
     
     charts.forEach(function(bundle) {
