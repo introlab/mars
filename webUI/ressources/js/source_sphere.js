@@ -85,7 +85,6 @@ function init() {
     
     // Axis
     var axis = new THREE.AxisHelper(1.2);
-    console.log(axis);
     subScene.add( axis );
     
     // Add axes labels
@@ -106,7 +105,6 @@ function init() {
         labelX.position.x = 1.2;
         labelX.position.y = 0.01;
         labelX.position.z = 0;
-        labelX.rotation = 0;
         subScene.add(labelX);
         
         var  textGeo = new THREE.TextGeometry('Y', {
@@ -123,7 +121,6 @@ function init() {
         labelY.position.x = 0.03;
         labelY.position.y = 1.2;
         labelY.position.z = 0;
-        labelY.rotation = 0;
         subScene.add(labelY);
         
         var  textGeo = new THREE.TextGeometry('Z', {
@@ -140,7 +137,6 @@ function init() {
         labelZ.position.x = 0.01;
         labelZ.position.y = 0.01;
         labelZ.position.z = 1.2;
-        labelZ.rotation = 0;
         subScene.add(labelZ);
         
     } );
@@ -164,14 +160,22 @@ function animate() {
     
     controls.update();
     
-    subCamera.rotation.copy(camera.rotation);
-    subCamera.position.copy(camera.position);
+    try {
+        subCamera.rotation.copy(camera.rotation);
+        subCamera.position.copy(camera.position);
+
+        labelX.rotation.copy(camera.rotation);
+        labelY.rotation.copy(camera.rotation);
+        labelZ.rotation.copy(camera.rotation);
+    }
     
-    labelX.rotation.copy(camera.rotation);
-    labelY.rotation.copy(camera.rotation);
-    labelZ.rotation.copy(camera.rotation);
+    catch(err) {
+        // Scene not loaded
+    }
     
-    render();
+    finally {
+        render();
+    }
 }
 
 function render() {
@@ -180,3 +184,23 @@ function render() {
     subRenderer.render( subScene, subCamera);
     
 }
+
+document.addEventListener('data', function(e) {
+    
+    currentFrame.sources.forEach(function(source,index) {
+        
+        sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
+        
+        sources3D[index].position.x = source.x;
+        sources3D[index].position.y = source.y;
+        sources3D[index].position.z = source.z;
+        
+    });
+});
+
+document.addEventListener('update-selection',function(e){
+    
+    currentFrame.sources.forEach(function(source,index) {
+        sources3D[index].visible = source.active && source.selected;
+    });  
+});

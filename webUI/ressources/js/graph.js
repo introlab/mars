@@ -1,9 +1,9 @@
-clabel = new Array(101);
+clabel = new Array(201);
 
 class ChartBundle {
     constructor() {
         this.chart = null;
-        this.cdata = [new Array(101),new Array(101),new Array(101),new Array(101)];
+        this.cdata = [new Array(201),new Array(201),new Array(201),new Array(201)];
         this.cdataSetup = {
               labels: clabel,
               datasets: [
@@ -127,10 +127,10 @@ ctxs.forEach(function(ctx,i) {
 
 document.addEventListener('data', function(e) {
     
-    currentFrame.sources.forEach(function(source,index) {
-        
-        if(currentFrame.timestamp%20 == 0) {
-            
+    if(currentFrame.timestamp%20 == 0) {
+    
+        currentFrame.sources.forEach(function(source,index) {
+
             x = source.x;
             y = source.y;
             z = source.z;
@@ -142,28 +142,17 @@ document.addEventListener('data', function(e) {
             charts[0].cdata[index].shift();
             charts[1].cdata[index].push(az*180/Math.PI);
             charts[1].cdata[index].shift();
-            
-        }
-        
-        sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
-        
-        sources3D[index].position.x = source.x;
-        sources3D[index].position.y = source.y;
-        sources3D[index].position.z = source.z;
-        
-    });
-    
-    if(currentFrame.timestamp%20 == 0) {
+
+        });
+
         clabel.push(currentFrame.timestamp);
         clabel.shift();
         document.dispatchEvent(new Event('request-chart'));
     }
     
-},false);
+});
 
 document.addEventListener('update-selection',function(e){
-                          
-    console.log('Hidding');
     
     charts.forEach(function(bundle) {
         bundle.chart.config.data.datasets.forEach(function(dataset,index) {
@@ -172,9 +161,5 @@ document.addEventListener('update-selection',function(e){
         
         document.dispatchEvent(new Event('request-chart'));
     });
-    
-    currentFrame.sources.forEach(function(source,index) {
-        sources3D[index].visible = source.active && source.selected;
-    });  
 
 });

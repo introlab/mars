@@ -91,11 +91,12 @@ socket.onmessage = function(msg) {
         }
         
         catch(err) {
+            
+            // Can't parse frame
             return;
         }
         
         currentFrame.timestamp = data.frame.timestamp;
-        console.log('Current frame : ' + currentFrame.timestamp.toString());
         
         // Update sources
         currentFrame.sources.forEach(function(source,index) {
