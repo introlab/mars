@@ -100,7 +100,7 @@ function handleConnection(conn) {
     console.log(d);
     currentData = d;
     //eventEmitter.emit('newData');
-    buffer.push(d);
+    buffer.unshift(d);
   }
 
   function onConnClose() {

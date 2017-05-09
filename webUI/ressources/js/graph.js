@@ -64,8 +64,8 @@ var charts = [];
 var ctxc = document.getElementsByClassName('graph');
 var ctxs = Array.prototype.slice.call( ctxc );
 
-var mins = [-180,-180];
-var maxs = [180,180];
+var mins = [-90,-180];
+var maxs = [90,180];
 var stepSizes = [30, 60];
 var pointsRadius = [0,0];
 
@@ -135,7 +135,7 @@ document.addEventListener('data', function(e) {
         charts[0].cdata[index].push(inc*180/Math.PI);
         charts[1].cdata[index].push(az*180/Math.PI);
         
-        sources3D[index].visible = source.active && source.selected;
+        sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
         
         sources3D[index].position.x = source.x;
         sources3D[index].position.y = source.y;
@@ -172,4 +172,4 @@ setInterval(function() {
     charts.forEach(function(bundle) {
         bundle.chart.update();
     });
-},20);
+},100);

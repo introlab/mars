@@ -42,7 +42,6 @@ var sourceManager = new Vue({
     }
 });
 
-
 /*
  * Web Socket connection to server
  */
@@ -78,19 +77,25 @@ socket.onmessage = function(msg) {
         //console.log(data);
         
         currentFrame.sources.forEach(function(source) {
+            source.x = null;
+            source.y = null;
+            source.z = null;
             source.active = false;
         });
         
-        data.frame.src.forEach(function(source,index) {
+        if(data.frame.src) {
             
-            currentFrame.sources[index].id = source.id;
-            currentFrame.sources[index].x = source.x;
-            currentFrame.sources[index].y = source.y;
-            currentFrame.sources[index].z = source.z;
-            currentFrame.sources[index].active = true;
+            data.frame.src.forEach(function(source,index) {
             
-        });
-        
+                currentFrame.sources[index].id = source.id;
+                currentFrame.sources[index].x = source.x;
+                currentFrame.sources[index].y = source.y;
+                currentFrame.sources[index].z = source.z;
+                currentFrame.sources[index].active = true;
+
+            });
+            
+        }  
 
         var event = new Event('data');
         document.dispatchEvent(event);
