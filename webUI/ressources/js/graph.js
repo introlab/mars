@@ -1,9 +1,9 @@
-var clabel = Array.apply(null, {length: 501}).map(Number.call, Number)
+var clabel = Array.apply(null, {length: 101}).map(Number.call, Number)
 
 class ChartBundle {
     constructor() {
         this.chart = null;
-        this.cdata = [new Array(501),new Array(501),new Array(501),new Array(501)];
+        this.cdata = [new Array(101),new Array(101),new Array(101),new Array(101)];
         this.cdataSetup = {
               labels: clabel,
               datasets: [
@@ -119,21 +119,27 @@ ctxs.forEach(function(ctx,i) {
         }
         
     });
+    
+    document.addEventListener('request-chart',function(e) {
+        charts[i].chart.update();
+    });
 });
 
 document.addEventListener('data', function(e) {
     
     currentFrame.sources.forEach(function(source,index) {
-        
+            
         x = source.x;
         y = source.y;
         z = source.z;
-        
+
         inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
         az = Math.atan(y/x);
-        
+
         charts[0].cdata[index].push(inc*180/Math.PI);
+        charts[0].cdata[index].shift();
         charts[1].cdata[index].push(az*180/Math.PI);
+        charts[1].cdata[index].shift();
         
         sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
         
@@ -141,12 +147,6 @@ document.addEventListener('data', function(e) {
         sources3D[index].position.y = source.y;
         sources3D[index].position.z = source.z;
         
-    });
-    
-    charts.forEach(function(bundle) {
-        bundle.cdata.forEach(function(data) {
-            data.shift();
-        });
     });
     
 },false);
@@ -160,7 +160,7 @@ var showHide = function(e) {
             dataset.hidden = !currentFrame.sources[index].selected;
         });
         
-        bundle.chart.update();
+        document.dispatchEvent(new Event('request-chart'));
     });
     
     currentFrame.sources.forEach(function(source,index) {
@@ -169,7 +169,5 @@ var showHide = function(e) {
 };
 
 setInterval(function() {
-    charts.forEach(function(bundle) {
-        bundle.chart.update();
-    });
+    document.dispatchEvent(new Event('request-chart'));
 },100);

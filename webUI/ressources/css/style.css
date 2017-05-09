@@ -83,7 +83,8 @@ body {
     }
     
     #axis {
-    position: absolute;
-    bottom: 0
-}
+        position: absolute;
+        bottom: 0;
+        left: 15px;
+    }
 }

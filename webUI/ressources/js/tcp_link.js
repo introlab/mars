@@ -2,9 +2,9 @@
  * Data structures to manage source data
  */
 
-var angle = 0;
 rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
 
+// Single source data
 class Source {
     constructor(index) {
         
@@ -22,9 +22,13 @@ class Source {
     }
 }
 
+// Single data frame
 class DataFrame {
     constructor() {
-        this.sources = [new Source(0),new Source(1),new Source(2),new Source(3)];
+        this.timeStamp = null;
+        this.sources = new Array(4);
+        for(var i = 0; i<4; i++)
+            this.sources[i] = new Source(i);
     }
 }
 
@@ -42,6 +46,7 @@ var sourceManager = new Vue({
     }
 });
 
+
 /*
  * Web Socket connection to server
  */
@@ -57,47 +62,61 @@ if (loc.protocol === "https:") {
 
 new_uri += "//" + loc.host + "/stream";
 
+
 // Open socket and create parser
 var socket = new WebSocket(new_uri);
 console.log(new_uri);
 
+
 // Update current data with received data
 socket.onmessage = function(msg) {
     
-    //console.log(msg);
     
+    // Read incoming data
     var reader = new window.FileReader();
     reader.readAsText(msg.data); 
     reader.onloadend = function() {
         
-        var strData = reader.result;                
-        //console.log(strData);
+        try {
         
-        var data = JSON.parse(strData);
-        //console.log(data);
+            // Parse received string as JSON
+            var strData = reader.result;                   
+            var data = JSON.parse(strData);
+            
+        }
         
-        currentFrame.sources.forEach(function(source) {
-            source.x = null;
-            source.y = null;
-            source.z = null;
-            source.active = false;
+        catch(err) {
+            return;
+        }
+        
+        currentFrame.timestamp = data.frame.timestamp;
+        console.log('Current frame : ' + currentFrame.timestamp.toString());
+        
+        // Update sources
+        currentFrame.sources.forEach(function(source,index) {
+            
+            try { // If source exist in received data
+                
+                cSrc = data.frame.src[index];
+                
+                source.id = cSrc.id;
+                source.x = cSrc.x;
+                source.y = cSrc.y;
+                source.z = cSrc.z;
+                source.active = true;
+            }
+            
+            catch(err) {  // Clear source
+                
+                source.x = null;
+                source.y = null;
+                source.z = null;
+                source.active = false;
+            }
+            
         });
-        
-        if(data.frame.src) {
-            
-            data.frame.src.forEach(function(source,index) {
-            
-                currentFrame.sources[index].id = source.id;
-                currentFrame.sources[index].x = source.x;
-                currentFrame.sources[index].y = source.y;
-                currentFrame.sources[index].z = source.z;
-                currentFrame.sources[index].active = true;
 
-            });
-            
-        }  
-
-        var event = new Event('data');
-        document.dispatchEvent(event);
-    }
+        // Trigger update
+        document.dispatchEvent(new Event('data'));
+    };
 };
