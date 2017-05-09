@@ -104,10 +104,13 @@ function handleConnection(conn) {
       
     var decoder = new StringDecoder();
     
+    // Decode received string
     var splitted = decoder.write(d).split('$');
+      
+    // Split frame
     splitted.forEach(function(str) {
-        console.log(str);
-        if(str.length > 0)
+        
+        if(str.length > 0)  // Clear empty strings
             buffer.unshift(str);
     });
   }

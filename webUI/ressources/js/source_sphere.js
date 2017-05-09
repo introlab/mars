@@ -25,7 +25,8 @@ function init() {
 
     // Cameras
     camera = new THREE.PerspectiveCamera( 70, canvas.offsetWidth/canvas.offsetHeight , 1, 4 );
-    camera.position.z = 2.1;
+    camera.position.y = -2.1;
+    camera.up.set(0,0,1);
 
     // Cameras controls
     controls = new THREE.TrackballControls( camera,canvas );
@@ -33,7 +34,7 @@ function init() {
     controls.noZoom = true;
     controls.noPan = true;
     controls.dynamicDampingFactor = 0.2;
-
+    
     // Scene
     scene = new THREE.Scene();
 
