@@ -1,9 +1,9 @@
-var clabel = Array.apply(null, {length: 201}).map(Number.call, Number)
+var clabel = Array.apply(null, {length: 501}).map(Number.call, Number)
 
 class ChartBundle {
     constructor() {
         this.chart = null;
-        this.cdata = [new Array(201),new Array(201),new Array(201),new Array(201)];
+        this.cdata = [new Array(501),new Array(501),new Array(501),new Array(501)];
         this.cdataSetup = {
               labels: clabel,
               datasets: [
@@ -64,10 +64,10 @@ var charts = [];
 var ctxc = document.getElementsByClassName('graph');
 var ctxs = Array.prototype.slice.call( ctxc );
 
-var mins = [0,-180, 0, -180];
-var maxs = [1, 180, 1, 180];
-var stepSizes = [0.5, 30, 0.2, 60];
-var pointsRadius = [3, 0, 3, 0];
+var mins = [-180,-180];
+var maxs = [180,180];
+var stepSizes = [30, 60];
+var pointsRadius = [0,0];
 
 ctxs.forEach(function(ctx,i) {
     
@@ -76,12 +76,9 @@ ctxs.forEach(function(ctx,i) {
         type: "line",
         data: charts[i].cdataSetup,
         options: {
-            showLines: i==1||i==3,
+            showLines: true,
             
-            animation: {
-                duration : 0,
-                easing : 'linear'
-            },
+            animation: false,
             
             tooltips: {
                 enabled: false
@@ -135,10 +132,8 @@ document.addEventListener('data', function(e) {
         inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
         az = Math.atan(y/x);
         
-        charts[0].cdata[index].push(source.active);
-        charts[1].cdata[index].push(inc*180/Math.PI);
-        charts[2].cdata[index].push(source.energy);
-        charts[3].cdata[index].push(az*180/Math.PI);
+        charts[0].cdata[index].push(inc*180/Math.PI);
+        charts[1].cdata[index].push(az*180/Math.PI);
         
         sources3D[index].visible = source.active && source.selected;
         
@@ -152,8 +147,6 @@ document.addEventListener('data', function(e) {
         bundle.cdata.forEach(function(data) {
             data.shift();
         });
-        
-        bundle.chart.update();
     });
     
 },false);
@@ -174,3 +167,9 @@ var showHide = function(e) {
         sources3D[index].visible = source.active && source.selected;
     });
 };
+
+setInterval(function() {
+    charts.forEach(function(bundle) {
+        bundle.chart.update();
+    });
+},20);

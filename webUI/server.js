@@ -53,7 +53,7 @@ app.ws('/stream',function(ws, req) {
         if(buffer.length < 1) {
             clearInterval(id);
         }
-    },50);
+    },5);
     
     // Remove listener when connection closes
     ws.on('close', function() {
