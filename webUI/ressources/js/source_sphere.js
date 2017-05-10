@@ -3,6 +3,8 @@ var subCanvas, subCamera, subScene, subRenderer;
 var labelX, labelY, labelZ;
 var sources3D = new Array(4);
 
+const camOffset = 2.1;
+
 init();
 animate();
 
@@ -25,21 +27,22 @@ function init() {
 
     // Cameras
     camera = new THREE.PerspectiveCamera( 70, canvas.offsetWidth/canvas.offsetHeight , 1, 4 );
-    camera.position.y = -2.1;
+    camera.position.y = -camOffset;
     camera.up.set(0,0,1);
 
     // Cameras controls
     controls = new THREE.TrackballControls( camera,canvas );
-    controls.rotateSpeed = 5.0;
+    controls.rotateSpeed = 5;
     controls.noZoom = true;
     controls.noPan = true;
+    
     controls.dynamicDampingFactor = 0.2;
     
     // Scene
     scene = new THREE.Scene();
 
     // Sphere
-    var sphereGeometry = new THREE.SphereGeometry( 1, 25, 25); 
+    var sphereGeometry = new THREE.SphereGeometry( 1, 24, 24); 
     var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x0000ff, transparent: true, opacity:0.1});
     
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
@@ -216,3 +219,19 @@ document.addEventListener('update-selection',function(e){
         sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
     });  
 });
+
+
+/*
+ * Ortho view switch
+ */
+
+var viewFront = function() {
+    
+    camera.up.set(0,0,1);
+    
+    camera.position.x = 0;
+    camera.position.y = -camOffset;
+    camera.position.z = 0;
+    
+    controls.reset();
+};
