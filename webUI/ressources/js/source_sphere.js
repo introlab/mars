@@ -39,11 +39,22 @@ function init() {
     scene = new THREE.Scene();
 
     // Sphere
-    var sphereGeometry = new THREE.SphereGeometry( 1, 10, 10);
-    var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe:true} ); 
+    var sphereGeometry = new THREE.SphereGeometry( 1, 25, 25); 
+    var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x0000ff, transparent: true, opacity:0.1});
     
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
     scene.add(sphere);
+    
+    var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x0000ff, transparent: true, opacity:0.3, wireframe:true});
+    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    scene.add(sphere);
+    
+    // Cube
+    var cubeGeometry = new THREE.BoxGeometry(0.5,0.5,0.5);
+    var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0xc7c7c7, wireframe:true});
+    
+    var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+    scene.add(cube);
     
     // Sources
     var sourceGroup = new THREE.Group();

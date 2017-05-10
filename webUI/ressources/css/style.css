@@ -14,7 +14,17 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 30px;
-  background-color: #f5f5f5;
+  background-color: #e3e3e3;
+    border-top-style: solid;
+    border-top: thin solid #00994d;
+}
+
+.footer .container-fluid {
+    padding-top: 5px;
+}
+
+.footer p {
+    margin-bottom: 0;
 }
 
 .main {
@@ -32,6 +42,10 @@ body {
 }
 
 @media screen and (min-width: 992px) {
+    
+    .darker {
+        background-color: #dfefe7;
+    }
     
     .wrapper {
     height: 100vh;
@@ -87,4 +101,8 @@ body {
         bottom: 0;
         left: 15px;
     }
+}
+
+.p-body {
+    margin-top: 50px;
 }

@@ -8,12 +8,12 @@
         <title>Live Data</title>
         <link rel="icon" href="images/introlab_icon.png">
         
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper">
-            <nav class="navbar navbar-default navbar-fixed-top">
+            <nav class="navbar navbar-default bg-primary navbar-fixed-top ">
                 <div class="container-fluid"> 
 
                     <div class="navbar-header">
@@ -37,7 +37,7 @@
 
             <div class="container-fluid content main">
                 <div class="row content">
-                    <div class="col-md-3 layout">
+                    <div class="col-md-3 layout darker">
                         <h2>Mars Data</h2>
                         <p>Params</p>
                     </div>
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 layout">
+                    <div class="col-md-3 layout darker">
                         <h2>Sources</h2>
                         <table class="table table-hover" id="source_table">
                             <tr v-for = "source in sources" v-if = "source.active">
