@@ -14,9 +14,13 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 30px;
-  background-color: #e3e3e3;
+  background-color: #00994d;
     border-top-style: solid;
     border-top: thin solid #00994d;
+}
+
+.footer .text-muted, .footer a{
+    color:#ffffff
 }
 
 .footer .container-fluid {
@@ -80,7 +84,6 @@ body {
     
     #sphere_heading {
         position: absolute;
-        color: white;
         padding-left: 10px
     }
     
@@ -100,6 +103,10 @@ body {
         position: absolute;
         bottom: 0;
         left: 15px;
+    }
+    
+    .darker h2 {
+        margin-top: 5px;
     }
 }
 
