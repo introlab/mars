@@ -1,9 +1,19 @@
-clabel = new Array(201);
+if( window.innerWidth < 992 ) {
+    totalFrames = 101;
+    refreshFrame = 40;
+}
+
+else {
+    totalFrames = 201;
+    refreshFrame = 20;
+}
+
+clabel = new Array(totalFrames);
 
 class ChartBundle {
     constructor() {
         this.chart = null;
-        this.cdata = [new Array(201),new Array(201),new Array(201),new Array(201)];
+        this.cdata = [new Array(totalFrames),new Array(totalFrames),new Array(totalFrames),new Array(totalFrames)];
         this.cdataSetup = {
               labels: clabel,
               datasets: [
@@ -127,7 +137,7 @@ ctxs.forEach(function(ctx,i) {
 
 document.addEventListener('data', function(e) {
     
-    if(currentFrame.timestamp%20 == 0) {
+    if(currentFrame.timestamp%refreshFrame == 0) {
     
         currentFrame.sources.forEach(function(source,index) {
 
@@ -147,7 +157,9 @@ document.addEventListener('data', function(e) {
 
         clabel.push(currentFrame.timestamp);
         clabel.shift();
-        document.dispatchEvent(new Event('request-chart'));
+        
+        if( window.innerWidth>=992 )
+            document.dispatchEvent(new Event('request-chart'));
     }
     
 });
@@ -163,3 +175,8 @@ document.addEventListener('update-selection',function(e){
     });
 
 });
+
+if( window.innerWidth < 992 )
+    setInterval(function() {
+        document.dispatchEvent(new Event('request-chart'));
+    },250);

@@ -43,6 +43,23 @@ body {
 #axis {
     position: absolute;
     bottom: 5px;
+    left: 0;
+}
+
+@media (max-width: 767px) {
+    .navbar-brand span {
+        margin-left: -15px;
+    }
+}
+
+.navbar-logo {
+    padding: 0;
+}
+
+.navbar-brand img {
+    height: 100%;
+    padding: 10px;
+    width: auto;
 }
 
 @media screen and (min-width: 992px) {

@@ -22,7 +22,8 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" width="120" href="https://github.com/introlab/mars">MARS</a>
+                        <a class="navbar-brand navbar-logo" width="120" href="https://github.com/introlab/mars"><img src="images/introlab_icon.png"></a>
+                        <a class="navbar-brand" width="120" href="https://github.com/introlab/mars"><span>MARS</span></a>
                     </div>
 
                 <div class="collapse navbar-collapse" id="navbar-content">
@@ -37,11 +38,10 @@
 
             <div class="container-fluid content main">
                 <div class="row content">
-                    <div class="col-md-3 layout darker">
+                    <div class="col-md-2 layout darker">
                         <h2>Mars Data</h2>
-                        <p>Params</p>
                     </div>
-                    <div class="col-md-6 layout">
+                    <div class="col-md-8 layout">
                         <div class="row graph-row">
                             <div class="col-xs-12 content">
                                 <h4 class="abs_head">Source Elevation</h4>
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 layout darker">
+                    <div class="col-md-2 layout darker">
                         <h2>Sources</h2>
                         <table class="table table-hover" id="source_table">
                             <tr v-for = "source in sources" v-if = "source.active">
