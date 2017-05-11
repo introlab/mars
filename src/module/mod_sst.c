@@ -701,6 +701,7 @@
         // Copy in tracking
    
         memset(msg_tracks->tracks->array, 0x00, sizeof(float) * msg_tracks->tracks->nTracks * 3);
+        memset(msg_tracks->tracks->ids, 0x00, sizeof(unsigned long long) * msg_tracks->tracks->nTracks);
         iTrack = 0;
 
         for (iTrackMax = 0; iTrackMax < obj->nTracksMax; iTrackMax++) {
