@@ -1,6 +1,8 @@
 
     #include <mars/mars.h>
     #include <signal.h>
+    #include <time.h>
+    #include <unistd.h>
 
     #include "../src/general/profiler.h"
 
@@ -18,6 +20,8 @@
         configs * cfgs;
         objects * objs;
 
+        struct timespec start, end;
+        unsigned long hopTimeNano;
         unsigned int nHops;
 
         profiler_obj * profiler;
@@ -62,6 +66,11 @@
         quit = 0x00;
         nHops = 0;
 
+        if (args->realtime == 0x01) {
+            hopTimeNano = (unsigned long) ((1E9) * ((float) params->general->hopSize) / ((float) params->general->fS));
+            clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+        }
+
         printf("Processing............... "); fflush(stdout);
         while((objects2objects_process(objs, profiler) == 0) && (quit==0x00)) {
 
@@ -76,6 +85,19 @@
 
                 }
                 
+            }
+
+            if (args->realtime == 0x01) {
+
+                clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+                do {
+                    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+                    usleep(100);
+                } while ((end.tv_nsec - start.tv_nsec) < hopTimeNano);
+
+                clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
             }
 
         }
