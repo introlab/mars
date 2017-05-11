@@ -1,6 +1,6 @@
 if( window.innerWidth < 992 ) {
-    totalFrames = 101;
-    refreshFrame = 20;
+    totalFrames = 51;
+    refreshFrame = 40;
 }
 
 else {
