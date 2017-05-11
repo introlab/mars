@@ -135,9 +135,11 @@ ctxs.forEach(function(ctx,i) {
     });
 });
 
+var framCnt = 0;
+
 document.addEventListener('data', function(e) {
     
-    if(currentFrame.timestamp%refreshFrame == 0) {
+    if(framCnt%refreshFrame == 0) {
     
         currentFrame.sources.forEach(function(source,index) {
 
@@ -159,7 +161,11 @@ document.addEventListener('data', function(e) {
         clabel.shift();
         
         document.dispatchEvent(new Event('request-chart'));
+        
+        framCnt = 0;
     }
+    
+    framCnt++;
     
 });
 

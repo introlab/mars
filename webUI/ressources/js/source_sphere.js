@@ -173,7 +173,8 @@ function animate() {
     
     requestAnimationFrame( animate );
     
-    controls.update();
+    if(controls.enabled)
+        controls.update();
     
     try {
         subCamera.rotation.copy(camera.rotation);

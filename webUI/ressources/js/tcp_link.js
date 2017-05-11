@@ -2,7 +2,10 @@
  * Data structures to manage source data
  */
 
-rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
+var rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
+
+var indexPool = [0,1,2,3];
+var indexMap = {};
 
 // Single source data
 class Source {

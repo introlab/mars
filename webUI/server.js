@@ -37,7 +37,6 @@ app.ws('/stream',function(ws, req) {
     
     // Sends new data to client
     var sendData = function(data) {
-        console.log('wow data');
         ws.send(data);
     };
     
@@ -96,7 +95,6 @@ function handleConnection(conn) {
         
         if(str.length > 0)  {   // Clear empty strings
             eventEmitter.emit('newData',str);
-            console.log('emitted');
         }
     });
   }
