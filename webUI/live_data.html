@@ -22,6 +22,9 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
+                        <button type="button" class="navbar-toggle collapsed navbar-button" data-toggle="collapse" data-target="#source-list" aria-expanded="false">
+                            Sources
+                        </button>
                         <a class="navbar-brand navbar-logo" width="120" href="https://github.com/introlab/mars"><img src="images/introlab_icon.png"></a>
                         <a class="navbar-brand" width="120" href="https://github.com/introlab/mars"><span>MARS</span></a>
                     </div>
@@ -63,16 +66,18 @@
                         </div>
                     </div>
                     <div class="col-md-2 layout darker">
-                        <h2>Sources</h2>
-                        <table class="table table-hover" id="source_table">
-                            <tr v-for = "source in sources">
-                                <td>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" v-model="source.selected" v-on:change="showHide">Source  <span v-if = "source.active" class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.id}}</span></label>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="collapse navbar-collapse" id="source-list">
+                            <h2>Sources</h2>
+                            <table class="table table-hover" id="source_table">
+                                <tr v-for = "source in sources">
+                                    <td>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" v-model="source.selected" v-on:change="showHide">Source  <span v-if = "source.active" class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.id}}</span></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
