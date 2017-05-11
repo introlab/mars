@@ -2,8 +2,6 @@
  * Create web server
  */
 
-var buffer = [];
-
 // Load modules
 var express = require('express');
 var path = require('path');
@@ -15,7 +13,6 @@ var app = express();
 var expressWs = require('express-ws')(app);
 
 var eventEmitter = new events.EventEmitter();
-var currentData = null;
 
 // Deliver static ressources
 app.use(express.static('ressources'));
@@ -39,27 +36,18 @@ app.get('/legal', function(req, res) {
 app.ws('/stream',function(ws, req) {
     
     // Sends new data to client
-    var sendData = function() {
-        ws.send(currentData);
+    var sendData = function(data) {
+        console.log('wow data');
+        ws.send(data);
     };
     
     // Register client to event
     eventEmitter.on('newData',sendData);
-    
-    var id;
-    
-    id = setInterval(function() {
-        ws.send(buffer.pop());
-        
-        if(buffer.length < 1) {
-            clearInterval(id);
-        }
-    },5);
+    console.log('registered');
     
     // Remove listener when connection closes
     ws.on('close', function() {
         eventEmitter.removeListener('newData',sendData);
-        clearInterval(id);
     });
 
 });
@@ -97,10 +85,6 @@ function handleConnection(conn) {
   conn.on('error', onConnError);
 
   function onConnData(d) {
-    //console.log('connection data from %s: %j', remoteAddress, d);
-    //console.log(d);
-    currentData = d;
-    //eventEmitter.emit('newData');
       
     var decoder = new StringDecoder();
     
@@ -110,8 +94,10 @@ function handleConnection(conn) {
     // Split frame
     splitted.forEach(function(str) {
         
-        if(str.length > 0)  // Clear empty strings
-            buffer.unshift(str);
+        if(str.length > 0)  {   // Clear empty strings
+            eventEmitter.emit('newData',str);
+            console.log('emitted');
+        }
     });
   }
 
