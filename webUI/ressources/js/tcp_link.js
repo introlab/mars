@@ -4,7 +4,6 @@
 
 var rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
 
-var indexPool = [0,1,2,3];
 var indexMap = {};
 
 // Single source data
@@ -96,40 +95,64 @@ socket.onmessage = function(msg) {
         console.warn('Frame skipped ' + data.frame.timestamp.toString());
 
     currentFrame.timestamp = data.frame.timestamp;
-    // console.log(currentFrame.timestamp);
-
-    // Update sources
-    currentFrame.sources.forEach(function(source,index) {
-
-        try { // If source exist in received data
-
-            cSrc = data.frame.src[index];
+    
+    var newMap = {};
+    var indexPool = [0,1,2,3];
+    var hasNewSource = false;
+    
+    if(data.frame.src) {    // If frame contains sources
+        
+        data.frame.src.forEach(function(src) {  // Remove still used index from the pool
             
-            var newId = source.id != cSrc.id;
+            if(typeof(indexMap[src.id])!='undefined') {  // If source is not new
+                indexPool.splice(indexPool.indexOf(indexMap[src.id]),1);
+                //console.log(indexPool);
+            }
+        });
+        
+        data.frame.src.forEach(function(src) { // Update sources
 
-            source.id = cSrc.id;
-            source.x = cSrc.x;
-            source.y = cSrc.y;
-            source.z = cSrc.z;
-            
-            source.active = true && source.x!=0 && source.y!=0 && source.z!=0;
-            
-            if (newId)
-                document.dispatchEvent(new Event('update-selection'));
-        }
+             if(typeof(indexMap[src.id])!='undefined') {  // Source is already registered
 
-        catch(err) {  // Clear source
+                newMap[src.id] = indexMap[src.id];
+            }
 
-            source.id = null;
-            source.x = null;
-            source.y = null;
-            source.z = null;
-            source.active = false;
-            source.selected = true;
-        }
+            else {  // Source is new
 
+                newMap[src.id] = indexPool.shift(); // Get unused index from pool
+                console.log('insert into map ', newMap[src.id].toString() + ' ' + src.id.toString());
+
+                currentFrame.sources[newMap[src.id]].id = src.id;
+                hasNewSource = true;
+            }
+
+            currentFrame.sources[newMap[src.id]].x = src.x;
+            currentFrame.sources[newMap[src.id]].y = src.y;
+            currentFrame.sources[newMap[src.id]].z = src.z;
+
+            currentFrame.sources[newMap[src.id]].active = !(src.x==0 && src.y==0 && src.z==0);
+
+        });
+        
+    }
+    
+    indexMap = newMap;
+    
+    indexPool.forEach(function(index) { // Clear unused source slot
+        
+        currentFrame.sources[index].id = null;
+        
+        currentFrame.sources[index].x = null;
+        currentFrame.sources[index].y = null;
+        currentFrame.sources[index].z = null;
+        
+        currentFrame.sources[index].active = false;
+        currentFrame.sources[index].selected = true;
     });
 
     // Trigger update
     document.dispatchEvent(new Event('data'));
+    
+    if(hasNewSource)
+        document.dispatchEvent(new Event('update-selection'));
 };
