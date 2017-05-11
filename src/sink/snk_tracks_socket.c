@@ -138,7 +138,7 @@
             sprintf(obj->message, "%s\n", obj->message);       
         }
 
-        sprintf(obj->message, "%s}\n}\n", obj->message);
+        sprintf(obj->message, "%s}\n}$", obj->message);
         
         if (send(obj->id, obj->message, strlen(obj->message), 0) < 0) {
             printf("Could not send message.\n");
