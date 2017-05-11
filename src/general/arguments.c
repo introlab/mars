@@ -23,6 +23,7 @@
         args->output_track_socket_xml = (char *) NULL;
         args->output_track_socket_json = (char *) NULL;
         args->verbose = 0x00;
+        args->realtime = 0x00;
 
         return args;
 

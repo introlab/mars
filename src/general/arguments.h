@@ -29,6 +29,7 @@
         char * output_track_socket_json;
 
         char verbose;
+        char realtime;
 
     } arguments;
 

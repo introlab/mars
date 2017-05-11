@@ -10,7 +10,8 @@
         obj->frameSize = frameSize;
         obj->halfFrameSize = halfFrameSize;
 
-        obj->win = windowing_hann(frameSize);
+        //obj->win = windowing_hann(frameSize);
+        obj->win = windowing_roothann(frameSize);
         obj->frame = (float *) malloc(sizeof(float) * frameSize);
         memset(obj->frame, 0x00, sizeof(float) * frameSize);
         obj->fft = fft_construct(frameSize);
