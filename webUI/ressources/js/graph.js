@@ -148,9 +148,9 @@ document.addEventListener('data', function(e) {
             z = source.z;
 
             inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
-            az = Math.atan(y/x);
+            az = Math.atan2(y,x);
 
-            charts[0].cdata[index].push(inc*180/Math.PI);
+            charts[0].cdata[index].push(90 - inc*180/Math.PI);
             charts[0].cdata[index].shift();
             charts[1].cdata[index].push(az*180/Math.PI);
             charts[1].cdata[index].shift();
