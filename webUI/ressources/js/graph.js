@@ -1,6 +1,6 @@
 if( window.innerWidth < 992 ) {
     totalFrames = 101;
-    refreshFrame = 40;
+    refreshFrame = 20;
 }
 
 else {
@@ -158,8 +158,7 @@ document.addEventListener('data', function(e) {
         clabel.push(currentFrame.timestamp);
         clabel.shift();
         
-        if( window.innerWidth>=992 )
-            document.dispatchEvent(new Event('request-chart'));
+        document.dispatchEvent(new Event('request-chart'));
     }
     
 });
@@ -175,8 +174,3 @@ document.addEventListener('update-selection',function(e){
     });
 
 });
-
-if( window.innerWidth < 992 )
-    setInterval(function() {
-        document.dispatchEvent(new Event('request-chart'));
-    },250);

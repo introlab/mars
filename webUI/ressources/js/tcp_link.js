@@ -93,7 +93,7 @@ socket.onmessage = function(msg) {
         console.warn('Frame skipped ' + data.frame.timestamp.toString());
 
     currentFrame.timestamp = data.frame.timestamp;
-    console.log(currentFrame.timestamp);
+    // console.log(currentFrame.timestamp);
 
     // Update sources
     currentFrame.sources.forEach(function(source,index) {
@@ -101,16 +101,23 @@ socket.onmessage = function(msg) {
         try { // If source exist in received data
 
             cSrc = data.frame.src[index];
+            
+            var newId = source.id != cSrc.id;
 
             source.id = cSrc.id;
             source.x = cSrc.x;
             source.y = cSrc.y;
             source.z = cSrc.z;
+            
             source.active = true && source.x!=0 && source.y!=0 && source.z!=0;
+            
+            if (newId)
+                document.dispatchEvent(new Event('update-selection'));
         }
 
         catch(err) {  // Clear source
 
+            source.id = null;
             source.x = null;
             source.y = null;
             source.z = null;
