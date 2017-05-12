@@ -42,21 +42,38 @@ function init() {
     scene = new THREE.Scene();
 
     // Sphere
-    var sphereGeometry = new THREE.SphereGeometry( 1, 24, 24); 
+    
+    // Top
+    var sphereGeometry = new THREE.SphereGeometry( 1, 12, 12,0,Math.PI,0,Math.PI); 
     var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x0000ff, transparent: true, opacity:0.1});
     
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
     scene.add(sphere);
     
-    var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x0000ff, transparent: true, opacity:0.3, wireframe:true});
+    var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x0000ff, transparent: true, opacity:0.1, wireframe:true});
+    
+    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    scene.add(sphere);
+    
+    // Bottom
+    var sphereGeometry = new THREE.SphereGeometry( 1, 12, 12,Math.PI,Math.PI,0,Math.PI); 
+    var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x8d4f1a, transparent: true, opacity:0.1});
+    
+    var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    scene.add(sphere);
+    
+    var sphereMaterial = new THREE.MeshBasicMaterial({ color:0x8d4f1a, transparent: true, opacity:0.1, wireframe:true});
+    
     var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
     scene.add(sphere);
     
     // Cube
-    var cubeGeometry = new THREE.BoxGeometry(0.5,0.5,0.5);
+    var cubeGeometry = new THREE.BoxGeometry(0.5,0.5,0.1);
     var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0xc7c7c7, wireframe:true});
     
     var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+    cube.position.z = -0.05;
+    
     scene.add(cube);
     
     // Sources
@@ -100,7 +117,10 @@ function init() {
     
     // Axis
     var axis = new THREE.AxisHelper(1.2);
-    subScene.add( axis );
+    scene.add( axis );
+
+    var subAxis = new THREE.AxisHelper(1.2);
+    subScene.add( subAxis );
     
     // Add axes labels
     var loader = new THREE.FontLoader();

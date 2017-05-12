@@ -150,9 +150,20 @@ document.addEventListener('data', function(e) {
             inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
             az = Math.atan2(y,x);
 
-            charts[0].cdata[index].push(90 - inc*180/Math.PI);
+            if(source.active) {
+                
+                charts[0].cdata[index].push(90 - inc*180/Math.PI);     
+                charts[1].cdata[index].push(az*180/Math.PI);
+                
+            }
+            
+            else {
+                
+                charts[0].cdata[index].push(null);     
+                charts[1].cdata[index].push(null);
+            }
+            
             charts[0].cdata[index].shift();
-            charts[1].cdata[index].push(az*180/Math.PI);
             charts[1].cdata[index].shift();
 
         });
