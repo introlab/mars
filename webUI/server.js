@@ -32,8 +32,8 @@ app.get('/legal', function(req, res) {
     res.sendFile(path.join(__dirname+'/legal.html'));
 });
 
-// Websocket to stream data
-app.ws('/stream',function(ws, req) {
+// Websocket to stream tracking
+app.ws('/tracking',function(ws, req) {
     
     // Sends new data to client
     var sendData = function(data) {
@@ -41,12 +41,31 @@ app.ws('/stream',function(ws, req) {
     };
     
     // Register client to event
-    eventEmitter.on('newData',sendData);
-    console.log('registered');
+    eventEmitter.on('newTracking',sendData);
+    console.log('registered tracking');
     
     // Remove listener when connection closes
     ws.on('close', function() {
-        eventEmitter.removeListener('newData',sendData);
+        eventEmitter.removeListener('newTracking',sendData);
+    });
+
+});
+
+// Websocket to stream system information
+app.ws('/system.info',function(ws, req) {
+    
+    // Sends new data to client
+    var sendData = function(data) {
+        ws.send(JSON.stringify(data));
+    };
+    
+    // Register client to event
+    eventEmitter.on('sysInfo',sendData);
+    console.log('registered sysInfo');
+    
+    // Remove listener when connection closes
+    ws.on('close', function() {
+        eventEmitter.removeListener('sysInfo',sendData);
     });
 
 });
@@ -94,7 +113,7 @@ function handleConnection(conn) {
     splitted.forEach(function(str) {
         
         if(str.length > 0)  {   // Clear empty strings
-            eventEmitter.emit('newData',str);
+            eventEmitter.emit('newTracking',str);
         }
     });
   }
@@ -107,3 +126,33 @@ function handleConnection(conn) {
     console.log('Connection %s error: %s', remoteAddress, err.message);
   }
 }
+
+
+/*
+ * System monitor
+ */
+
+// Load modules
+var si = require('systeminformation');
+
+function updateSi() { // Gather params
+    
+    var sysInfo = {cpu:0,mem:0,temp:0};
+    
+    si.currentLoad(function(data) { 
+        sysInfo.cpu = data.currentload;
+        
+        si.mem(function(data) {
+            sysInfo.mem = (data.used/data.total)*100;
+            
+            si.cpuTemperature(function(data) {   
+                sysInfo.temp = data.main;
+                eventEmitter.emit('sysInfo',sysInfo);
+            });
+        });
+    });
+    
+}
+
+// Schedule update
+setInterval(updateSi,500);

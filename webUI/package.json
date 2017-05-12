@@ -4,6 +4,7 @@
   "dependencies": {
     "express": "^4.15.2",
     "express-ws": "^3.0.0",
-    "string_decoder": "^1.0.0"
+    "string_decoder": "^1.0.0",
+    "systeminformation": "^3.17.3"
   }
 }

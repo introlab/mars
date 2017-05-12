@@ -137,7 +137,7 @@ ctxs.forEach(function(ctx,i) {
 
 var framCnt = 0;
 
-document.addEventListener('data', function(e) {
+document.addEventListener('tracking', function(e) {
     
     if(framCnt%refreshFrame == 0) {
     

@@ -53,13 +53,19 @@ var sourceManager = new Vue({
     }
 });
 
+var systemMonitor = new Vue({
+    el: '#system-monitor',
+    data: {
+        system : {cpu:'0 %',mem:0,temp:0}
+    }
+});
 
 /*
  * Web Socket connection to server
  */
 
 // Generate websocket server URL
-var loc = window.location, new_uri;
+var loc = window.location, new_uri, sys_uri;
 
 if (loc.protocol === "https:") {
     new_uri = "wss:";
@@ -67,7 +73,8 @@ if (loc.protocol === "https:") {
     new_uri = "ws:";
 }
 
-new_uri += "//" + loc.host + "/stream";
+sys_uri = new_uri + "//" + loc.host + "/system.info";
+new_uri += "//" + loc.host + "/tracking";
 
 
 // Open socket and create parser
@@ -151,8 +158,20 @@ socket.onmessage = function(msg) {
     });
 
     // Trigger update
-    document.dispatchEvent(new Event('data'));
+    document.dispatchEvent(new Event('tracking'));
     
     if(hasNewSource)
         document.dispatchEvent(new Event('update-selection'));
+};
+
+var systemSocket = new WebSocket(sys_uri);
+
+systemSocket.onmessage = function(msg) {
+    console.log(msg);
+    
+    var data = JSON.parse(msg.data);
+    
+    systemMonitor.system.cpu = data.cpu.toPrecision(3).toString() + ' %';
+    systemMonitor.system.mem = data.mem.toPrecision(2).toString() + ' %';
+    systemMonitor.system.temp = data.temp.toPrecision(3).toString() + ' °C';
 };
