@@ -56,7 +56,14 @@ app.ws('/system.info',function(ws, req) {
     
     // Sends new data to client
     var sendData = function(data) {
-        ws.send(JSON.stringify(data));
+        
+        try {
+            ws.send(JSON.stringify(data));
+        }
+        
+        catch(e) {
+            console.warn('Socket closed');
+        }
     };
     
     // Register client to event
