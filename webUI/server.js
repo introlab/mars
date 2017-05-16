@@ -186,7 +186,7 @@ function updateSi() { // Gather params
         sysInfo.cpu = data.currentload;
         
         si.mem(function(data) {
-            sysInfo.mem = (data.used/data.total)*100;
+            sysInfo.mem = (data.active/data.total)*100;
             
             si.cpuTemperature(function(data) {   
                 sysInfo.temp = data.main;
@@ -224,6 +224,8 @@ udpServer.on('listening', function() {
 udpServer.bind(10000);
 
 */
+
+/* WAV Audio Server
 var audioBuffer = [];
 var receiveBuffer = [];
 
@@ -285,6 +287,41 @@ function handleConnection(conn) {
               audioBuffer.push(receiveBuffer.shift());
           
       });
+  }
+
+  function onConnClose() {
+    console.log('connection from %s closed', remoteAddress);
+  }
+
+  function onConnError(err) {
+    console.log('Connection %s error: %s', remoteAddress, err.message);
+  }
+}
+*/
+
+/*
+ * Audio stream server
+ */
+
+var audioServer = net.createServer();  
+audioServer.on('connection', handleAudioConnection);
+
+audioServer.listen(10000, function() {  
+  console.log('server listening to %j', audioServer.address());
+});
+
+function handleAudioConnection(conn) {  
+    
+  var remoteAddress = conn.remoteAddress + ':' + conn.remotePort;
+  console.log('new client connection from %s', remoteAddress);
+
+  conn.on('data', onConnData);
+  conn.once('close', onConnClose);
+  conn.on('error', onConnError);
+
+  function onConnData(d) {
+      
+    eventEmitter.emit('newAudio',d);
   }
 
   function onConnClose() {
