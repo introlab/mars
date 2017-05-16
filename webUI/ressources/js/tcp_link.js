@@ -73,6 +73,7 @@ if (loc.protocol === "https:") {
     new_uri = "ws:";
 }
 
+audio_uri = new_uri + "//" + loc.host + "/audio";
 sys_uri = new_uri + "//" + loc.host + "/system.info";
 new_uri += "//" + loc.host + "/tracking";
 
@@ -167,11 +168,24 @@ socket.onmessage = function(msg) {
 var systemSocket = new WebSocket(sys_uri);
 
 systemSocket.onmessage = function(msg) {
-    console.log(msg);
     
     var data = JSON.parse(msg.data);
     
     systemMonitor.system.cpu = data.cpu.toPrecision(3).toString() + ' %';
     systemMonitor.system.mem = data.mem.toPrecision(2).toString() + ' %';
     systemMonitor.system.temp = data.temp.toPrecision(3).toString() + ' °C';
+};
+
+var audioSocket = new WebSocket(audio_uri);
+
+audioSocket.onmessage = function(msg) {
+    
+     var reader = new FileReader();
+    
+    reader.onloadend = function() {
+        document.dispatchEvent(new CustomEvent('audioData', { 'detail': reader.result}));
+    };
+
+    reader.readAsArrayBuffer(msg.data);
+    
 };
