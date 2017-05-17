@@ -8,7 +8,7 @@
 
         obj = (msg_xcs_obj *) malloc(sizeof(msg_xcs_obj));
 
-        nPairs = cfg->nMics*(cfg->nMics-1)/2;
+        nPairs = cfg->nChannels*(cfg->nChannels-1)/2;
 
         obj->timeStamp = 0;
         obj->xcorrs = xcorrs_construct_zero(nPairs, cfg->frameSize);
@@ -31,7 +31,7 @@
         cfg = (msg_xcs_cfg *) malloc(sizeof(msg_xcs_cfg));
 
         cfg->frameSize = 0;
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
 
         return cfg;
 

@@ -18,7 +18,7 @@
 
     typedef struct mod_stft_cfg {
         
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int hopSize;
         unsigned int frameSize;
 

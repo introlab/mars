@@ -15,7 +15,7 @@
     typedef struct msg_spectra_cfg {
 
         unsigned int frameSize;
-        unsigned int nMics;
+        unsigned int nChannels;
 
     } msg_spectra_cfg;
 

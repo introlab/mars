@@ -7,11 +7,11 @@
 
         obj = (mod_gcc_obj *) malloc(sizeof(mod_gcc_obj));
 
-        obj->nMics = cfg->nMics;
-        obj->nPairs = cfg->nMics * (cfg->nMics - 1) / 2;
+        obj->nChannels = cfg->nChannels;
+        obj->nPairs = cfg->nChannels * (cfg->nChannels - 1) / 2;
         obj->frameSize = cfg->frameSize;
 
-        obj->phasors = freqs_construct_zero(obj->nMics, obj->frameSize/2+1);
+        obj->phasors = freqs_construct_zero(obj->nChannels, obj->frameSize/2+1);
         obj->products = freqs_construct_zero(obj->nPairs, obj->frameSize/2+1);
         obj->smooths = freqs_construct_zero(obj->nPairs, obj->frameSize/2+1);
 
@@ -52,7 +52,7 @@
 
         cfg = (mod_gcc_cfg *) malloc(sizeof(mod_gcc_cfg));
 
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
         cfg->frameSize = 0;
         cfg->epsilon = 0.0f;
         cfg->alpha = 0.0f;

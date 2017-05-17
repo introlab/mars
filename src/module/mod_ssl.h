@@ -23,7 +23,7 @@
 
     typedef struct mod_ssl_obj {
 
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int nPairs;
         unsigned int nPots;
         unsigned int nScans;

@@ -11,8 +11,8 @@
 
         obj = (mod_ssl_obj *) malloc(sizeof(mod_ssl_obj));
 
-        obj->nMics = cfg->mics->nMics;
-        obj->nPairs = obj->nMics * (obj->nMics - 1) / 2;
+        obj->nChannels = cfg->mics->nChannels;
+        obj->nPairs = obj->nChannels * (obj->nChannels - 1) / 2;
         obj->nPots = cfg->nPots;
         obj->nScans = cfg->nLevels;
 

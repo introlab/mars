@@ -82,7 +82,7 @@
 
         printf(" - mics:\n");
 
-        for (iMic = 0; iMic < params->general->mics->nMics; iMic++) {
+        for (iMic = 0; iMic < params->general->mics->nChannels; iMic++) {
             
             printf("    - (%02u): mu = (%+1.3f, %+1.3f, %+1.3f), Sigma = [%+1.3f %+1.3f %+1.3f; %+1.3f %+1.3f %+1.3f; %+1.3f %+1.3f %+1.3f]\n",
                    iMic,

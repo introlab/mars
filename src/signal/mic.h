@@ -6,13 +6,13 @@
 
     typedef struct mics_obj {
 
-        unsigned int nMics;
+        unsigned int nChannels;
         float * mu;
         float * sigma;
 
     } mics_obj;
 
-    mics_obj * mics_construct_zero(const unsigned int nMics);
+    mics_obj * mics_construct_zero(const unsigned int nChannels);
 
     void mics_destroy(mics_obj * obj);
 

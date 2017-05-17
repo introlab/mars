@@ -3,12 +3,11 @@
     msg_hops_obj * msg_hops_construct(const msg_hops_cfg * cfg) {
 
         msg_hops_obj * obj;
-        unsigned int iMic;
 
         obj = (msg_hops_obj *) malloc(sizeof(msg_hops_obj));
 
         obj->timeStamp = 0;
-        obj->hops = hops_construct_zero(cfg->nMics, cfg->hopSize);
+        obj->hops = hops_construct_zero(cfg->nChannels, cfg->hopSize);
 
         return obj;
 
@@ -28,7 +27,7 @@
         cfg = (msg_hops_cfg *) malloc(sizeof(msg_hops_cfg));
 
         cfg->hopSize = 0;
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
 
         return cfg;
 

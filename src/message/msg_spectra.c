@@ -8,7 +8,7 @@
         obj = (msg_spectra_obj *) malloc(sizeof(msg_spectra_obj));
 
         obj->timeStamp = 0;
-        obj->freqs = freqs_construct_zero(cfg->nMics, cfg->frameSize/2+1);
+        obj->freqs = freqs_construct_zero(cfg->nChannels, cfg->frameSize/2+1);
 
         return obj;
 
@@ -28,7 +28,7 @@
         cfg = (msg_spectra_cfg *) malloc(sizeof(msg_spectra_cfg));
 
         cfg->frameSize = 0;
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
 
         return cfg;
 

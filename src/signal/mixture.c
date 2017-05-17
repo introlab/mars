@@ -4,9 +4,6 @@
     mixture_obj * mixture_construct_zero(const unsigned int nPots, const unsigned int nTracks) {
 
         mixture_obj * obj;
-        unsigned int iT;
-        unsigned int iS;
-        unsigned int iC;
 
         obj = (mixture_obj *) malloc(sizeof(mixture_obj));
 

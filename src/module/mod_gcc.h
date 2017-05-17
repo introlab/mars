@@ -13,7 +13,7 @@
 
     typedef struct mod_gcc_obj {
 
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int nPairs;
         unsigned int frameSize;
 
@@ -27,7 +27,7 @@
 
     typedef struct mod_gcc_cfg {
         
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int frameSize;
         float epsilon;
         float alpha;

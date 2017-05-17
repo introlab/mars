@@ -8,7 +8,7 @@
         obj = (mod_stft_obj *) malloc(sizeof(mod_stft_obj));
 
         obj->hop2frame =  hop2frame_construct_zero(cfg->hopSize, cfg->frameSize);
-        obj->frames = frames_construct_zero(cfg->nMics,cfg->frameSize);
+        obj->frames = frames_construct_zero(cfg->nChannels,cfg->frameSize);
         obj->frame2freq = frame2freq_construct_zero(cfg->frameSize, cfg->frameSize/2+1);
 
         return obj;
@@ -40,7 +40,7 @@
 
         cfg = (mod_stft_cfg *) malloc(sizeof(mod_stft_cfg));
 
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
         cfg->hopSize = 0;
         cfg->frameSize = 0;
 

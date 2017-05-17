@@ -10,7 +10,7 @@
         obj->timeStamp = 0;
 
         obj->hopSize = cfg->hopSize;
-        obj->nMics = cfg->nMics;
+        obj->nChannels = cfg->nChannels;
         obj->nBits = cfg->nBits;
         
         obj->fileName = (char *) malloc(sizeof(char) * (strlen(cfg->fileName)+1));
@@ -43,7 +43,7 @@
     int src_raw_file_process(src_raw_file_obj * obj, msg_hops_obj * msg_hops) {
 
         unsigned int iSample;
-        unsigned int iMic;
+        unsigned int iChannel;
         signed char sampleChar;
         signed short sampleShort;
         signed int sampleInt;
@@ -55,7 +55,7 @@
 
         for (iSample = 0; iSample < obj->hopSize; iSample++) {
             
-            for (iMic = 0; iMic < obj->nMics; iMic++) {
+            for (iChannel = 0; iChannel < obj->nChannels; iChannel++) {
             
                 if (!feof(obj->fp)) {
 
@@ -84,7 +84,7 @@
 
                 }
 
-                msg_hops->hops->array[iMic][iSample] = sample;
+                msg_hops->hops->array[iChannel][iSample] = sample;
 
             }
 
@@ -105,7 +105,7 @@
         cfg = (src_raw_file_cfg *) malloc(sizeof(src_raw_file_cfg));
 
         cfg->hopSize = 0;
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
         cfg->nBits = 0;
         cfg->fileName = (char *) NULL;
 

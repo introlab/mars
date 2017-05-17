@@ -36,7 +36,7 @@
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeIn;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
         cfg->nBits = params->raw->nBitsIn;
 
         return cfg;
@@ -51,7 +51,7 @@
 
         cfg->cardName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeIn;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
         cfg->nBits = params->raw->nBitsIn;
         cfg->fS = params->general->fS * (params->raw->hopSizeIn/params->general->hopSize);
 
@@ -67,7 +67,7 @@
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeIn;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
         cfg->nBits = params->raw->nBitsIn;
 
         return cfg;
@@ -81,7 +81,7 @@
         cfg = msg_hops_cfg_construct();
 
         cfg->hopSize = params->raw->hopSizeIn;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
 
         return cfg;
 
@@ -93,7 +93,7 @@
 
         cfg = mod_resample_cfg_construct();
 
-        cfg->nHops = params->general->mics->nMics;
+        cfg->nHops = params->general->mics->nChannels;
         cfg->hopSizeIn = params->raw->hopSizeIn;
         cfg->hopSizeOut = params->general->hopSize;
 
@@ -108,7 +108,7 @@
         cfg = msg_hops_cfg_construct();
 
         cfg->hopSize = params->general->hopSize;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
 
         return cfg;        
 
@@ -121,7 +121,7 @@
         cfg = msg_hops_cfg_construct();
 
         cfg->hopSize = params->raw->hopSizeOut;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
 
         return cfg;
 
@@ -133,7 +133,7 @@
 
         cfg = mod_resample_cfg_construct();
 
-        cfg->nHops = params->general->mics->nMics;
+        cfg->nHops = params->general->mics->nChannels;
         cfg->hopSizeIn = params->general->hopSize;
         cfg->hopSizeOut = params->raw->hopSizeOut;
 
@@ -149,7 +149,7 @@
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         cfg->hopSize = params->raw->hopSizeOut;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
         cfg->nBits = params->raw->nBitsOut;
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
@@ -166,7 +166,7 @@
 
         cfg->hopSize = params->general->hopSize;
         cfg->frameSize = params->general->frameSize;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
 
         return cfg;
 
@@ -179,7 +179,7 @@
         cfg = msg_spectra_cfg_construct();
 
         cfg->frameSize = params->general->frameSize;
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
 
         return cfg;
 
@@ -204,7 +204,7 @@
 
         cfg = mod_gcc_cfg_construct();
 
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
         cfg->frameSize = params->general->frameSize;
         cfg->epsilon = params->gcc->epsilon;
         cfg->alpha = params->gcc->alpha;
@@ -219,7 +219,7 @@
 
         cfg = msg_xcs_cfg_construct();
 
-        cfg->nMics = params->general->mics->nMics;
+        cfg->nChannels = params->general->mics->nChannels;
         cfg->frameSize = params->general->frameSize;
 
         return cfg;
@@ -245,9 +245,9 @@
 
         cfg = mod_ssl_cfg_construct();
 
-        cfg->mics = mics_construct_zero(params->general->mics->nMics);
-        memcpy(cfg->mics->mu, params->general->mics->mu, sizeof(float) * 3 * params->general->mics->nMics);
-        memcpy(cfg->mics->sigma, params->general->mics->sigma, sizeof(float) * 9 * params->general->mics->nMics);
+        cfg->mics = mics_construct_zero(params->general->mics->nChannels);
+        memcpy(cfg->mics->mu, params->general->mics->mu, sizeof(float) * 3 * params->general->mics->nChannels);
+        memcpy(cfg->mics->sigma, params->general->mics->sigma, sizeof(float) * 9 * params->general->mics->nChannels);
 
         cfg->nPots = params->ssl->nPots;
         cfg->fS = params->general->fS;
