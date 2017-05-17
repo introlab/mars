@@ -9,6 +9,7 @@
     #include "../message/msg_hops.h"
     #include "../module/mod_resample.h"
     #include "../sink/snk_raw_file.h"
+    #include "../sink/snk_raw_socket.h"
     #include "../module/mod_stft.h"
     #include "../message/msg_spectra.h"
     #include "../sink/snk_spectra_file.h"
@@ -34,6 +35,7 @@
         mod_resample_obj * mod_resample_raw_out;
         msg_hops_obj * msg_hops_raw_out;
         snk_raw_file_obj * snk_raw_file;
+        snk_raw_socket_obj * snk_raw_socket;
         mod_stft_obj * mod_stft;
         msg_spectra_obj * msg_spectra;
         snk_spectra_file_obj * snk_spectra_file;

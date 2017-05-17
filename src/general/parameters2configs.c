@@ -12,6 +12,7 @@
         cfgs->mod_resample_raw_out = parameters2configs_mod_resample_raw_out(params);
         cfgs->msg_hops_raw_out = parameters2configs_msg_hops_raw_out(params);
         cfgs->snk_raw_file = parameters2configs_snk_raw_file(params);
+        cfgs->snk_raw_socket = parameters2configs_snk_raw_socket(params);
         cfgs->mod_stft = parameters2configs_mod_stft(params);
         cfgs->msg_spectra = parameters2configs_msg_spectra(params);
         cfgs->snk_spectra_file = parameters2configs_snk_spectra_file(params);
@@ -153,6 +154,24 @@
         cfg->nBits = params->raw->nBitsOut;
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
+
+        return cfg;
+
+    }
+
+    snk_raw_socket_cfg * parameters2configs_snk_raw_socket(const parameters * params) {
+
+        snk_raw_socket_cfg * cfg;
+
+        cfg = snk_raw_socket_cfg_construct();
+
+        cfg->hopSize = params->raw->hopSizeOut;
+        cfg->nChannels = params->general->mics->nChannels;
+        cfg->nBits = params->raw->nBitsOut;
+        cfg->ipAddress = (char *) malloc(sizeof(char) * 256);
+        strcpy(cfg->ipAddress, "");
+        cfg->portNumber = (char *) malloc(sizeof(char) * 16);
+        strcpy(cfg->portNumber, "");
 
         return cfg;
 

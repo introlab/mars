@@ -49,14 +49,25 @@
 
         // Write raw to file
 
-        if (objs->snk_raw_file != NULL) {
+        if ((objs->snk_raw_file != NULL) || (objs->snk_raw_socket != NULL)) {
 
             mod_resample_process(objs->mod_resample_raw_out,
                                  objs->msg_hops_raw,
                                  objs->msg_hops_raw_out);
 
-            snk_raw_file_process(objs->snk_raw_file, 
-                                 objs->msg_hops_raw_out);
+            if (objs->snk_raw_file != NULL) {
+
+                snk_raw_file_process(objs->snk_raw_file, 
+                                     objs->msg_hops_raw_out);
+
+            }
+
+            if (objs->snk_raw_socket != NULL) {
+
+                snk_raw_socket_process(objs->snk_raw_socket, 
+                                       objs->msg_hops_raw_out);
+                
+            }
 
         }
 

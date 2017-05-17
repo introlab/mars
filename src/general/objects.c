@@ -16,6 +16,7 @@
         objs->mod_resample_raw_out = (mod_resample_obj *) NULL;
         objs->msg_hops_raw_out = (msg_hops_obj *) NULL;
         objs->snk_raw_file = (snk_raw_file_obj *) NULL;
+        objs->snk_raw_socket = (snk_raw_socket_obj *) NULL;
         objs->mod_stft = (mod_stft_obj *) NULL;
         objs->msg_spectra = (msg_spectra_obj *) NULL;
         objs->snk_spectra_file = (snk_spectra_file_obj *) NULL;

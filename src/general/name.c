@@ -7,7 +7,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".raw$", REG_EXTENDED);
+        regcomp(&reg, "\\.raw$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -21,7 +21,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".wav$", REG_EXTENDED);
+        regcomp(&reg, "\\.wav$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -35,7 +35,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".cfg$", REG_EXTENDED);
+        regcomp(&reg, "\\.cfg$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -49,7 +49,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".spectra.bin$", REG_EXTENDED);
+        regcomp(&reg, "\\.spectra\\.bin$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -63,7 +63,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".xcs.bin$", REG_EXTENDED);
+        regcomp(&reg, "\\.xcs\\.bin$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -77,7 +77,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".pot.bin$", REG_EXTENDED);
+        regcomp(&reg, "\\.pot\\.bin$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -91,7 +91,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".pot.xml$", REG_EXTENDED);
+        regcomp(&reg, "\\.pot\\.xml$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -105,7 +105,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".track.bin$", REG_EXTENDED);
+        regcomp(&reg, "\\.track\\.bin$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -119,7 +119,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".track.xml$", REG_EXTENDED);
+        regcomp(&reg, "\\.track\\.xml$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -133,7 +133,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, ".track.json$", REG_EXTENDED);
+        regcomp(&reg, "\\.track\\.json$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -147,7 +147,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.raw$", REG_EXTENDED);
+        regcomp(&reg, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}:raw$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -161,7 +161,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.pot.xml$", REG_EXTENDED);
+        regcomp(&reg, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}:pot\\.xml$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -175,7 +175,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.track.xml$", REG_EXTENDED);
+        regcomp(&reg, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}:track\\.xml$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
@@ -189,7 +189,7 @@
         regmatch_t match;
         int rtnValue;
 
-        regcomp(&reg, "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}.track.json$", REG_EXTENDED);
+        regcomp(&reg, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}:track\\.json$", REG_EXTENDED);
         rtnValue = regexec(&reg, str, 1, &match, 0);
         regfree(&reg);
 
