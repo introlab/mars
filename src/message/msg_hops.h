@@ -14,7 +14,7 @@
     typedef struct msg_hops_cfg {
 
         unsigned int hopSize;
-        unsigned int nMics;
+        unsigned int nChannels;
 
     } msg_hops_cfg;
 

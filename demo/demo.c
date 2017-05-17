@@ -44,7 +44,7 @@
         printf("Loading parameters....... "); fflush(stdout);
         file2parameters(params, args->config_file);
         printf("[OK]\n");
-
+        
         // Convert these parameters to individual configurations for each object
         printf("Loading configurations... "); fflush(stdout);
         parameters2configs(cfgs, params);

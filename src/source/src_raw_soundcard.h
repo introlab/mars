@@ -14,7 +14,7 @@
         unsigned long long timeStamp;   
 
         unsigned int hopSize;           
-        unsigned int nMics;             
+        unsigned int nChannels;             
         unsigned int nBits;    
         unsigned int fS;
         char * cardName;  
@@ -29,7 +29,7 @@
     typedef struct src_raw_soundcard_cfg {
 
         unsigned int hopSize;
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int nBits;
         unsigned int fS;
         char * cardName;

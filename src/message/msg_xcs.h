@@ -15,7 +15,7 @@
     typedef struct msg_xcs_cfg {
 
         unsigned int frameSize;
-        unsigned int nMics;
+        unsigned int nChannels;
 
     } msg_xcs_cfg;
 

@@ -83,6 +83,7 @@ set(SRC
 
     src/sink/snk_pots_file.c
     src/sink/snk_raw_file.c
+    src/sink/snk_raw_socket.c
     src/sink/snk_spectra_file.c
     src/sink/snk_tracks_file.c
     src/sink/snk_tracks_socket.c

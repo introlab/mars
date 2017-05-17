@@ -47,6 +47,18 @@
 
         }
 
+        if (args->output_raw_socket != NULL) {
+
+            parser_extract_ipv4_ip(args->output_raw_socket, cfgs->snk_raw_socket->ipAddress);
+            parser_extract_ipv4_port(args->output_raw_socket, cfgs->snk_raw_socket->portNumber);
+            cfgs->snk_raw_socket->format = 'b';
+
+            objs->snk_raw_socket = snk_raw_socket_construct(cfgs->snk_raw_socket);
+            objs->mod_resample_raw_out = mod_resample_construct(cfgs->mod_resample_raw_out);
+            objs->msg_hops_raw_out = msg_hops_construct(cfgs->msg_hops_raw_out);           
+
+        }
+
         if (args->output_raw_soundcard != NULL) {
 
             printf("Not implemented yet.\n");

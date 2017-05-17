@@ -16,6 +16,7 @@
         cfgs->mod_resample_raw_out = (mod_resample_cfg *) NULL;
         cfgs->msg_hops_raw_out = (msg_hops_cfg *) NULL;
         cfgs->snk_raw_file = (snk_raw_file_cfg *) NULL;
+        cfgs->snk_raw_socket = (snk_raw_socket_cfg *) NULL;
         cfgs->mod_stft = (mod_stft_cfg *) NULL;
         cfgs->msg_spectra = (msg_spectra_cfg *) NULL;
         cfgs->snk_spectra_file = (snk_spectra_file_cfg *) NULL;
@@ -62,6 +63,9 @@
         }
         if (cfgs->snk_raw_file != NULL) {
             snk_raw_file_cfg_destroy(cfgs->snk_raw_file);
+        }
+        if (cfgs->snk_raw_socket != NULL) {
+            snk_raw_socket_cfg_destroy(cfgs->snk_raw_socket);
         }
         if (cfgs->mod_stft != NULL) {
             mod_stft_cfg_destroy(cfgs->mod_stft);

@@ -11,7 +11,7 @@
         obj = (src_raw_soundcard_obj *) malloc(sizeof(src_raw_soundcard_obj));
 
         obj->hopSize = cfg->hopSize;
-        obj->nMics = cfg->nMics;
+        obj->nChannels = cfg->nChannels;
         obj->nBits = cfg->nBits;
         obj->fS = cfg->fS;
 
@@ -27,7 +27,7 @@
                 format = SND_PCM_FORMAT_S16_LE;
 
                 obj->nBytes = 2;
-                obj->buffer = (void *) malloc(sizeof(char) * obj->nBytes * obj->nMics * obj->hopSize);
+                obj->buffer = (void *) malloc(sizeof(char) * obj->nBytes * obj->nChannels * obj->hopSize);
 
             break;
 
@@ -36,7 +36,7 @@
                 format = SND_PCM_FORMAT_S32_LE;
 
                 obj->nBytes = 4;
-                obj->buffer = (void *) malloc(sizeof(char) * obj->nBytes * obj->nMics * obj->hopSize);
+                obj->buffer = (void *) malloc(sizeof(char) * obj->nBytes * obj->nChannels * obj->hopSize);
 
             break;
 
@@ -77,7 +77,7 @@
             exit(EXIT_FAILURE);
         }
 
-        if ((err = snd_pcm_hw_params_set_channels(obj->captureHandle, hw_params, obj->nMics)) < 0) {
+        if ((err = snd_pcm_hw_params_set_channels(obj->captureHandle, hw_params, obj->nChannels)) < 0) {
             printf("Cannot set channel count: %s\n", snd_strerror(err));
             exit(EXIT_FAILURE);
         }
@@ -112,7 +112,7 @@
 
         int err;
         unsigned int iSample;
-        unsigned int iMic;
+        unsigned int iChannel;
         unsigned int iByte;
         unsigned int sampleShort;
         unsigned long sampleLong;
@@ -126,9 +126,9 @@
 
         for (iSample = 0; iSample < obj->hopSize; iSample++) {
 
-            for (iMic = 0; iMic < obj->nMics; iMic++) {
+            for (iChannel = 0; iChannel < obj->nChannels; iChannel++) {
 
-                iByte = (iSample * obj->nMics + iMic) * obj->nBytes;
+                iByte = (iSample * obj->nChannels + iChannel) * obj->nBytes;
 
                 switch(obj->nBytes) {
 
@@ -155,7 +155,7 @@
 
                 }
 
-                msg_hops->hops->array[iMic][iSample] = sampleFloat;
+                msg_hops->hops->array[iChannel][iSample] = sampleFloat;
 
             }
 
@@ -172,7 +172,7 @@
         cfg = (src_raw_soundcard_cfg *) malloc(sizeof(src_raw_soundcard_cfg));
 
         cfg->hopSize = 0;
-        cfg->nMics = 0;
+        cfg->nChannels = 0;
         cfg->nBits = 0;
         cfg->fS = 0;
         cfg->cardName = (char *) NULL;

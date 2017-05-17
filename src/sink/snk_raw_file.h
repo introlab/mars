@@ -13,7 +13,7 @@
         unsigned long long timeStamp;
 
         unsigned int hopSize;
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int nBits;
         char * fileName;
         FILE * fp;
@@ -23,7 +23,7 @@
     typedef struct snk_raw_file_cfg {
 
         unsigned int hopSize;
-        unsigned int nMics;
+        unsigned int nChannels;
         unsigned int nBits;
         char * fileName;
 

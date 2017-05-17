@@ -7,14 +7,14 @@
 
         unsigned int nPairs;
         
-        unsigned int iMic1;
-        unsigned int iMic2;
+        unsigned int iChannel1;
+        unsigned int iChannel2;
         unsigned int iPair;
         unsigned int iPoint;
 
         float diff, dist, tau;
 
-        nPairs = mics->nMics * (mics->nMics -1) / 2;
+        nPairs = mics->nChannels * (mics->nChannels -1) / 2;
 
         obj = tdoas_construct_zero(points->nPoints,nPairs);
 
@@ -22,14 +22,14 @@
 
             iPair = 0;
 
-            for (iMic1 = 0; iMic1 < mics->nMics; iMic1++) {
+            for (iChannel1 = 0; iChannel1 < mics->nChannels; iChannel1++) {
 
-                for (iMic2 = (iMic1+1); iMic2 < mics->nMics; iMic2++) {
+                for (iChannel2 = (iChannel1+1); iChannel2 < mics->nChannels; iChannel2++) {
 
                     dist = 0.0f;
-                    dist += (mics->mu[iMic1*3+0] - mics->mu[iMic2*3+0]) * points->array[iPoint*3+0];
-                    dist += (mics->mu[iMic1*3+1] - mics->mu[iMic2*3+1]) * points->array[iPoint*3+1];                    
-                    dist += (mics->mu[iMic1*3+2] - mics->mu[iMic2*3+2]) * points->array[iPoint*3+2];                    
+                    dist += (mics->mu[iChannel1*3+0] - mics->mu[iChannel2*3+0]) * points->array[iPoint*3+0];
+                    dist += (mics->mu[iChannel1*3+1] - mics->mu[iChannel2*3+1]) * points->array[iPoint*3+1];                    
+                    dist += (mics->mu[iChannel1*3+2] - mics->mu[iChannel2*3+2]) * points->array[iPoint*3+2];                    
 
                     tau = (((float) fS) / soundspeed->mu) * dist;
 
@@ -141,8 +141,8 @@
 
         unsigned int nPairs;
 
-        unsigned int iMic1;
-        unsigned int iMic2;
+        unsigned int iChannel1;
+        unsigned int iChannel2;
         unsigned int iPair;
         unsigned int iPoint;
 
@@ -158,7 +158,7 @@
         float sigma_ij_yx, sigma_ij_yy, sigma_ij_yz;
         float sigma_ij_zx, sigma_ij_zy, sigma_ij_zz;
 
-        nPairs = mics->nMics * (mics->nMics -1) / 2;
+        nPairs = mics->nChannels * (mics->nChannels -1) / 2;
 
         obj = taus_construct_zero(points->nPoints, nPairs);
 
@@ -167,23 +167,23 @@
 
         iPair = 0;
 
-        for (iMic1 = 0; iMic1 < mics->nMics; iMic1++) {
+        for (iChannel1 = 0; iChannel1 < mics->nChannels; iChannel1++) {
 
-            for (iMic2 = (iMic1+1); iMic2 < mics->nMics; iMic2++) {
+            for (iChannel2 = (iChannel1+1); iChannel2 < mics->nChannels; iChannel2++) {
 
-                mu_ij_x = mics->mu[iMic1*3+0] - mics->mu[iMic2*3+0];
-                mu_ij_y = mics->mu[iMic1*3+1] - mics->mu[iMic2*3+1];
-                mu_ij_z = mics->mu[iMic1*3+2] - mics->mu[iMic2*3+2];
+                mu_ij_x = mics->mu[iChannel1*3+0] - mics->mu[iChannel2*3+0];
+                mu_ij_y = mics->mu[iChannel1*3+1] - mics->mu[iChannel2*3+1];
+                mu_ij_z = mics->mu[iChannel1*3+2] - mics->mu[iChannel2*3+2];
 
-                sigma_ij_xx = mics->sigma[iMic1*9+0];
-                sigma_ij_xy = mics->sigma[iMic1*9+1];
-                sigma_ij_xz = mics->sigma[iMic1*9+2];
-                sigma_ij_yx = mics->sigma[iMic1*9+3];
-                sigma_ij_yy = mics->sigma[iMic1*9+4];
-                sigma_ij_yz = mics->sigma[iMic1*9+5];
-                sigma_ij_zx = mics->sigma[iMic1*9+6];
-                sigma_ij_zy = mics->sigma[iMic1*9+7];
-                sigma_ij_zz = mics->sigma[iMic1*9+8];
+                sigma_ij_xx = mics->sigma[iChannel1*9+0];
+                sigma_ij_xy = mics->sigma[iChannel1*9+1];
+                sigma_ij_xz = mics->sigma[iChannel1*9+2];
+                sigma_ij_yx = mics->sigma[iChannel1*9+3];
+                sigma_ij_yy = mics->sigma[iChannel1*9+4];
+                sigma_ij_yz = mics->sigma[iChannel1*9+5];
+                sigma_ij_zx = mics->sigma[iChannel1*9+6];
+                sigma_ij_zy = mics->sigma[iChannel1*9+7];
+                sigma_ij_zz = mics->sigma[iChannel1*9+8];
 
                 for (iPoint = 0; iPoint < points->nPoints; iPoint++) {
 

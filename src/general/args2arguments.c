@@ -74,6 +74,13 @@
 
                     }       
 
+                    if (name_check_ipv4_raw(optarg) == 0) {
+
+                        args->output_raw_socket = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_raw_socket, optarg);
+
+                    }
+                    
                     if (name_check_file_spectrabin(optarg) == 0) {
 
                         args->output_spectra_file_bin = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
