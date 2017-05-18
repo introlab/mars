@@ -18,6 +18,8 @@
         args->output_xcs_file_bin = (char *) NULL;
         args->output_pot_file_bin = (char *) NULL;
         args->output_pot_file_xml = (char *) NULL;
+        args->output_pot_socket_xml = (char *) NULL;
+        args->output_pot_socket_json = (char *) NULL;
         args->output_track_file_bin = (char *) NULL;
         args->output_track_file_xml = (char *) NULL;
         args->output_track_socket_xml = (char *) NULL;
@@ -75,6 +77,14 @@
             free((void *) args->output_pot_file_xml);
         }
 
+        if (args->output_pot_socket_xml != NULL) {
+            free((void *) args->output_pot_socket_xml);
+        }
+
+        if (args->output_pot_socket_json != NULL) {
+            free((void *) args->output_pot_socket_json);
+        }
+
         if (args->output_track_file_bin != NULL) {
             free((void *) args->output_track_file_bin);
         }
@@ -106,6 +116,8 @@
         printf("output_raw_socket: %s\n",args->output_raw_socket);
         printf("output_pot_file_bin: %s\n",args->output_pot_file_bin);
         printf("output_pot_file_xml: %s\n",args->output_pot_file_xml);
+        printf("output_pot_socket_xml: %s\n",args->output_pot_socket_xml);
+        printf("output_pot_socket_json: %s\n",args->output_pot_socket_json);
         printf("output_track_file_bin: %s\n",args->output_track_file_bin);
         printf("output_track_file_xml: %s\n",args->output_track_file_xml);
         printf("output_track_socket_xml: %s\n",args->output_track_socket_xml);

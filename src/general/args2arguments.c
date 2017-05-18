@@ -80,7 +80,7 @@
                         strcpy(args->output_raw_socket, optarg);
 
                     }
-                    
+
                     if (name_check_file_spectrabin(optarg) == 0) {
 
                         args->output_spectra_file_bin = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
@@ -108,6 +108,20 @@
                         strcpy(args->output_pot_file_xml, optarg);
 
                     }                   
+
+                    if (name_check_ipv4_potxml(optarg) == 0) {
+
+                        args->output_pot_socket_xml = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_pot_socket_xml, optarg);
+
+                    }   
+
+                    if (name_check_ipv4_potjson(optarg) == 0) {
+
+                        args->output_pot_socket_json = (char *) malloc(sizeof(char) * (strlen(optarg)+1));
+                        strcpy(args->output_pot_socket_json, optarg);
+
+                    }                       
 
                     if (name_check_file_trackbin(optarg) == 0) {
 

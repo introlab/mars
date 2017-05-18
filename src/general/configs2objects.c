@@ -117,6 +117,26 @@
 
         }
 
+        if (args->output_pot_socket_xml != NULL) {
+
+            parser_extract_ipv4_ip(args->output_pot_socket_xml, cfgs->snk_pots_socket->ipAddress);
+            parser_extract_ipv4_port(args->output_pot_socket_xml, cfgs->snk_pots_socket->portNumber);
+            cfgs->snk_pots_socket->format = 'x';
+
+            objs->snk_pots_socket = snk_pots_socket_construct(cfgs->snk_pots_socket);
+
+        } 
+
+        if (args->output_pot_socket_json != NULL) {
+
+            parser_extract_ipv4_ip(args->output_pot_socket_json, cfgs->snk_pots_socket->ipAddress);
+            parser_extract_ipv4_port(args->output_pot_socket_json, cfgs->snk_pots_socket->portNumber);
+            cfgs->snk_pots_socket->format = 'j';
+
+            objs->snk_pots_socket = snk_pots_socket_construct(cfgs->snk_pots_socket);
+
+        }         
+
         // SST
 
         objs->mod_sst = mod_sst_construct(cfgs->mod_sst);

@@ -25,6 +25,8 @@
 
     int name_check_ipv4_potxml(const char * str);
 
+    int name_check_ipv4_potjson(const char * str);
+
     int name_check_ipv4_trackxml(const char * str);
 
     int name_check_ipv4_trackjson(const char * str);
