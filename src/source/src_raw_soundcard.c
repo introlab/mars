@@ -161,6 +161,8 @@
 
         }
 
+        msg_hops->timeStamp = obj->timeStamp;
+
         return 0;
 
     }
