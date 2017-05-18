@@ -22,6 +22,7 @@
         cfgs->mod_ssl = parameters2configs_mod_ssl(params);
         cfgs->msg_pots = parameters2configs_msg_pots(params);
         cfgs->snk_pots_file = parameters2configs_snk_pots_file(params);
+        cfgs->snk_pots_socket = parameters2configs_snk_pots_socket(params);
         cfgs->mod_sst = parameters2configs_mod_sst(params);
         cfgs->msg_tracks = parameters2configs_msg_tracks(params);
         cfgs->snk_tracks_file = parameters2configs_snk_tracks_file(params);
@@ -312,6 +313,21 @@
 
         cfg->fileName = (char *) malloc(sizeof(char) * 1024);
         strcpy(cfg->fileName, "");
+
+        return cfg;
+
+    }
+
+    snk_pots_socket_cfg * parameters2configs_snk_pots_socket(const parameters * params) {
+
+        snk_pots_socket_cfg * cfg;
+
+        cfg = snk_pots_socket_cfg_construct();
+
+        cfg->ipAddress = (char *) malloc(sizeof(char) * 256);
+        strcpy(cfg->ipAddress, "");
+        cfg->portNumber = (char *) malloc(sizeof(char) * 16);
+        strcpy(cfg->portNumber, "");
 
         return cfg;
 

@@ -19,6 +19,7 @@
     #include "../module/mod_ssl.h"
     #include "../message/msg_pots.h"
     #include "../sink/snk_pots_file.h"
+    #include "../sink/snk_pots_socket.h"
     #include "../module/mod_sst.h"
     #include "../message/msg_tracks.h"
     #include "../sink/snk_tracks_file.h"
@@ -45,6 +46,7 @@
         mod_ssl_cfg * mod_ssl;
         msg_pots_cfg * msg_pots;
         snk_pots_file_cfg * snk_pots_file;
+        snk_pots_socket_cfg * snk_pots_socket;
         mod_sst_cfg * mod_sst;
         msg_tracks_cfg * msg_tracks;
         snk_tracks_file_cfg * snk_tracks_file;

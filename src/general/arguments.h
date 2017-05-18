@@ -23,6 +23,7 @@
         char * output_pot_file_bin;
         char * output_pot_file_xml; 
         char * output_pot_socket_xml;       
+        char * output_pot_socket_json;
         char * output_track_file_bin;
         char * output_track_file_xml;
         char * output_track_socket_xml;

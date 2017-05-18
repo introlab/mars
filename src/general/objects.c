@@ -26,6 +26,7 @@
         objs->mod_ssl = (mod_ssl_obj *) NULL;
         objs->msg_pots = (msg_pots_obj *) NULL;
         objs->snk_pots_file = (snk_pots_file_obj *) NULL;
+        objs->snk_pots_socket = (snk_pots_socket_obj *) NULL;
         objs->mod_sst = (mod_sst_obj *) NULL;
         objs->msg_tracks = (msg_tracks_obj *) NULL;
         objs->snk_tracks_file = (snk_tracks_file_obj *) NULL;
@@ -100,6 +101,10 @@
         if (objs->snk_pots_file != NULL) {
             snk_pots_file_destroy(objs->snk_pots_file);
         }
+
+        if (objs->snk_pots_socket != NULL) {
+            snk_pots_socket_destroy(objs->snk_pots_socket);
+        }       
 
         if (objs->mod_sst != NULL) {
             mod_sst_destroy(objs->mod_sst);

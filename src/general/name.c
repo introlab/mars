@@ -169,6 +169,20 @@
 
     }
 
+    int name_check_ipv4_potjson(const char * str) {
+
+        regex_t reg;
+        regmatch_t match;
+        int rtnValue;
+
+        regcomp(&reg, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}:pot\\.json$", REG_EXTENDED);
+        rtnValue = regexec(&reg, str, 1, &match, 0);
+        regfree(&reg);
+
+        return rtnValue;
+
+    }    
+
     int name_check_ipv4_trackxml(const char * str) {
 
         regex_t reg;

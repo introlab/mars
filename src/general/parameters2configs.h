@@ -44,6 +44,8 @@
 
     snk_pots_file_cfg * parameters2configs_snk_pots_file(const parameters * params);
 
+    snk_pots_socket_cfg * parameters2configs_snk_pots_socket(const parameters * params);
+
     mod_sst_cfg * parameters2configs_mod_sst(const parameters * params);
 
     msg_tracks_cfg * parameters2configs_msg_tracks(const parameters * params);
