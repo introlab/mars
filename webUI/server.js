@@ -306,7 +306,7 @@ function handleConnection(conn) {
 var audioServer = net.createServer();  
 audioServer.on('connection', handleAudioConnection);
 
-audioServer.listen(10000, function() {  
+audioServer.listen(10001, function() {  
   console.log('server listening to %j', audioServer.address());
 });
 
@@ -331,4 +331,21 @@ function handleAudioConnection(conn) {
   function onConnError(err) {
     console.log('Connection %s error: %s', remoteAddress, err.message);
   }
+}
+
+var dummyPorts = [];
+
+for(n = 2; n<=16; n++) {
+    
+    var dummy = net.createServer();
+    
+    dummy.on('connection', function(conn) {
+        // Dummy
+    });
+    
+    dummy.listen(10000+n);
+    console.log(`Dummy listen on ${10000+n}`);
+    
+    dummyPorts.push(dummy);
+    
 }

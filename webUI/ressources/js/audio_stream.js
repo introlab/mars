@@ -1,83 +1,52 @@
 var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-/* WAV Audio streamer
-var startTime = 0;
-var playTime = 0;
-var reset = true;
 
-document.addEventListener('audioData',function(ev) {
-
-    var data = ev.detail;
-    console.log(data);
-    
-    var source = audioCtx.createBufferSource();
-
-    audioCtx.decodeAudioData(data,function(buffer) {
-
-        source.buffer = buffer;
-        source.connect(audioCtx.destination);
-        
-        if(reset) {
-            startTime = audioCtx.currentTime + 0.1;
-            reset = false;
-        }
-        
-        source.start(startTime);
-        console.log(`scheduled ${startTime}`)
-        
-        startTime += buffer.duration;
-        console.log(`next      ${startTime}`)
-
-        playTime += buffer.duration;
-        console.log(`play time ${playTime}`);
-    })
-});
-*/
-
-var sampleRate = 44100;
+var sampleRate = 16000;
 var channels = 1;
-var frameCount = 50;
 
-var lookAhead = 0.2;
+var startBuffer = 0.05;
 
-var startTime = audioCtx.currentTime;
+var startTime = 0;
+var streamStarted = false;
 
-streamConnected = false;
+var watchdog = null;
 
 document.addEventListener('audioData',function(ev) {
     
-    var data = new Float32Array(ev.detail);
+    var data = new Int16Array(ev.detail);
+    var dataNormalized = new Float32Array(data.length);
     
-    if(!streamConnected) {
-        startTime = audioCtx.currentTime + 0.1;
-        streamConnected = true;
+    for(var i=0; i<data.length; i++) {
+        dataNormalized[i] = (data[i]/32768.0);
     }
     
-    scheduleBuffer(data);
+    if(!streamStarted)
+        startTime = audioCtx.currentTime + startBuffer;
+    
+    streamStarted = true;
+    scheduleBuffer(dataNormalized);
+    
+    clearInterval(watchdog);
+    watchdog = setInterval(function(){
+        
+        streamStarted = false;
+        console.log('Watchdog');
+        clearInterval(watchdog);
+        
+    }, startBuffer * 2000);
 });
 
-function scheduleBuffer(source) {
+function scheduleBuffer(audio) {
     
-    var buffer = audioCtx.createBuffer(channels, source.length, sampleRate);
-    /* Sin wave
-    var buffering = buffer.getChannelData(0);
-    
-    for(var i=0; i<frameCount; i++) {
-        buffering[i] = Math.sin( ((i+1)/frameCount)*Math.PI*2 );
-    }*/
-    
-    buffer.copyToChannel(source,0);
+    var buffer = audioCtx.createBuffer(channels, audio.length, sampleRate);
+    buffer.copyToChannel(audio,0,0);
     
     var source = audioCtx.createBufferSource();
     source.buffer = buffer;
     
     source.connect(audioCtx.destination);
-    
     source.start(startTime);
+    
+    console.log(`Scheduled in ${startTime-audioCtx.currentTime}`);
+    
     startTime += buffer.duration;
 }
-/* For sin wave
-setInterval(function() {
-    while(startTime < audioCtx.currentTime + lookAhead) {
-        scheduleBuffer();
-    }
-},50);*/
