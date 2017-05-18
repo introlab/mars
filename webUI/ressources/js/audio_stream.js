@@ -3,7 +3,7 @@ var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
 var sampleRate = 16000;
 var channels = 1;
 
-var startBuffer = 0.05;
+var startBuffer = 0.100;
 
 var startTime = 0;
 var streamStarted = false;
@@ -32,7 +32,7 @@ document.addEventListener('audioData',function(ev) {
         console.log('Watchdog');
         clearInterval(watchdog);
         
-    }, startBuffer * 2000);
+    }, 10000);
 });
 
 function scheduleBuffer(audio) {

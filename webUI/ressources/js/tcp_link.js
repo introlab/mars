@@ -24,13 +24,28 @@ class Source {
     }
 }
 
+// Single potential source data
+class PotentialSource {
+    constructor() {
+        this.e = null;
+        this.x = null;
+        this.y = null;
+        this.z = null;
+    }
+}
+
 // Single data frame
 class DataFrame {
     constructor() {
-        this.timeStamp = null;
+        
+        this.timestamp = null;
+        this.ptimestamp = null;
+        
         this.sources = new Array(4);
         for(var i = 0; i<4; i++)
             this.sources[i] = new Source(i);
+        
+        this.potentialSources = [];
     }
 }
 
@@ -65,7 +80,7 @@ var systemMonitor = new Vue({
  */
 
 // Generate websocket server URL
-var loc = window.location, new_uri, sys_uri;
+var loc = window.location, new_uri, sys_uri, pot_uri;
 
 if (loc.protocol === "https:") {
     new_uri = "wss:";
@@ -75,6 +90,7 @@ if (loc.protocol === "https:") {
 
 audio_uri = new_uri + "//" + loc.host + "/audio";
 sys_uri = new_uri + "//" + loc.host + "/system.info";
+pot_uri = new_uri + "//" + loc.host + "/potential";
 new_uri += "//" + loc.host + "/tracking";
 
 
@@ -103,7 +119,7 @@ socket.onmessage = function(msg) {
         console.warn('Frame skipped ' + data.frame.timestamp.toString());
 
     currentFrame.timestamp = data.frame.timestamp;
-    
+
     var newMap = {};
     var indexPool = [0,1,2,3];
     var hasNewSource = false;
@@ -163,6 +179,59 @@ socket.onmessage = function(msg) {
     
     if(hasNewSource)
         document.dispatchEvent(new Event('update-selection'));
+};
+
+
+// Open potential sources socket
+var potentialSocket = new WebSocket(pot_uri);
+console.log(pot_uri);
+
+
+// Update current data with received potential sources
+potentialSocket.onmessage = function(msg) {
+        
+    try { 
+        var strData = msg.data;
+        var data = JSON.parse(strData);
+    }
+
+    catch(err) {
+
+        // Can't parse frame
+        console.error(err);
+        console.log(strData);
+        return;
+    }
+    
+    if(data.frame.timestamp -  currentFrame.ptimestamp > 1)
+        console.warn('Frame skipped ' + data.frame.timestamp.toString());
+
+    currentFrame.ptimestamp = data.frame.timestamp;
+    currentFrame.potentialSources = [];
+    
+    if(data.frame.src) {    // If frame contains sources
+        
+        data.frame.src.forEach(function(source) {
+            
+            var newSource = new PotentialSource();
+            
+            newSource.e = source.e;
+            newSource.x = source.x;
+            newSource.y = source.y;
+            newSource.z = source.z;
+            
+            currentFrame.potentialSources.push(newSource);
+            
+        });
+        
+        if(data.frame.src.length > 1)
+            console.log(data);
+        
+    }
+
+    // Trigger update
+    document.dispatchEvent(new Event('potential'));
+
 };
 
 var systemSocket = new WebSocket(sys_uri);
