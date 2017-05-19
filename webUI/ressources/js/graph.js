@@ -312,3 +312,15 @@ document.addEventListener('update-selection',function(e){
     });
 
 });
+
+document.addEventListener('potential-visibility', function(e){
+    
+    charts.forEach(function(bundle) {
+        
+        for(var i=4; i<15; i++) {
+            bundle.chart.config.data.datasets[i].hidden = !sourceManager.showPotentials;
+        }
+        
+        document.dispatchEvent(new Event('request-chart'));
+    })
+})

@@ -60,10 +60,15 @@ var sourceManager = new Vue({
     el: '#source_table',
     data: {
         sources : currentFrame.sources,
+        showPotentials : true
     },
     methods : {
         showHide: function(e) {
             document.dispatchEvent(new Event('update-selection'));
+        },
+        
+        showPot: function(e) {
+            document.dispatchEvent(new Event('potential-visibility'));
         }
     }
 });
@@ -234,9 +239,29 @@ potentialSocket.onmessage = function(msg) {
 
 };
 
-potentialSocket.onclose = function() {
-    document.dispatchEvent(new Event('clearChart'));
-}
+// Clear current frame when no data is received
+document.addEventListener('clearChart', function(e){
+    
+    currentFrame.timestamp = 0;
+    currentFrame.ptimestamp = 0;
+    
+    currentFrame.sources.forEach(function(source){
+        source.id = null;
+        
+        source.x = null;
+        source.y = null;
+        source.z = null;
+        
+        source.active = false;
+        source.selected = true;
+    });
+    
+    currentFrame.potentialSources = [];
+    
+    document.dispatchEvent(new Event('tracking'));
+    document.dispatchEvent(new Event('potential'));
+    document.dispatchEvent(new Event('request-chart'));
+});
 
 var systemSocket = new WebSocket(sys_uri);
 
