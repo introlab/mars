@@ -260,6 +260,12 @@ document.addEventListener('clearChart', function(e){
     
     document.dispatchEvent(new Event('tracking'));
     document.dispatchEvent(new Event('potential'));
+    document.dispatchEvent(new Event('update-selection'));
+    
+    sourceManager.showPotentials = true;
+    document.dispatchEvent(new Event('potential-visibility'));
+    
+    viewFront();
     
     var req = setInterval(function() {
         
@@ -267,9 +273,8 @@ document.addEventListener('clearChart', function(e){
         
         hasPotential = false;
         clearInterval(req);
-        sourceManager.showPotentials = true;
-        
         console.log('UI cleaned');
+        
     },500);
 });
 
