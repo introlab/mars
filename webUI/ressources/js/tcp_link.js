@@ -260,7 +260,17 @@ document.addEventListener('clearChart', function(e){
     
     document.dispatchEvent(new Event('tracking'));
     document.dispatchEvent(new Event('potential'));
-    document.dispatchEvent(new Event('request-chart'));
+    
+    var req = setInterval(function() {
+        
+        document.dispatchEvent(new Event('request-chart'));
+        
+        hasPotential = false;
+        clearInterval(req);
+        sourceManager.showPotentials = true;
+        
+        console.log('UI cleaned');
+    },500);
 });
 
 var systemSocket = new WebSocket(sys_uri);

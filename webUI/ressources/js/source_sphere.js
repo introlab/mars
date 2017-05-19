@@ -1,7 +1,9 @@
-var canvas, camera, controls, scene, renderer;
+var canvas, camera, controls, scene, renderer, potGroup;
 var subCanvas, subCamera, subScene, subRenderer;
 var labelX, labelY, labelZ;
+
 var sources3D = new Array(4);
+var potSources3D = [];
 
 const camOffset = 2.1;
 
@@ -101,6 +103,10 @@ function init() {
     }
 
     scene.add( sourceGroup );
+    
+    // Potential sources
+    potGroup = new THREE.Group();
+    scene.add(potGroup);
     
     /*
      * Draw sub canvas with axis
@@ -239,6 +245,57 @@ document.addEventListener('tracking', function(e) {
         sources3D[index].position.z = source.z;
         
     });
+});
+
+var potSourceMaterial = [];
+
+heatmapColors.forEach(function(color) {
+   potSourceMaterial.push(new THREE.PointsMaterial({
+       color: color,
+       size: 0.1
+   }));
+});
+
+document.addEventListener('potential', function(e) {
+    
+    if(potSources3D.length > 0) {
+        
+        potSources3D.forEach(function(src,i) {
+            src.life--;
+            
+            if(src.life < 1) {
+                src.obj.parent.remove(src.obj);
+                potSources3D.splice(i,1);
+            }
+        })
+    }
+    
+    if(currentFrame.potentialSources.length > 0 && sourceManager.showPotentials ) {
+        
+        currentFrame.potentialSources.forEach(function(s) {
+            
+            var geo = new THREE.Geometry();
+            var ps = new THREE.Vector3(s.x,s.y,s.z);
+            geo.vertices.push(ps);
+            
+            var sys = new THREE.Points(geo,potSourceMaterial[Math.round(s.e*10)]);
+            potSources3D.push({obj:sys,life:50});
+            potGroup.add(sys);
+        });
+        
+    }
+});
+
+document.addEventListener('clearChart',function(e) {
+    
+    if(potSources3D.length > 0) {
+        
+        potSources3D.forEach(function(src,i) {
+                src.obj.parent.remove(src.obj);
+        });
+    }
+    
+    potSources3D = [];
 });
 
 document.addEventListener('update-selection',function(e){
