@@ -37,7 +37,14 @@ app.ws('/tracking',function(ws, req) {
     
     // Sends new data to client
     var sendData = function(data) {
-        ws.send(data);
+        
+        try {
+            ws.send(data);
+        }
+        
+        catch(e) {
+            console.warn('Socket closed');
+        }
     };
     
     // Register client to event
@@ -56,7 +63,14 @@ app.ws('/potential',function(ws, req) {
     
     // Sends new data to client
     var sendData = function(data) {
-        ws.send(data);
+        
+        try {
+            ws.send(data);
+        }
+        
+        catch(e) {
+            console.warn('Socket closed');
+        }
     };
     
     // Register client to event

@@ -3,7 +3,7 @@ var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
 var sampleRate = 16000;
 var channels = 1;
 
-var startBuffer = 0.100;
+var startBuffer = 0.070;
 
 var startTime = 0;
 var streamStarted = false;
@@ -32,7 +32,7 @@ document.addEventListener('audioData',function(ev) {
         console.log('Watchdog');
         clearInterval(watchdog);
         
-    }, 10000);
+    }, 2000);
 });
 
 function scheduleBuffer(audio) {
@@ -43,7 +43,12 @@ function scheduleBuffer(audio) {
     var source = audioCtx.createBufferSource();
     source.buffer = buffer;
     
-    source.connect(audioCtx.destination);
+    var gain = audioCtx.createGain();
+    gain.gain.value = 15;
+    
+    source.connect(gain);
+    gain.connect(audioCtx.destination);
+    
     source.start(startTime);
     
     console.log(`Scheduled in ${startTime-audioCtx.currentTime}`);

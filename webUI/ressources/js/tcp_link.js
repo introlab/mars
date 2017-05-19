@@ -115,7 +115,7 @@ socket.onmessage = function(msg) {
         return;
     }
     
-    if(data.frame.timestamp -  currentFrame.timestamp > 1)
+    if(Math.abs(data.frame.timestamp -  currentFrame.timestamp) > 1)
         console.warn('Frame skipped ' + data.frame.timestamp.toString());
 
     currentFrame.timestamp = data.frame.timestamp;
@@ -203,7 +203,7 @@ potentialSocket.onmessage = function(msg) {
         return;
     }
     
-    if(data.frame.timestamp -  currentFrame.ptimestamp > 1)
+    if(Math.abs(data.frame.timestamp -  currentFrame.ptimestamp) > 1)
         console.warn('Frame skipped ' + data.frame.timestamp.toString());
 
     currentFrame.ptimestamp = data.frame.timestamp;
@@ -233,6 +233,10 @@ potentialSocket.onmessage = function(msg) {
     document.dispatchEvent(new Event('potential'));
 
 };
+
+potentialSocket.onclose = function() {
+    document.dispatchEvent(new Event('clearChart'));
+}
 
 var systemSocket = new WebSocket(sys_uri);
 

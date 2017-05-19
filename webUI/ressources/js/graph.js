@@ -1,7 +1,10 @@
 var totalFrames;
 var refreshFrame;
+
 var watchPot;
 var hasPotential = false;
+
+var watchTrack;
 
 // Refresh params for mobile
 if( window.innerWidth < 992 ) {
@@ -34,6 +37,11 @@ class ChartBundle {
         this.chart = null;  // Chart.js element
         
         this.cdata = [[],[],[],[]];
+        document.addEventListener('clearChart',function(e){
+            this.cdata.forEach(function(a) {
+                a.length = 0;
+            });
+        }.bind(this));
         
         this.pdata = [];
         this.pdatasets = [];
@@ -58,6 +66,10 @@ class ChartBundle {
             };
             
             this.pdatasets.push(dataset);
+            document.addEventListener('clearChart',function(e){
+                this.pdata[index].length = 0;
+            }.bind(this));
+            
         }.bind(this));
         
         // Sources dataset configurations
@@ -219,6 +231,12 @@ document.addEventListener('tracking', function(e) {
             document.dispatchEvent(new Event('request-chart'));
         
         framCnt = 0;
+        
+        clearInterval(watchTrack);
+        watchTrack = setInterval(function() {
+            document.dispatchEvent(new Event('clearChart'));
+            clearInterval(watchTrack);
+        },2000);
     }
     
     framCnt++;
@@ -252,8 +270,12 @@ document.addEventListener('potential', function(e) {
 
             if(charts[0].pdata[i].length > 0) {
                 while(charts[0].pdata[i][0].x < currentFrame.ptimestamp - totalFrames*refreshFrame) {
+                    
                     charts[0].pdata[i].shift();
                     charts[1].pdata[i].shift();
+                    
+                    if(charts[0].pdata[i].length <= 0)
+                        break;
                 }
             }
         }
@@ -261,6 +283,7 @@ document.addEventListener('potential', function(e) {
         clearInterval(watchPot);
         watchPot = setInterval(function() {
             hasPotential = false;
+            document.dispatchEvent(new Event('clearChart'));
             clearInterval(watchPot);
         },2000);
         
