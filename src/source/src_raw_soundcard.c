@@ -10,6 +10,8 @@
 
         obj = (src_raw_soundcard_obj *) malloc(sizeof(src_raw_soundcard_obj));
 
+        obj->timeStamp = 0;
+
         obj->hopSize = cfg->hopSize;
         obj->nChannels = cfg->nChannels;
         obj->nBits = cfg->nBits;
