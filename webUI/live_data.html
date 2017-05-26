@@ -10,6 +10,7 @@
         
         <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
+        <link href="css/bootstrap_slider.css" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper">
@@ -89,12 +90,24 @@
                     </div>
                     <div class="col-md-2 layout darker">
                         <div class="collapse navbar-collapse" id="source-list">
+                            
                             <h2>Sources</h2>
                             <table class="table table-hover" id="source_table">
                                 <tr v-for = "source in sources">
                                     <td>
                                         <div class="checkbox">
                                             <label><input type="checkbox" v-model="source.selected" v-on:change="showHide">Source  <span v-if = "source.active" class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.id}}</span></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <h2>Filters</h2>
+                            <table class="table table-hover" id="filter_table">
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" v-model="showSources" v-on:change="showSrc">Sources</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -106,6 +119,10 @@
                                     </td>
                                 </tr>
                             </table>
+                            Potential sources energy range:<br>
+                            <b id="left-marker">0</b>
+                            <input id="range_slider" type="text" class="span2" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.05" data-slider-value="[0,1]"/>
+                            <b id="right-marker">1</b> 
                         </div>
                     </div>
                 </div>
@@ -123,7 +140,11 @@
 
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        
         <script src="js/vue.js"></script>
+        <script src="js/bootstrap_slider.js"></script>
+        <script src="js/interface.js"></script>
+        
         
         <script src="js/tcp_link.js"></script>
         

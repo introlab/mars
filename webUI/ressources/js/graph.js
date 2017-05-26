@@ -18,18 +18,6 @@ else {
     refreshFrame = 20;
 }
 
-var heatmapColors = ['rgb(16, 0, 229)',
-                     'rgb(64, 3, 229)',
-                     'rgb(111, 7, 230)',
-                     'rgb(156, 11, 230)',
-                     'rgb(200, 15, 231)',
-                     'rgb(232, 19, 220)',
-                     'rgb(232, 23, 180)',
-                     'rgb(233, 27, 141)',
-                     'rgb(233, 31, 103)',
-                     'rgb(234, 35, 67)',
-                     'rgb(235, 46, 40)'];
-
 class ChartBundle {
     
     constructor() {
@@ -249,22 +237,32 @@ document.addEventListener('potential', function(e) {
     
     hasPotential = true;
     
-    if(pframCnt%(refreshFrame/2) == 0) {
+    if(pframCnt%(refreshFrame) == 0) {
 
+        var noPot = true;
         currentFrame.potentialSources.forEach(function(source) {
 
             var x = source.x;
             var y = source.y;
             var z = source.z;
             var e = source.e;
+            
+            if( energyIsInRange(e) ) {
 
-            var inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
-            var az = Math.atan2(y,x);
+                var inc = Math.acos(z/Math.sqrt(x*x+y*y+z*z));
+                var az = Math.atan2(y,x);
 
-            charts[0].pdata[Math.round(10*e)].push({x:currentFrame.ptimestamp, y: 90 - inc*180/Math.PI});
-            charts[1].pdata[Math.round(10*e)].push({ x:currentFrame.ptimestamp, y: az*180/Math.PI});
-
+                charts[0].pdata[scaleEnergy(e)].push({x:currentFrame.ptimestamp, y: 90 - inc*180/Math.PI});
+                charts[1].pdata[scaleEnergy(e)].push({ x:currentFrame.ptimestamp, y: az*180/Math.PI});
+                
+                noPot = false;
+            }
         });
+        
+        if( noPot ) {
+            charts[0].pdata[0].push({x:currentFrame.ptimestamp, y: null});
+            charts[1].pdata[0].push({x:currentFrame.ptimestamp, y: null});
+        }
 
         for(var i=0; i<heatmapColors.length; i++) {
 
@@ -305,7 +303,7 @@ document.addEventListener('update-selection',function(e){
     charts.forEach(function(bundle) {
         
         for(var i=0; i<4; i++) {
-            bundle.chart.config.data.datasets[i].hidden = !currentFrame.sources[i].selected;
+            bundle.chart.config.data.datasets[i].hidden = !(currentFrame.sources[i].selected && filterManager.showSources);
         }
         
         document.dispatchEvent(new Event('request-chart'));
@@ -318,7 +316,7 @@ document.addEventListener('potential-visibility', function(e){
     charts.forEach(function(bundle) {
         
         for(var i=4; i<15; i++) {
-            bundle.chart.config.data.datasets[i].hidden = !sourceManager.showPotentials;
+            bundle.chart.config.data.datasets[i].hidden = !filterManager.showPotentials;
         }
         
         document.dispatchEvent(new Event('request-chart'));

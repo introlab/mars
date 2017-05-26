@@ -188,3 +188,11 @@ body {
 .p-body {
     margin-top: 50px;
 }
+
+#left-marker {
+    margin-right: 15px
+}
+
+#right-marker {
+    margin-left: 15px
+}

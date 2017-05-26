@@ -1,8 +1,10 @@
-var canvas, camera, controls, scene, renderer, potGroup;
+var canvas, camera, controls, scene, renderer, potGroup, sourceGroup;
 var subCanvas, subCamera, subScene, subRenderer;
 var labelX, labelY, labelZ;
 
 var sources3D = new Array(4);
+var sources3DTrail = [];
+
 var potSources3D = [];
 
 const camOffset = 2.1;
@@ -86,7 +88,7 @@ function init() {
     scene.add(cube);
     
     // Sources
-    var sourceGroup = new THREE.Group();
+    sourceGroup = new THREE.Group();
 
     var sourceGeometry = new THREE.SphereGeometry( 0.08, 10, 10);
 
@@ -234,17 +236,58 @@ function render() {
     
 }
 
+var sourceMaterial = [];
+
+rgbValueStrings.forEach(function(color) {
+   sourceMaterial.push(new THREE.PointsMaterial({
+       color: 'rgb('+color+')',
+       size: 0.05
+   }));
+});
+
 document.addEventListener('tracking', function(e) {
+    
+    if(sources3DTrail.length > 0) {
+        
+        sources3DTrail.forEach(function(src,i) {
+            src.life--;
+            
+            if(src.life < 1) {
+                src.obj.material.dispose();
+                src.obj.geometry.dispose();
+                src.obj.parent.remove(src.obj);
+                src.obj = null;
+                sources3DTrail.splice(i,1);
+            }
+        })
+    }
     
     currentFrame.sources.forEach(function(source,index) {
         
-        sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
+        sources3D[index].visible = filterManager.showSources && source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
         
         sources3D[index].position.x = source.x;
         sources3D[index].position.y = source.y;
         sources3D[index].position.z = source.z;
         
+        if( filterManager.showSources && source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0) ) {
+            
+            var geo = new THREE.Geometry();
+            var ps = new THREE.Vector3(source.x,source.y,source.z);
+            geo.vertices.push(ps);
+
+            var sys = new THREE.Points(geo,sourceMaterial[index]);
+            sources3DTrail.push({obj:sys,life:150});
+            sourceGroup.add(sys);
+        }
     });
+});
+
+document.addEventListener('update-selection',function(e){
+    
+    currentFrame.sources.forEach(function(source,index) {
+        sources3D[index].visible =  filterManager.showSources && source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
+    });  
 });
 
 var potSourceMaterial = [];
@@ -264,23 +307,28 @@ document.addEventListener('potential', function(e) {
             src.life--;
             
             if(src.life < 1) {
+                src.obj.material.dispose();
+                src.obj.geometry.dispose();
                 src.obj.parent.remove(src.obj);
+                src.obj = null;
                 potSources3D.splice(i,1);
             }
         })
     }
     
-    if(currentFrame.potentialSources.length > 0 && sourceManager.showPotentials ) {
+    if(currentFrame.potentialSources.length > 0 && filterManager.showPotentials) {
         
         currentFrame.potentialSources.forEach(function(s) {
             
-            var geo = new THREE.Geometry();
-            var ps = new THREE.Vector3(s.x,s.y,s.z);
-            geo.vertices.push(ps);
-            
-            var sys = new THREE.Points(geo,potSourceMaterial[Math.round(s.e*10)]);
-            potSources3D.push({obj:sys,life:50});
-            potGroup.add(sys);
+			if ( energyIsInRange(s.e) ) {
+		        var geo = new THREE.Geometry();
+		        var ps = new THREE.Vector3(s.x,s.y,s.z);
+		        geo.vertices.push(ps);
+		        
+		        var sys = new THREE.Points(geo,potSourceMaterial[scaleEnergy(s.e)]);
+		        potSources3D.push({obj:sys,life:50});
+		        potGroup.add(sys);
+			}
         });
         
     }
@@ -291,18 +339,24 @@ document.addEventListener('clearChart',function(e) {
     if(potSources3D.length > 0) {
         
         potSources3D.forEach(function(src,i) {
+                src.obj.material.dispose();
+                src.obj.geometry.dispose();
                 src.obj.parent.remove(src.obj);
         });
     }
     
     potSources3D = [];
-});
-
-document.addEventListener('update-selection',function(e){
     
-    currentFrame.sources.forEach(function(source,index) {
-        sources3D[index].visible = source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
-    });  
+    if(sources3DTrail.length > 0) {
+        
+        sources3DTrail.forEach(function(src,i) {
+                src.obj.material.dispose();
+                src.obj.geometry.dispose();
+                src.obj.parent.remove(src.obj);
+        });
+    }
+    
+    sources3DTrail = [];
 });
 
 

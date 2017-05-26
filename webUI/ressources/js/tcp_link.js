@@ -1,86 +1,4 @@
 /*
- * Data structures to manage source data
- */
-
-var rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
-
-var indexMap = {};
-
-// Single source data
-class Source {
-    constructor(index) {
-        
-        // Web UI info
-        this.index = index;
-        this.rgbValueString = rgbValueStrings[index];
-        this.selected = true;
-        
-        // Source info
-        this.id = null;
-        this.active = false;
-        this.x = null;
-        this.y = null;
-        this.z = null;
-    }
-}
-
-// Single potential source data
-class PotentialSource {
-    constructor() {
-        this.e = null;
-        this.x = null;
-        this.y = null;
-        this.z = null;
-    }
-}
-
-// Single data frame
-class DataFrame {
-    constructor() {
-        
-        this.timestamp = null;
-        this.ptimestamp = null;
-        
-        this.sources = new Array(4);
-        for(var i = 0; i<4; i++)
-            this.sources[i] = new Source(i);
-        
-        this.potentialSources = [];
-    }
-}
-
-var currentFrame = new DataFrame();
-
-
-/*
- * Vue models for dynamic UI
- */
-
-var sourceManager = new Vue({
-    el: '#source_table',
-    data: {
-        sources : currentFrame.sources,
-        showPotentials : true
-    },
-    methods : {
-        showHide: function(e) {
-            document.dispatchEvent(new Event('update-selection'));
-        },
-        
-        showPot: function(e) {
-            document.dispatchEvent(new Event('potential-visibility'));
-        }
-    }
-});
-
-var systemMonitor = new Vue({
-    el: '#system-monitor',
-    data: {
-        system : {cpu:'0 %',mem:0,temp:0}
-    }
-});
-
-/*
  * Web Socket connection to server
  */
 
@@ -103,8 +21,9 @@ new_uri += "//" + loc.host + "/tracking";
 var socket = new WebSocket(new_uri);
 console.log(new_uri);
 
-
 // Update current data with received data
+var indexMap = {};
+
 socket.onmessage = function(msg) {
         
     try { 
@@ -228,9 +147,6 @@ potentialSocket.onmessage = function(msg) {
             currentFrame.potentialSources.push(newSource);
             
         });
-        
-        if(data.frame.src.length > 1)
-            console.log(data);
         
     }
 
