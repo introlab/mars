@@ -16,6 +16,9 @@ sys_uri = new_uri + "//" + loc.host + "/system.info";
 pot_uri = new_uri + "//" + loc.host + "/potential";
 new_uri += "//" + loc.host + "/tracking";
 
+/*
+ * Tracking data socket
+ */
 
 // Open socket and create parser
 var socket = new WebSocket(new_uri);
@@ -45,7 +48,10 @@ socket.onmessage = function(msg) {
     currentFrame.timestamp = data.frame.timestamp;
 
     var newMap = {};
-    var indexPool = [0,1,2,3];
+    var indexPool = [];
+    rgbValueStrings.forEach(function(c,index) {
+        indexPool.push(index);
+    });
     var hasNewSource = false;
     
     if(data.frame.src) {    // If frame contains sources
@@ -105,8 +111,10 @@ socket.onmessage = function(msg) {
         document.dispatchEvent(new Event('update-selection'));
 };
 
+/*
+ * Potential sources socket
+ */
 
-// Open potential sources socket
 var potentialSocket = new WebSocket(pot_uri);
 console.log(pot_uri);
 
@@ -155,7 +163,10 @@ potentialSocket.onmessage = function(msg) {
 
 };
 
-// Clear current frame when no data is received
+/*
+ * Frame reset when no data is received
+ */
+
 document.addEventListener('clearChart', function(e){
     
     currentFrame.timestamp = 0;
@@ -194,6 +205,10 @@ document.addEventListener('clearChart', function(e){
     },500);
 });
 
+/*
+ * System info socket
+ */
+
 var systemSocket = new WebSocket(sys_uri);
 
 systemSocket.onmessage = function(msg) {
@@ -205,6 +220,10 @@ systemSocket.onmessage = function(msg) {
     systemMonitor.system.temp = data.temp.toPrecision(3).toString() + ' °C';
 };
 
+/*
+ * Audio socket
+ */
+
 var audioSocket = new WebSocket(audio_uri);
 
 audioSocket.onmessage = function(msg) {
@@ -215,6 +234,5 @@ audioSocket.onmessage = function(msg) {
         document.dispatchEvent(new CustomEvent('audioData', { 'detail': reader.result}));
     };
 
-    reader.readAsArrayBuffer(msg.data);
-    
+    reader.readAsArrayBuffer(msg.data);  
 };

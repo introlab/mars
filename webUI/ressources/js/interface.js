@@ -1,9 +1,12 @@
 /*
- * Gradiant colors for source energy
+ * Colors
+ * ALSO DEFINE NUMBER OF TRACKED SOURCES MANAGED BY THE WEB UI!!!
  */
 
-var rgbValueStrings = ["75,192,192","192,75,192","192,192,30","0,200,40"];
+// Sources
+var rgbValueStrings = ["rgb(75,192,192)","rgb(192,75,192)","rgb(192,192,30)","rgb(0,200,40)"];
 
+// Energy gradiant
 var heatmapColors = ['rgb(16, 0, 229)',
                      'rgb(64, 3, 229)',
                      'rgb(111, 7, 230)',
@@ -16,10 +19,12 @@ var heatmapColors = ['rgb(16, 0, 229)',
                      'rgb(234, 35, 67)',
                      'rgb(235, 46, 40)'];
 
+// Is energy value in selected range
 function energyIsInRange(e) {
-    return e >= rangeSlider.getValue()[0] && e <= rangeSlider.getValue()[1];
+    return e >= rangeSlider.getValue()[0];
 }
 
+// Get gradiant index corresponding to energy
 function scaleEnergy(e) {
     
     var min = rangeSlider.getValue()[0];
@@ -76,9 +81,10 @@ class DataFrame {
         this.timestamp = null;
         this.ptimestamp = null;
         
-        this.sources = new Array(4);
-        for(var i = 0; i<4; i++)
-            this.sources[i] = new Source(i);
+        this.sources = [];
+        rgbValueStrings.forEach(function (color,i) {
+            this.sources.push(new Source(i));
+        }.bind(this));
         
         this.potentialSources = [];
     }
@@ -90,6 +96,7 @@ var currentFrame = new DataFrame();
  * Vue models for dynamic UI
  */
 
+// Source list model
 var sourceManager = new Vue({
     el: '#source_table',
     data: {
@@ -102,6 +109,7 @@ var sourceManager = new Vue({
     }
 });
 
+// Filters model
 var filterManager = new Vue({
     el: '#filter_table',
     data: {
@@ -119,6 +127,7 @@ var filterManager = new Vue({
     }
 });
 
+// System monitor model
 var systemMonitor = new Vue({
     el: '#system-monitor',
     data: {

@@ -114,6 +114,9 @@ body {
       .collapse.in{
           display:block !important;
       }
+    .layout {
+        padding-bottom: 30px;
+    }
 }
 
 @media screen and (min-width: 992px) {

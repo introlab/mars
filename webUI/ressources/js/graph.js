@@ -18,23 +18,49 @@ else {
     refreshFrame = 20;
 }
 
+/*
+ * Chart bundle containing chart and chart data
+ */
+
 class ChartBundle {
     
     constructor() {
         
         this.chart = null;  // Chart.js element
         
-        this.cdata = [[],[],[],[]];
-        document.addEventListener('clearChart',function(e){
-            this.cdata.forEach(function(a) {
-                a.length = 0;
-            });
+        this.cdata = [];
+        this.datasets = [];
+        
+        // Generate source dataset from rgb colors
+        
+        rgbValueStrings.forEach(function(color,index) {
+            
+            this.cdata.push(new Array(0));
+            
+            var dataset = {
+                
+                label : 'source' + index.toString(),
+                fill : false,
+                borderColor: color,
+                spanGaps: false,
+                data: this.cdata[index],
+                hidden : false,
+                cubicInterpolationMode : 'monotone'
+            };
+            
+            this.datasets.push(dataset);
+            document.addEventListener('clearChart',function(e){
+                this.cdata[index].length = 0;
+            }.bind(this));
+            
+            
         }.bind(this));
         
         this.pdata = [];
         this.pdatasets = [];
         
         // Generate potential dataset from heatmap color
+        
         heatmapColors.forEach(function(color,index) {
             
             this.pdata.push(new Array(0));
@@ -60,58 +86,15 @@ class ChartBundle {
             
         }.bind(this));
         
-        // Sources dataset configurations
-        this.datasets = [];
-        this.datasets.push({    label : 'source0',
-                                fill : false,
-                                borderColor: "rgba(75,192,192,1)",
-                                spanGaps: false,
-                                data: this.cdata[0],
-                                hidden : false,
-                                cubicInterpolationMode : 'monotone'
-                            });
-        
-        this.datasets.push({    label : 'source1',
-                                fill : false,
-                                pointBorderColor: "rgba(192,75,192,1)",
-                                pointBackgroundColor: "rgba(192,75,192,1)",
-                                backgroundColor: "rgba(192,75,192,0.4)",
-                                borderColor: "rgba(192,75,192,1)",
-                                spanGaps: false,
-                                data: this.cdata[1],
-                                hidden : false,
-                                cubicInterpolationMode : 'monotone'
-                            });
-        
-        this.datasets.push({    label : 'source2',
-                                fill : false,
-                                pointBorderColor: "rgba(192,192,30,1)",
-                                pointBackgroundColor: "rgba(192,192,30,1)",
-                                backgroundColor: "rgba(192,192,30,0.4)",
-                                borderColor: "rgba(192,192,30,1)",
-                                spanGaps: false,
-                                data: this.cdata[2],
-                                hidden : false,
-                                cubicInterpolationMode : 'monotone'
-                            });
-        
-        this.datasets.push({    label : 'source3',
-                                fill : false,
-                                pointBorderColor: "rgba(0,200,40,1)",
-                                pointBackgroundColor: "rgba(0,200,40,1)",
-                                backgroundColor: "rgba(0,200,40,0.4)",
-                                borderColor: "rgba(0,200,40,1)",
-                                spanGaps: false,
-                                data: this.cdata[3],
-                                hidden : false,
-                                cubicInterpolationMode : 'monotone'
-                            });
-        
         this.cdataSetup = {
               datasets: this.datasets.concat(this.pdatasets)
         };
     }
 }
+
+/*
+ * Generate charts from html tags and chart bundles
+ */
 
 var charts = [];
 
@@ -180,6 +163,10 @@ ctxs.forEach(function(ctx,i) {
     });
 });
 
+/*
+ * Update graph with tracking data received from Mars
+ */
+
 var framCnt = 0;
 
 document.addEventListener('tracking', function(e) {
@@ -231,13 +218,17 @@ document.addEventListener('tracking', function(e) {
     
 });
 
+/*
+ * Update graph with potential source data received from Mars
+ */
+
 var pframCnt = 0;
 
 document.addEventListener('potential', function(e) {
     
     hasPotential = true;
     
-    if(pframCnt%(refreshFrame) == 0) {
+    if(pframCnt%refreshFrame == 0) {
 
         var noPot = true;
         currentFrame.potentialSources.forEach(function(source) {
@@ -285,11 +276,6 @@ document.addEventListener('potential', function(e) {
             clearInterval(watchPot);
         },2000);
         
-    }
-    
-    
-    if(pframCnt%refreshFrame == 0) {
-        
         document.dispatchEvent(new Event('request-chart'));
         pframCnt = 0;
     }
@@ -298,26 +284,36 @@ document.addEventListener('potential', function(e) {
     
 });
 
+/*
+ * Update dataset visibility for sources
+ */
+
 document.addEventListener('update-selection',function(e){
     
     charts.forEach(function(bundle) {
         
-        for(var i=0; i<4; i++) {
-            bundle.chart.config.data.datasets[i].hidden = !(currentFrame.sources[i].selected && filterManager.showSources);
-        }
+        bundle.datasets.forEach(function(dataset,i) {
+            
+            dataset.hidden = !(currentFrame.sources[i].selected && filterManager.showSources);
+        });
         
         document.dispatchEvent(new Event('request-chart'));
     });
 
 });
 
+/*
+ * Update dataset visibility for potential sources
+ */
+
 document.addEventListener('potential-visibility', function(e){
     
     charts.forEach(function(bundle) {
         
-        for(var i=4; i<15; i++) {
-            bundle.chart.config.data.datasets[i].hidden = !filterManager.showPotentials;
-        }
+            bundle.pdatasets.forEach(function(dataset) { 
+                
+                dataset.hidden = !filterManager.showPotentials;
+            });
         
         document.dispatchEvent(new Event('request-chart'));
     })

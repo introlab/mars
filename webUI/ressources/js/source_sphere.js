@@ -2,7 +2,7 @@ var canvas, camera, controls, scene, renderer, potGroup, sourceGroup;
 var subCanvas, subCamera, subScene, subRenderer;
 var labelX, labelY, labelZ;
 
-var sources3D = new Array(4);
+var sources3D = [];
 var sources3DTrail = [];
 
 var potSources3D = [];
@@ -12,11 +12,11 @@ const camOffset = 2.1;
 init();
 animate();
 
+/*
+ * Draw sources and sphere
+ */
+
 function init() {
-    
-    /*
-     * Draw sources and sphere
-     */
     
     // Canvas
     canvas = document.getElementById("sphere");
@@ -91,18 +91,16 @@ function init() {
     sourceGroup = new THREE.Group();
 
     var sourceGeometry = new THREE.SphereGeometry( 0.08, 10, 10);
-
-    var colors = ["rgb(75,192,192)","rgb(192,75,192)","rgb(192,192,30)","rgb(0,200,40)"]
     
-    for(var i = 0; i<4; i++) {
+    rgbValueStrings.forEach(function(color) {
         
-        var sourceMaterial = new THREE.MeshBasicMaterial( {color: colors[i], wireframe:false} );
+        var sourceMaterial = new THREE.MeshBasicMaterial( {color: color, wireframe:false} );
         var source = new THREE.Mesh( sourceGeometry, sourceMaterial );
         source.visible = false;
         
-        sources3D[i] = source;
-        sourceGroup.add(sources3D[i]);
-    }
+        sources3D.push(source);
+        sourceGroup.add(source);
+    });
 
     scene.add( sourceGroup );
     
@@ -194,6 +192,9 @@ function init() {
     window.addEventListener( 'resize', onWindowResize, false );
 }
 
+/*
+ * Resize canvas and renderer when page is resized
+ */
 function onWindowResize() {
     
     camera.aspect = canvas.offsetWidth/canvas.offsetHeight ;
@@ -203,6 +204,10 @@ function onWindowResize() {
     canvas.style.height = '100%';
     canvas.style.width = '100%';
 }
+
+/*
+ * Render a frame
+ */
 
 function animate() {
     
@@ -236,23 +241,31 @@ function render() {
     
 }
 
+/*
+ * Draw source on sphere when tracking data is received
+ */
+
+// Material for tails
 var sourceMaterial = [];
 
 rgbValueStrings.forEach(function(color) {
    sourceMaterial.push(new THREE.PointsMaterial({
-       color: 'rgb('+color+')',
+       color: color,
        size: 0.05
    }));
 });
 
+// Update on new event
 document.addEventListener('tracking', function(e) {
     
+    // Clear older trail pixels
     if(sources3DTrail.length > 0) {
         
         sources3DTrail.forEach(function(src,i) {
             src.life--;
             
-            if(src.life < 1) {
+            if(src.life < 1) {  // Dispose of pixel if life is over
+                
                 src.obj.material.dispose();
                 src.obj.geometry.dispose();
                 src.obj.parent.remove(src.obj);
@@ -262,6 +275,7 @@ document.addEventListener('tracking', function(e) {
         })
     }
     
+    // Update source on sphere
     currentFrame.sources.forEach(function(source,index) {
         
         sources3D[index].visible = filterManager.showSources && source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0);
@@ -270,7 +284,8 @@ document.addEventListener('tracking', function(e) {
         sources3D[index].position.y = source.y;
         sources3D[index].position.z = source.z;
         
-        if( filterManager.showSources && source.active && source.selected && !(source.x == 0 && source.y == 0 && source.z == 0) ) {
+        // Add a pixel to the tail if the source is visible
+        if( sources3D[index].visible ) {
             
             var geo = new THREE.Geometry();
             var ps = new THREE.Vector3(source.x,source.y,source.z);
@@ -283,6 +298,7 @@ document.addEventListener('tracking', function(e) {
     });
 });
 
+// Update visibility when selection is changed
 document.addEventListener('update-selection',function(e){
     
     currentFrame.sources.forEach(function(source,index) {
@@ -290,6 +306,11 @@ document.addEventListener('update-selection',function(e){
     });  
 });
 
+/*
+ * Draw potential sources on sphere when potential source data is received
+ */
+
+// Material from heatmap gradiant color
 var potSourceMaterial = [];
 
 heatmapColors.forEach(function(color) {
@@ -299,14 +320,16 @@ heatmapColors.forEach(function(color) {
    }));
 });
 
+// Update on 'potential' event
 document.addEventListener('potential', function(e) {
     
+    // Remove old trail points
     if(potSources3D.length > 0) {
         
         potSources3D.forEach(function(src,i) {
             src.life--;
             
-            if(src.life < 1) {
+            if(src.life < 1) {  // Dispose if life is over
                 src.obj.material.dispose();
                 src.obj.geometry.dispose();
                 src.obj.parent.remove(src.obj);
@@ -316,11 +339,12 @@ document.addEventListener('potential', function(e) {
         })
     }
     
+    // Add potential source to sphere if potential source filter is selected
     if(currentFrame.potentialSources.length > 0 && filterManager.showPotentials) {
         
         currentFrame.potentialSources.forEach(function(s) {
             
-			if ( energyIsInRange(s.e) ) {
+			if ( energyIsInRange(s.e) ) {    // Add source if source's energy's in range
 		        var geo = new THREE.Geometry();
 		        var ps = new THREE.Vector3(s.x,s.y,s.z);
 		        geo.vertices.push(ps);
@@ -333,6 +357,10 @@ document.addEventListener('potential', function(e) {
         
     }
 });
+
+/*
+ * Clear sphere when no data is reveived
+ */
 
 document.addEventListener('clearChart',function(e) {
     

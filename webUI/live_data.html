@@ -96,7 +96,7 @@
                                 <tr v-for = "source in sources">
                                     <td>
                                         <div class="checkbox">
-                                            <label><input type="checkbox" v-model="source.selected" v-on:change="showHide">Source  <span v-if = "source.active" class="badge" v-bind:style = "{ 'background-color' : 'rgb('+source.rgbValueString+')' }" >{{source.id}}</span></label>
+                                            <label><input type="checkbox" v-model="source.selected" v-on:change="showHide">Source  <span v-if = "source.active" class="badge" v-bind:style = "{ 'background-color' : source.rgbValueString }" >{{source.id}}</span></label>
                                         </div>
                                     </td>
                                 </tr>
@@ -119,7 +119,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            Potential sources energy range:<br>
+                            <p>Potential sources energy range:</p>
                             <b id="left-marker">0</b>
                             <input id="range_slider" type="text" class="span2" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.05" data-slider-value="[0,1]"/>
                             <b id="right-marker">1</b> 
