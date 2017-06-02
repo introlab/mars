@@ -119,49 +119,65 @@
         unsigned int sampleShort;
         unsigned long sampleLong;
         float sampleFloat;
+	unsigned int nSamples;
+	unsigned int nBytes;
 
-        if ((err = snd_pcm_readi(obj->captureHandle, obj->buffer, obj->hopSize)) != obj->hopSize) {
+	nBytes = obj->nBits / 8;
+	nSamples = 0;
 
-            return 1;
+	while (nSamples < obj->hopSize) {
 
-        }
+		if ((err = snd_pcm_readi(obj->captureHandle, &(((char *) (obj->buffer))[nSamples*obj->nChannels*nBytes]), (obj->hopSize-nSamples))) < 0) {
 
-        for (iSample = 0; iSample < obj->hopSize; iSample++) {
+		    return 1;
 
-            for (iChannel = 0; iChannel < obj->nChannels; iChannel++) {
+		}
 
-                iByte = (iSample * obj->nChannels + iChannel) * obj->nBytes;
+		if (err < obj->hopSize) {
+			printf("Multiple read: recovery mode.\n");
+		}
 
-                switch(obj->nBytes) {
+		nSamples += err;
 
-                    case 2:
+	}
 
-                        sampleShort = ((((unsigned short) (((char *) obj->buffer)[iByte+1])) << 8) & 0xFF00) + 
-                                      ((((unsigned short) (((char *) obj->buffer)[iByte+0]))) & 0x00FF);
+	for (iSample = 0; iSample < obj->hopSize; iSample++) {
 
-                        sampleFloat = pcm_signed16bits2normalized(sampleShort);
+	    for (iChannel = 0; iChannel < obj->nChannels; iChannel++) {
+
+	        iByte = (iSample * obj->nChannels + iChannel) * obj->nBytes;
+
+	        switch(obj->nBytes) {
+
+	            case 2:
+
+	                sampleShort = ((((unsigned short) (((char *) obj->buffer)[iByte+1])) << 8) & 0xFF00) + 
+	                              ((((unsigned short) (((char *) obj->buffer)[iByte+0]))) & 0x00FF);
+
+	                sampleFloat = pcm_signed16bits2normalized(sampleShort);
 
 
-                    break;
+	            break;
 
-                    case 4:
+	            case 4:
 
-                        sampleLong = ((((unsigned long) (((char *) obj->buffer)[iByte+3])) << 24) & 0xFF000000) + 
-                                     ((((unsigned long) (((char *) obj->buffer)[iByte+2])) << 16) & 0x00FF0000) + 
-                                     ((((unsigned long) (((char *) obj->buffer)[iByte+1])) << 8) & 0x0000FF00) + 
-                                     ((((unsigned long) (((char *) obj->buffer)[iByte+0]))) & 0x000000FF);            
+	                sampleLong = ((((unsigned long) (((char *) obj->buffer)[iByte+3])) << 24) & 0xFF000000) + 
+	                             ((((unsigned long) (((char *) obj->buffer)[iByte+2])) << 16) & 0x00FF0000) + 
+	                             ((((unsigned long) (((char *) obj->buffer)[iByte+1])) << 8) & 0x0000FF00) + 
+	                             ((((unsigned long) (((char *) obj->buffer)[iByte+0]))) & 0x000000FF);            
 
-                        sampleFloat = pcm_signed32bits2normalized(sampleLong);            
+	                sampleFloat = pcm_signed32bits2normalized(sampleLong);            
 
-                    break;
+	            break;
 
-                }
+	        }
 
-                msg_hops->hops->array[iChannel][iSample] = sampleFloat;
+	        msg_hops->hops->array[iChannel][iSample] = sampleFloat;
 
-            }
+	    }
 
-        }
+	}
+
 
         obj->timeStamp++;
 
