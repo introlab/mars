@@ -118,6 +118,7 @@ app.ws('/audio',function(ws, req) {
         
         try {
             ws.send(data);
+			console.log(`Sent audio on ${new Date().getTime()}`);
         }
         
         catch(e) {
@@ -290,7 +291,8 @@ function handleAudioConnection(conn) {
 
   function onConnData(d) {
       
-    eventEmitter.emit('newAudio',d);
+   console.log(`Received audio on ${new Date().getTime()}`); 
+	eventEmitter.emit('newAudio',d);
   }
 
   function onConnClose() {

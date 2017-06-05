@@ -211,7 +211,7 @@ document.addEventListener('tracking', function(e) {
         watchTrack = setInterval(function() {
             document.dispatchEvent(new Event('clearChart'));
             clearInterval(watchTrack);
-        },2000);
+        },10000);
     }
     
     framCnt++;
@@ -274,7 +274,7 @@ document.addEventListener('potential', function(e) {
             hasPotential = false;
             document.dispatchEvent(new Event('clearChart'));
             clearInterval(watchPot);
-        },2000);
+        },10000);
         
         document.dispatchEvent(new Event('request-chart'));
         pframCnt = 0;
