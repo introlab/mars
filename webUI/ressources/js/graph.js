@@ -106,6 +106,9 @@ var maxs = [90,180];
 var stepSizes = [30, 60];
 var pointsRadius = [0,0];
 
+var dataMin = 0;
+var dataMax = totalFrames * refreshFrame;
+
 ctxs.forEach(function(ctx,i) {
     
     charts[i] = new ChartBundle();
@@ -130,7 +133,8 @@ ctxs.forEach(function(ctx,i) {
                     type: 'linear',
                     position: 'bottom',
                     ticks: {
-                        suggestedMax : totalFrames*refreshFrame
+                        min : dataMin,
+                        max : dataMax
                     },
                     scaleLabel: {
                         display: true,
@@ -214,6 +218,8 @@ document.addEventListener('tracking', function(e) {
         },10000);
     }
     
+    dataMax = currentFrame.timestamp;
+    dataMin = dataMax - totalFrames * refreshFrame;
     framCnt++;
     
 });
@@ -280,6 +286,8 @@ document.addEventListener('potential', function(e) {
         pframCnt = 0;
     }
     
+    dataMax = currentFrame.ptimestamp;
+    dataMin = dataMax - totalFrames * refreshFrame;
     pframCnt++;
     
 });
