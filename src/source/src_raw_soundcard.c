@@ -82,10 +82,33 @@
             exit(EXIT_FAILURE);
         }
 
+		// Params tests period, periods and buffer size.
+
+		long unsigned int period_size = obj->hopSize * 1;
+
+		if ((err = snd_pcm_hw_params_set_period_size_near (obj->captureHandle, hw_params, &period_size, 0)) < 0) {
+			printf ("cannot set period size (%s)\n",snd_strerror (err));
+			exit(EXIT_FAILURE);
+		}
+
+		printf("Period size = %ld\n",period_size);
+
+		long unsigned int nb_periods = 10;
+		long unsigned int buffer_size = period_size * nb_periods;
+
+		if ((err = snd_pcm_hw_params_set_buffer_size_near (obj->captureHandle, hw_params, &buffer_size)) < 0) {
+			printf ("cannot set buffer time (%s)\n",snd_strerror (err));
+			exit(EXIT_FAILURE);
+		}
+
+		printf("Buffer size = %ld\n",buffer_size);
+
         if ((err = snd_pcm_hw_params(obj->captureHandle, hw_params)) < 0) {
             printf("Cannot set parameters: %s\n", snd_strerror(err));
             exit(EXIT_FAILURE);
         }
+
+		// End of params tests		
 
         snd_pcm_hw_params_free(hw_params);
 
@@ -119,7 +142,8 @@
         float sampleFloat;
 
         if ((err = snd_pcm_readi(obj->captureHandle, obj->buffer, obj->hopSize)) != obj->hopSize) {
-
+			
+			perror("Read error!");
             return 1;
 
         }
