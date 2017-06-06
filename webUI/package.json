@@ -1,6 +1,9 @@
 {
   "name": "mars-web",
   "version": "0.1.0",
+  "description": "Web interface for MARS platform",
+  "repository": "MARS on GitHub/introlab",
+  "license" : "MIT",
   "dependencies": {
     "express": "^4.15.2",
     "express-ws": "^3.0.0",
