@@ -211,6 +211,11 @@ document.addEventListener('tracking', function(e) {
         
         framCnt = 0;
         
+        charts.forEach(function(bundle) {
+            bundle.chart.scales["x-axis-0"].max = dataMax;
+            bundle.chart.scales["x-axis-0"].min = dataMax - totalFrames * refreshFrame;
+        });
+        
         clearInterval(watchTrack);
         watchTrack = setInterval(function() {
             document.dispatchEvent(new Event('clearChart'));
@@ -218,8 +223,6 @@ document.addEventListener('tracking', function(e) {
         },10000);
     }
     
-    dataMax = currentFrame.timestamp;
-    dataMin = dataMax - totalFrames * refreshFrame;
     framCnt++;
     
 });
@@ -283,11 +286,15 @@ document.addEventListener('potential', function(e) {
         },10000);
         
         document.dispatchEvent(new Event('request-chart'));
+        
+        charts.forEach(function(bundle) {
+            bundle.chart.scales["x-axis-0"].max = dataMax;
+            bundle.chart.scales["x-axis-0"].min = dataMax - totalFrames * refreshFrame;
+        });
+        
         pframCnt = 0;
-    }
+    }  
     
-    dataMax = currentFrame.ptimestamp;
-    dataMin = dataMax - totalFrames * refreshFrame;
     pframCnt++;
     
 });
