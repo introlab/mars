@@ -14,6 +14,7 @@
         obj->nChannels = cfg->nChannels;
         obj->nBits = cfg->nBits;
         obj->fS = cfg->fS;
+		obj->timeStamp = 0;
 
         if (!((cfg->nBits == 16) | (cfg->nBits == 32))) {
             printf("Invalid number of bits.\n");
@@ -83,10 +84,10 @@
         }
 
 		// Params tests period, periods and buffer size.
+		
+		long unsigned int period_size = obj->hopSize *10;
 
-		long unsigned int period_size = obj->hopSize * 1;
-
-		if ((err = snd_pcm_hw_params_set_period_size_near (obj->captureHandle, hw_params, &period_size, 0)) < 0) {
+		if ((err = snd_pcm_hw_params_set_period_size_near (obj->captureHandle, hw_params, &period_size, 0)) < 0) { // In frames!!
 			printf ("cannot set period size (%s)\n",snd_strerror (err));
 			exit(EXIT_FAILURE);
 		}
@@ -96,7 +97,7 @@
 		long unsigned int nb_periods = 10;
 		long unsigned int buffer_size = period_size * nb_periods;
 
-		if ((err = snd_pcm_hw_params_set_buffer_size_near (obj->captureHandle, hw_params, &buffer_size)) < 0) {
+		if ((err = snd_pcm_hw_params_set_buffer_size_near (obj->captureHandle, hw_params, &buffer_size)) < 0) { // In frames
 			printf ("cannot set buffer time (%s)\n",snd_strerror (err));
 			exit(EXIT_FAILURE);
 		}
@@ -109,6 +110,8 @@
         }
 
 		// End of params tests		
+		
+		
 
         snd_pcm_hw_params_free(hw_params);
 
