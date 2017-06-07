@@ -134,7 +134,8 @@ ctxs.forEach(function(ctx,i) {
                     position: 'bottom',
                     ticks: {
                         min : dataMin,
-                        max : dataMax
+                        max : dataMax,
+						maxRotation : 0
                     },
                     scaleLabel: {
                         display: true,
@@ -211,9 +212,11 @@ document.addEventListener('tracking', function(e) {
         
         framCnt = 0;
         
+		dataMax = currentFrame.timestamp;
         charts.forEach(function(bundle) {
-            bundle.chart.scales["x-axis-0"].max = dataMax;
-            bundle.chart.scales["x-axis-0"].min = dataMax - totalFrames * refreshFrame;
+			
+            bundle.chart.config.options.scales.xAxes[0].ticks.max = dataMax;
+            bundle.chart.config.options.scales.xAxes[0].ticks.min = dataMax - totalFrames * refreshFrame;
         });
         
         clearInterval(watchTrack);
@@ -287,9 +290,11 @@ document.addEventListener('potential', function(e) {
         
         document.dispatchEvent(new Event('request-chart'));
         
+		dataMax = currentFrame.timestamp;
         charts.forEach(function(bundle) {
-            bundle.chart.scales["x-axis-0"].max = dataMax;
-            bundle.chart.scales["x-axis-0"].min = dataMax - totalFrames * refreshFrame;
+
+            bundle.chart.config.options.scales.xAxes[0].ticks.max = dataMax;
+            bundle.chart.config.options.scales.xAxes[0].ticks.min = dataMax - totalFrames * refreshFrame;
         });
         
         pframCnt = 0;
