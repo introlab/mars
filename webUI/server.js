@@ -19,17 +19,17 @@ app.use(express.static('ressources'));
 
 // Main page route
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname+'/live_data.html'));
+    res.sendFile(path.join(__dirname+'/views/live_data.html'));
 });
 
 // Config page route
 app.get('/config', function(req, res) {
-    res.sendFile(path.join(__dirname+'/configure.html'));
+    res.sendFile(path.join(__dirname+'/views/configure.html'));
 });
 
 // Legal page route
 app.get('/legal', function(req, res) {
-    res.sendFile(path.join(__dirname+'/legal.html'));
+    res.sendFile(path.join(__dirname+'/views/legal.html'));
 });
 
 // Websocket to stream tracking
